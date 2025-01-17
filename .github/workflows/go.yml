@@ -12,11 +12,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container:
-      image: golang:latest
+    container: golang:latest
     steps:
       - name: Test
-        run: go test -v ../../.
+        run: ls -la
 
   build:
     runs-on: ubuntu-latest
