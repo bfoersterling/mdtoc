@@ -8,12 +8,14 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: golang:latest
+    container:
+      image: golang:latest
+      volumes:
+        - ${{ github.repository }}:/__w/mdtoc/mdtoc
     steps:
       - run: ls -la
       - run: ls -la ..
       - run: ls -la ../..
-      - run: ls -la "${{ github.repository }}"
       - run: cat /etc/os-release
       - run: pwd
       - run: go version
