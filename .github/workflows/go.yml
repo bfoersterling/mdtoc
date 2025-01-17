@@ -14,12 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     container: golang:latest
     steps:
-      - name: Test
-        run: ls -la
-      - name: print os
-        run: cat /etc/os-release
-      - name: pwd
-        run: pwd
+      - run: ls -la
+      - run: cat /etc/os-release
+      - run: pwd
+      - run: go version
 
   build:
     runs-on: ubuntu-latest
