@@ -11,6 +11,8 @@ jobs:
     container: golang:latest
     steps:
       - run: ls -la
+      - run: ls -la ..
+      - run: ls -la ../..
       - run: cat /etc/os-release
       - run: pwd
       - run: go version
