@@ -16,7 +16,7 @@ jobs:
       image: golang:latest
     steps:
       - name: Test
-        run: go test -v ../.
+        run: go test -v ../../.
 
   build:
     runs-on: ubuntu-latest
