@@ -13,6 +13,7 @@ jobs:
       - run: ls -la
       - run: ls -la ..
       - run: ls -la ../..
+      - run: ls -la "${{ github.repository }}"
       - run: cat /etc/os-release
       - run: pwd
       - run: go version
