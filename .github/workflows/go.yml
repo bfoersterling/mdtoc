@@ -16,6 +16,10 @@ jobs:
     steps:
       - name: Test
         run: ls -la
+      - name: print os
+        run: cat /etc/os-release
+      - name: pwd
+        run: pwd
 
   build:
     runs-on: ubuntu-latest
