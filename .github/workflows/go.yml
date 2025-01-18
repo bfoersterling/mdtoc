@@ -19,8 +19,6 @@ jobs:
     runs-on: ubuntu-24.04
     container:
       image: golang:latest
-      volumes:
-        - ${{ github.repository }}:/__w/mdtoc/mdtoc
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
