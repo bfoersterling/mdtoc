@@ -11,7 +11,7 @@ jobs:
     steps:
       - run: cat /etc/os-release
       - run: ls -la
-      - run: echo "{{ GITHUB_ACTION_REPOSITORY }}"
+      - run: echo "${{ GITHUB_ACTION_REPOSITORY }}"
 
   test:
     runs-on: ubuntu-latest
