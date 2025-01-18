@@ -22,10 +22,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      - run: ls -la
-      - run: cat /etc/os-release
-      - run: pwd
-      - run: go version
+      - run: go test -v
 
   build:
     runs-on: ubuntu-24.04
