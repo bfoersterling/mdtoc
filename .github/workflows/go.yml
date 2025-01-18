@@ -7,14 +7,14 @@ on: [push, pull_request]
 
 jobs:
   ubuntu_test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - run: cat /etc/os-release
       - run: ls -la
       - run: echo "$GITHUB_ACTION_REPOSITORY"
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: golang:latest
       volumes:
@@ -28,7 +28,7 @@ jobs:
       - run: go version
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
