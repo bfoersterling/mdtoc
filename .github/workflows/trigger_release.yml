@@ -1,0 +1,15 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Trigger Release
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    container: golang:alpine
+    steps:
+      - uses: actions/checkout@v4
+      - run: go build
+      - run: echo "TODO: upload build to releases"
