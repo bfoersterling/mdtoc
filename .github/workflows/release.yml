@@ -20,4 +20,5 @@ jobs:
           name: mdtoc
           path: mdtoc
           overwrite: true
-      - run: "echo ${{ inputs.version }}"
+      - run: "echo inputs.version: ${{ inputs.version }}"
+      - run: "echo github.ref: ${{ github.ref }}"
