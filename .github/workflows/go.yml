@@ -6,6 +6,13 @@ name: Go
 on: [push, pull_request]
 
 jobs:
+  ubuntu_test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: cat /etc/os-release
+      - run: ls -la
+      - run: ls -la "${{ github.repository }}"
+
   test:
     runs-on: ubuntu-latest
     container:
