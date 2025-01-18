@@ -29,5 +29,6 @@ jobs:
     container: golang:latest
     steps:
       - uses: actions/checkout@v4
-      - run: go build -v
+      - run: ls -la
+      - run: go build
       - run: ls -la
