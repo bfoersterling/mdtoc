@@ -12,6 +12,7 @@ jobs:
       - run: cat /etc/os-release
       - run: ls -la
       - run: echo "$GITHUB_ACTION_REPOSITORY"
+      - run: ls ${{ github.workspace }}
 
   test:
     runs-on: ubuntu-24.04
