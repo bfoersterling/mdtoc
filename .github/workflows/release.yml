@@ -9,4 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: go build
-      - run: "echo 'TODO: upload build to releases'"
+      - uses: actions/uploadartifact@v4
+        with:
+          name: mdtoc
+          path: mdtoc
+          overwrite: true
