@@ -26,7 +26,7 @@ jobs:
 
   build:
     runs-on: ubuntu-24.04
-    container: golang:latest
+    container: golang:alpine
     steps:
       - uses: actions/checkout@v4
       - run: ls -la
