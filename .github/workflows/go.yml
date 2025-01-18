@@ -1,20 +1,8 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
 name: Go
 
 on: [push, pull_request]
 
 jobs:
-  ubuntu_test:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - run: cat /etc/os-release
-      - run: ls -la
-      - run: ls -la ${{ github.workspace }}
-
   test:
     runs-on: ubuntu-24.04
     container: golang:alpine
@@ -28,6 +16,9 @@ jobs:
     container: golang:alpine
     steps:
       - uses: actions/checkout@v4
-      - run: ls -la
       - run: go build
-      - run: ls -la
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mdtoc
+          path: mdtoc
+          overwrite: true
