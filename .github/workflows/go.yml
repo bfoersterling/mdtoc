@@ -22,9 +22,9 @@ jobs:
       volumes:
         - ${{ github.repository }}:/__w/mdtoc/mdtoc
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
       - run: ls -la
-      - run: ls -la ..
-      - run: ls -la ../..
       - run: cat /etc/os-release
       - run: pwd
       - run: go version
