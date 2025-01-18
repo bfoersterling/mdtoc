@@ -30,5 +30,5 @@ This seems intended by the creators of the language.
 
 - detect Windows line endings
 - delph deeper into different Markdown implementations (like CommonMark)
-- add support for "Setext-style headers"
-- maybe remove pound signs infront of headers
+- maybe add support for "Setext-style headers"
+- maybe replace pound signs infront of headers by numbers
