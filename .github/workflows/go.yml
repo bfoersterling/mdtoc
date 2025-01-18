@@ -26,13 +26,8 @@ jobs:
 
   build:
     runs-on: ubuntu-24.04
+    container: golang:latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.23'
-
-      - name: Build
-        run: go build -v
+      - run: go build -v
+      - run: ls -la
