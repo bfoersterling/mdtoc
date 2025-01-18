@@ -9,10 +9,11 @@ jobs:
   ubuntu_test:
     runs-on: ubuntu-24.04
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
       - run: cat /etc/os-release
       - run: ls -la
-      - run: echo "$GITHUB_ACTION_REPOSITORY"
-      - run: ls ${{ github.workspace }}
+      - run: ls -la ${{ github.workspace }}
 
   test:
     runs-on: ubuntu-24.04
