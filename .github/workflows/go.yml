@@ -17,12 +17,10 @@ jobs:
 
   test:
     runs-on: ubuntu-24.04
-    container:
-      image: golang:alpine
+    container: golang:alpine
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      - run: go version
       - run: go test -v
 
   build:
@@ -30,7 +28,6 @@ jobs:
     container: golang:alpine
     steps:
       - uses: actions/checkout@v4
-      - run: go version
       - run: ls -la
       - run: go build
       - run: ls -la
