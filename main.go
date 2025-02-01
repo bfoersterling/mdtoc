@@ -30,7 +30,7 @@ func parse_file(file_name string) []heading {
 
 		if !is_codeblock && is_heading(value) {
 			headings = append(
-				headings, heading{value, Get_heading_level(value), (index + 1)})
+				headings, heading{value, get_heading_level(value), (index + 1)})
 		}
 	}
 	return headings

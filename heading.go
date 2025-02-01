@@ -16,7 +16,7 @@ func is_heading(line string) bool {
 	}
 }
 
-func Get_heading_level(heading_text string) int {
+func get_heading_level(heading_text string) int {
 	level := 0
 	for i := 0; heading_text[i] == '#'; i++ {
 		level += 1
