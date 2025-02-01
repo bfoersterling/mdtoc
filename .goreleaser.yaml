@@ -23,7 +23,7 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - "-X 'main.version={{.VERSION}}'"
+      - -X 'main.version={{.VERSION}}'
 
 archives:
   - format: tar.gz
