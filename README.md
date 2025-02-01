@@ -1,10 +1,14 @@
-## building
+## Installation
 
+Download the latest release.
+
+Or build it:
 ```
-go build
+make
+sudo make install
 ```
 
-## usage
+## Usage
 
 ```
 $ ./mdtoc test_files/README.md
@@ -18,7 +22,7 @@ README.md
 `-- # Configuration File (54)
 ```
 
-#### markdown implementations
+#### Markdown Implementations
 
 https://en.wikipedia.org/wiki/Markdown
 
