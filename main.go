@@ -10,31 +10,6 @@ import (
 	"strings"
 )
 
-type heading struct {
-	text  string
-	level int
-	line  int
-}
-
-func is_heading(line string) bool {
-	if strings.HasPrefix(line, "#") {
-		return true
-	} else {
-		return false
-	}
-}
-
-func Get_heading_level(heading_text string) int {
-	level := 0
-	for i := 0; heading_text[i] == '#'; i++ {
-		level += 1
-		if i == (len(heading_text) - 1) {
-			break
-		}
-	}
-	return level
-}
-
 func parse_file(file_name string) []heading {
 	var headings []heading
 
@@ -55,7 +30,7 @@ func parse_file(file_name string) []heading {
 
 		if !is_codeblock && is_heading(value) {
 			headings = append(
-				headings, heading{value, Get_heading_level(value), (index + 1)})
+				headings, heading{value, get_heading_level(value), (index + 1)})
 		}
 	}
 	return headings
