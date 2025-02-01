@@ -22,7 +22,8 @@ builds:
       - linux
     flags:
       - -trimpath
-      - -ldflags "-X 'main.version={{.VERSION}}'"
+    ldflags:
+      - "-X 'main.version={{.VERSION}}'"
 
 archives:
   - format: tar.gz
