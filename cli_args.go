@@ -13,7 +13,7 @@ type cli_args struct {
 
 func usage() {
 	fmt.Printf("Usage: mdtoc [FILE]\n" +
-		"\n-V/--version\tprint version\n")
+		"\n-V, --version\tprint version\n")
 	os.Exit(1)
 }
 
