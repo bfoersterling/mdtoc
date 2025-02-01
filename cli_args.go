@@ -44,7 +44,7 @@ func get_cli_args() cli_args {
 
 func (args cli_args) evaluate() {
 	if args.version {
-		fmt.Printf("Version: %s\n", version)
+		fmt.Printf("%s %s, commit: %s, build at: %s.\n", os.Args[0], version, commit, date)
 		os.Exit(0)
 	}
 
