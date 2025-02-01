@@ -5,7 +5,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"path"
 )
 
 func usage() {
@@ -22,10 +21,5 @@ func main() {
 		usage()
 	}
 
-	var headings []heading = nil
-
-	headings = parse_file(file_name)
-
-	fmt.Println(path.Base(file_name))
-	tree(-1, "", headings)
+	print_tree(file_name)
 }

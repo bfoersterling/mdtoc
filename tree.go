@@ -2,7 +2,18 @@ package main
 
 import (
 	"fmt"
+	"path"
 )
+
+func print_tree(file_name string) {
+	var headings []heading = nil
+
+	headings = parse_file(file_name)
+
+	fmt.Println(path.Base(file_name))
+
+	tree(-1, "", headings)
+}
 
 func get_root_children(headings []heading) []int {
 	var root_children []int
