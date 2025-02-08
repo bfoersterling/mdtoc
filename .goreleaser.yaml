@@ -29,6 +29,9 @@ builds:
 
     binary: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
 
+archives:
+  - format: binary
+
 changelog:
   sort: asc
   filters:
