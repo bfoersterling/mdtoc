@@ -27,8 +27,6 @@ builds:
     flags:
       - -trimpath
 
-    binary: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
-
 archives:
   - format: binary
 
