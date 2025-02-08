@@ -35,9 +35,3 @@ changelog:
     exclude:
       - "^docs:"
       - "^test_files"
-
-artifacts:
-  blobs:
-    - id: binaries
-      name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
-      path: "dist/{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
