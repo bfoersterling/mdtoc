@@ -2,7 +2,7 @@
 
 Download the latest release.
 ```
-wget https://github.com/bfoersterling/mdtoc/releases/download/v0.0.14/mdtoc_0.0.14_linux_amd64 -O mdtoc
+wget wget https://github.com/bfoersterling/mdtoc/releases/latest/download/mdtoc_linux_amd64 -O mdtoc
 chmod +x mdtoc
 sudo install mdtoc /usr/local/bin
 ```
