@@ -18,12 +18,14 @@ before:
 builds:
   - env:
       - CGO_ENABLED=0
+
     goos:
       - linux
+
     flags:
       - -trimpath
 
-    binary: {{ .ProjectName }}_{{ .Os }}_{{ .Arch }}
+    binary: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
 
 archives:
   - format: tar.gz
