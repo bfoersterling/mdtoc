@@ -1,4 +1,4 @@
-all:
+default:
 	go build .
 
 run:
@@ -10,8 +10,8 @@ test:
 	go run . test_files/weird_headers.md
 	go run . test_files/audio.md
 
-install:
-	cp -v mdtoc /usr/local/bin/.
+install: default
+	install -v -m 755 mdtoc /usr/local/bin/.
 
 clean:
 	go clean

@@ -2,15 +2,14 @@
 
 Download the latest release.
 ```
-wget wget https://github.com/bfoersterling/mdtoc/releases/latest/download/mdtoc_linux_amd64 -O mdtoc
-chmod +x mdtoc
-sudo install mdtoc /usr/local/bin
+wget https://github.com/bfoersterling/mdtoc/releases/latest/download/mdtoc_linux_amd64 -O mdtoc
+sudo install -v -m 755 mdtoc /usr/local/bin
 ```
 
 Or build it:
 ```
-make
-sudo make install
+git clone https://github.com/bfoersterling/mdtoc.git
+sudo just install
 ```
 
 ## Usage
