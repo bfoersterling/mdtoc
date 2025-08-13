@@ -1,4 +1,7 @@
 default:
+	@just -l
+
+build:
 	go build .
 
 run:
