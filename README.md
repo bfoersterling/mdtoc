@@ -40,5 +40,7 @@ This seems intended by the creators of the language.
 - detect Windows line endings
 - maybe add support for "Setext-style headers"
 - maybe replace pound signs infront of headers by numbers
-- real heading numbering (for example 2.3.1)
+- real heading numbering (for example 2.3.1) \
+=> would require validating the markdown file first \
+(or print `0.0.0` for invalid headers outside of the tree)
 - option to print content under header x.x.x
