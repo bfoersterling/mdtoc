@@ -11,4 +11,10 @@ between an opening sequence of 1–6 unescaped # characters and an optional clos
 
 > The opening sequence of # characters must be followed by spaces or tabs, or by the end of line.
 
-=> space/tab after the `#`s (end of line is probably for empty headings)
+=> space/tab after the `#`s (end of line is probably for empty headings) \
+=> NOT valid: `####my header` -> valid: `#### my header`
+
+> The opening # character may be preceded by up to three spaces of indentation.\
+The raw contents of the heading are stripped of leading and trailing space or tabs before being parsed as inline content.
+
+=> 0-3 spaces before the `#` characters are allowed.

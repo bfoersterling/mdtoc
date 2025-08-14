@@ -36,6 +36,9 @@ This seems intended by the creators of the language.
 
 #### TODO
 
+- use goldmark for parsing?
 - detect Windows line endings
 - maybe add support for "Setext-style headers"
 - maybe replace pound signs infront of headers by numbers
+- real heading numbering (for example 2.3.1)
+- option to print content under header x.x.x
