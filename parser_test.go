@@ -5,6 +5,72 @@ import (
 	"testing"
 )
 
+func Test_pretty_print_heading_numbering(t *testing.T) {
+	// 1
+	hnum := [6]int{1, 2, 0, 8, 0, 2}
+
+	pp_hnum := pretty_print_numbering(hnum)
+
+	if pp_hnum != "1.2.8.2." {
+		t.Fatalf("pp_hnum should be 1.2.8.2.\n")
+	}
+}
+
+func Test_get_heading_numbers(t *testing.T) {
+	// 1
+	previous_level := 0
+	current_level := 1
+	current_lc := [6]int{0, 0, 0, 0, 0, 0}
+
+	expected_result := [6]int{1, 0, 0, 0, 0, 0}
+
+	test_lc := get_heading_numbers(current_level, previous_level, current_lc)
+
+	if test_lc != expected_result {
+		t.Fatalf("test_lc and expected_result differ!\n"+
+			"test_lc:\n%v\nexpected_result:\n%v\n", test_lc, expected_result)
+	}
+
+	// 2
+	previous_level = 4
+	current_level = 6
+	current_lc = [6]int{1, 2, 0, 8, 0, 1}
+	expected_result = [6]int{1, 2, 0, 8, 0, 2}
+
+	test_lc = get_heading_numbers(current_level, previous_level, current_lc)
+
+	if test_lc != expected_result {
+		t.Fatalf("test_lc and expected_result differ!\n"+
+			"test_lc:\n%v\nexpected_result:\n%v\n", test_lc, expected_result)
+	}
+
+	// 3 - move up heading levels
+	previous_level = 4
+	current_level = 2
+	current_lc = [6]int{0, 1, 0, 3, 0, 0}
+	expected_result = [6]int{0, 2, 0, 0, 0, 0}
+
+	test_lc = get_heading_numbers(current_level, previous_level, current_lc)
+
+	if test_lc != expected_result {
+		t.Fatalf("test_lc and expected_result differ!\n"+
+			"test_lc:\n%v\nexpected_result:\n%v\n", test_lc, expected_result)
+	}
+
+	// 3 - move up heading levels with more filled levels in between
+	previous_level = 6
+	current_level = 2
+	current_lc = [6]int{1, 2, 0, 5, 0, 2}
+	expected_result = [6]int{1, 3, 0, 0, 0, 0}
+
+	test_lc = get_heading_numbers(current_level, previous_level, current_lc)
+
+	if test_lc != expected_result {
+		t.Fatalf("test_lc and expected_result differ!\n"+
+			"test_lc:\n%v\nexpected_result:\n%v\n", test_lc, expected_result)
+	}
+}
+
 func Test_parse_headings(t *testing.T) {
 	// 1
 	reader := strings.NewReader("## first section\n\n" +
@@ -18,34 +84,40 @@ func Test_parse_headings(t *testing.T) {
 
 	expected_headings := []heading{
 		heading{
-			text:  "## first section",
-			level: 2,
-			line:  1,
+			text:   "## first section",
+			level:  2,
+			line:   1,
+			levels: [6]int{0, 1, 0, 0, 0, 0},
 		},
 		heading{
-			text:  "#### about",
-			level: 4,
-			line:  3,
+			text:   "#### about",
+			level:  4,
+			line:   3,
+			levels: [6]int{0, 1, 0, 1, 0, 0},
 		},
 		heading{
-			text:  "#### details",
-			level: 4,
-			line:  5,
+			text:   "#### details",
+			level:  4,
+			line:   5,
+			levels: [6]int{0, 1, 0, 2, 0, 0},
 		},
 		heading{
-			text:  "## second section",
-			level: 2,
-			line:  7,
+			text:   "## second section",
+			level:  2,
+			line:   7,
+			levels: [6]int{0, 2, 0, 0, 0, 0},
 		},
 		heading{
-			text:  "#### tutorial",
-			level: 4,
-			line:  9,
+			text:   "#### tutorial",
+			level:  4,
+			line:   9,
+			levels: [6]int{0, 2, 0, 1, 0, 0},
 		},
 		heading{
-			text:  "#### insights",
-			level: 4,
-			line:  11,
+			text:   "#### insights",
+			level:  4,
+			line:   11,
+			levels: [6]int{0, 2, 0, 2, 0, 0},
 		},
 	}
 
