@@ -8,7 +8,7 @@ import (
 func print_tree(file_name string) {
 	var headings []heading = nil
 
-	headings = parse_file(file_name)
+	headings = get_headings(file_name)
 
 	fmt.Println(path.Base(file_name))
 
