@@ -2,8 +2,8 @@
 
 Download the latest release.
 ```
-wget https://github.com/bfoersterling/mdtoc/releases/latest/download/mdtoc_linux_amd64 -O mdtoc
-sudo install -v -m 755 mdtoc /usr/local/bin
+wget https://github.com/bfoersterling/mdtoc/releases/latest/download/mdtoc_linux_amd64 -O /tmp/mdtoc
+sudo install -v -m 755 /tmp/mdtoc /usr/local/bin
 ```
 
 Or build it:
@@ -17,13 +17,13 @@ sudo just install
 ```
 $ ./mdtoc test_files/README.md
 README.md
-|-- # yamlfmt (1)
-|   |-- ## Goals (5)
-|   |-- ## Maintainers (11)
-|   |-- ## Blog (15)
-|   |-- ## Installation (21)
-|   `-- ## Basic Usage (35)
-`-- # Configuration File (54)
+|-- 1. # yamlfmt (1)
+|   |-- 1.1. ## Goals (5)
+|   |-- 1.2. ## Maintainers (11)
+|   |-- 1.3. ## Blog (15)
+|   |-- 1.4. ## Installation (21)
+|   `-- 1.5. ## Basic Usage (35)
+`-- 2. # Configuration File (54)
 ```
 
 #### Markdown Implementations
@@ -39,8 +39,5 @@ This seems intended by the creators of the language.
 - use goldmark for parsing?
 - detect Windows line endings
 - maybe add support for "Setext-style headers"
-- maybe replace pound signs infront of headers by numbers
-- real heading numbering (for example 2.3.1) \
-=> would require validating the markdown file first \
-(or print `0.0.0` for invalid headers outside of the tree)
+- maybe remove pound signs infront of headers (or introduce debug mode to show them)
 - option to print content under header x.x.x
