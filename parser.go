@@ -5,16 +5,39 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
+
+func pretty_print_numbering(level_count [6]int) (heading_number string) {
+	for _, level := range level_count {
+		if level == 0 {
+			continue
+		}
+		heading_number += strconv.Itoa(level) + "."
+	}
+
+	return
+}
 
 // get raw heading numbering
 // i.e. [0 1 0 2 0 0]
 // this output could then be pretty printed by omitting zeros
-func get_heading_numberings(current_level int, current_level_count [6]int) (level_count [6]int) {
+// but you need a logic when you switch levels
+// when you add a new subheading or when you go up a level to
+// finish the section
+// just incrementing the current level is not enough
+func get_heading_numberings(current_level int, previous_level int, current_level_count [6]int) (level_count [6]int) {
 	level_count = current_level_count
 
 	level_count[current_level-1]++
+
+	// going up a heading level includes clearing all child levels
+	if current_level < previous_level {
+		for i := current_level; i < 6; i++ {
+			level_count[i] = 0
+		}
+	}
 
 	return
 }
