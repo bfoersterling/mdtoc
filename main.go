@@ -1,7 +1,5 @@
 package main
 
-// TODO: read a file line by line
-
 var (
 	version = "dev"
 	commit  = "none"
