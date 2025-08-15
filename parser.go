@@ -27,7 +27,7 @@ func pretty_print_numbering(level_count [6]int) (heading_number string) {
 // when you add a new subheading or when you go up a level to
 // finish the section
 // just incrementing the current level is not enough
-func get_heading_numberings(current_level int, previous_level int, current_level_count [6]int) (level_count [6]int) {
+func get_heading_numbers(current_level int, previous_level int, current_level_count [6]int) (level_count [6]int) {
 	level_count = current_level_count
 
 	level_count[current_level-1]++
@@ -47,9 +47,9 @@ func parse_headings(reader io.Reader) []heading {
 	var headings []heading
 	is_codeblock := false
 	index := 0
-	//	var hnumbering [6]int
-	// hnum_cursor may have values 0-6
-	//	var hnum_cursor int
+	var curr_hlevel int
+	var prev_hlevel int
+	var hnumbers [6]int
 
 	md_scanner.Split(bufio.ScanLines)
 
@@ -70,17 +70,13 @@ func parse_headings(reader io.Reader) []heading {
 			continue
 		}
 
-		hlevel := get_heading_level(md_line)
+		prev_hlevel = curr_hlevel
+		curr_hlevel = get_heading_level(md_line)
 
-		/*
-			if len(headings) > 0 && hlevel < headings[index-1].level {
-				hnum_cursor++
-			} else if
-			}
-		*/
+		hnumbers = get_heading_numbers(curr_hlevel, prev_hlevel, hnumbers)
 
 		headings = append(
-			headings, heading{md_line, hlevel, index})
+			headings, heading{md_line, curr_hlevel, index, hnumbers})
 	}
 
 	return headings

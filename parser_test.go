@@ -16,7 +16,7 @@ func Test_pretty_print_heading_numbering(t *testing.T) {
 	}
 }
 
-func Test_get_heading_numberings(t *testing.T) {
+func Test_get_heading_numbers(t *testing.T) {
 	// 1
 	previous_level := 0
 	current_level := 1
@@ -24,7 +24,7 @@ func Test_get_heading_numberings(t *testing.T) {
 
 	expected_result := [6]int{1, 0, 0, 0, 0, 0}
 
-	test_lc := get_heading_numberings(current_level, previous_level, current_lc)
+	test_lc := get_heading_numbers(current_level, previous_level, current_lc)
 
 	if test_lc != expected_result {
 		t.Fatalf("test_lc and expected_result differ!\n"+
@@ -37,7 +37,7 @@ func Test_get_heading_numberings(t *testing.T) {
 	current_lc = [6]int{1, 2, 0, 8, 0, 1}
 	expected_result = [6]int{1, 2, 0, 8, 0, 2}
 
-	test_lc = get_heading_numberings(current_level, previous_level, current_lc)
+	test_lc = get_heading_numbers(current_level, previous_level, current_lc)
 
 	if test_lc != expected_result {
 		t.Fatalf("test_lc and expected_result differ!\n"+
@@ -50,7 +50,7 @@ func Test_get_heading_numberings(t *testing.T) {
 	current_lc = [6]int{0, 1, 0, 3, 0, 0}
 	expected_result = [6]int{0, 2, 0, 0, 0, 0}
 
-	test_lc = get_heading_numberings(current_level, previous_level, current_lc)
+	test_lc = get_heading_numbers(current_level, previous_level, current_lc)
 
 	if test_lc != expected_result {
 		t.Fatalf("test_lc and expected_result differ!\n"+
@@ -63,7 +63,7 @@ func Test_get_heading_numberings(t *testing.T) {
 	current_lc = [6]int{1, 2, 0, 5, 0, 2}
 	expected_result = [6]int{1, 3, 0, 0, 0, 0}
 
-	test_lc = get_heading_numberings(current_level, previous_level, current_lc)
+	test_lc = get_heading_numbers(current_level, previous_level, current_lc)
 
 	if test_lc != expected_result {
 		t.Fatalf("test_lc and expected_result differ!\n"+
@@ -84,34 +84,40 @@ func Test_parse_headings(t *testing.T) {
 
 	expected_headings := []heading{
 		heading{
-			text:  "## first section",
-			level: 2,
-			line:  1,
+			text:   "## first section",
+			level:  2,
+			line:   1,
+			levels: [6]int{0, 1, 0, 0, 0, 0},
 		},
 		heading{
-			text:  "#### about",
-			level: 4,
-			line:  3,
+			text:   "#### about",
+			level:  4,
+			line:   3,
+			levels: [6]int{0, 1, 0, 1, 0, 0},
 		},
 		heading{
-			text:  "#### details",
-			level: 4,
-			line:  5,
+			text:   "#### details",
+			level:  4,
+			line:   5,
+			levels: [6]int{0, 1, 0, 2, 0, 0},
 		},
 		heading{
-			text:  "## second section",
-			level: 2,
-			line:  7,
+			text:   "## second section",
+			level:  2,
+			line:   7,
+			levels: [6]int{0, 2, 0, 0, 0, 0},
 		},
 		heading{
-			text:  "#### tutorial",
-			level: 4,
-			line:  9,
+			text:   "#### tutorial",
+			level:  4,
+			line:   9,
+			levels: [6]int{0, 2, 0, 1, 0, 0},
 		},
 		heading{
-			text:  "#### insights",
-			level: 4,
-			line:  11,
+			text:   "#### insights",
+			level:  4,
+			line:   11,
+			levels: [6]int{0, 2, 0, 2, 0, 0},
 		},
 	}
 
