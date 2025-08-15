@@ -11,9 +11,7 @@ import (
 func parse_headings(reader io.Reader) []heading {
 	md_scanner := bufio.NewScanner(reader)
 	var headings []heading
-
 	is_codeblock := false
-
 	index := 1
 
 	md_scanner.Split(bufio.ScanLines)
@@ -31,6 +29,7 @@ func parse_headings(reader io.Reader) []heading {
 		}
 		index++
 	}
+
 	return headings
 }
 
