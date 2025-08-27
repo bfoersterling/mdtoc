@@ -37,7 +37,6 @@ This seems intended by the creators of the language.
 #### TODO
 
 - use goldmark for parsing?
-- detect Windows line endings
 - maybe add support for "Setext-style headers"
 - maybe remove pound signs infront of headers (or introduce debug mode to show them)
 - option to print content under header x.x.x
