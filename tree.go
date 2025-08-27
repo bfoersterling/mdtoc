@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"path"
 )
 
@@ -60,28 +61,30 @@ func get_root_children(headings []heading) []int {
 	return root_children
 }
 
-func print_tree(file_name string) {
+func print_tree(file_name string, writer io.Writer) {
 	var headings []heading = nil
 
 	headings = get_headings(file_name)
 
-	fmt.Println(path.Base(file_name))
+	fmt.Fprintln(writer, path.Base(file_name))
 
-	tree(-1, "", headings)
+	tree(-1, "", headings, writer)
 }
 
-func tree(index int, prefix string, headings []heading) {
+func tree(index int, prefix string, headings []heading, writer io.Writer) {
 	children := get_child_indices(index, headings)
 
 	for index, child_index := range children {
 		pretty_numbering := pretty_print_numbering(headings[child_index].levels)
 
 		if index == (len(children) - 1) {
-			fmt.Printf("%s %s %s (%d)\n", prefix+"`--", pretty_numbering, headings[child_index].text, headings[child_index].line)
-			tree(child_index, prefix+"    ", headings)
+			fmt.Fprintf(writer,
+				"%s %s %s (%d)\n", prefix+"`--", pretty_numbering, headings[child_index].text, headings[child_index].line)
+			tree(child_index, prefix+"    ", headings, writer)
 		} else {
-			fmt.Printf("%s %s %s (%d)\n", prefix+"|--", pretty_numbering, headings[child_index].text, headings[child_index].line)
-			tree(child_index, prefix+"|   ", headings)
+			fmt.Fprintf(writer,
+				"%s %s %s (%d)\n", prefix+"|--", pretty_numbering, headings[child_index].text, headings[child_index].line)
+			tree(child_index, prefix+"|   ", headings, writer)
 		}
 	}
 }
