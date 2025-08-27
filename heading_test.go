@@ -24,3 +24,26 @@ func Test_get_heading_level(t *testing.T) {
 		log.Fatal("Level should be 1.")
 	}
 }
+
+func Test_is_heading(t *testing.T) {
+	// 1
+	input := "## foobar\n"
+
+	if !is_heading(input) {
+		t.Fatalf("input %q should be categorized as a header.\n", input)
+	}
+
+	// 2 - over 6 num signs should not be recognized as headings
+	input = "####### level seven headers dont exist\n"
+
+	if is_heading(input) {
+		t.Fatalf("input %q should not be categorized as a header.\n", input)
+	}
+
+	// 3 - lines starting with 6 num signs should be recognized as heading
+	input = "###### this is a header\n"
+
+	if !is_heading(input) {
+		t.Fatalf("input %q should be recognized as a heading.\n", input)
+	}
+}
