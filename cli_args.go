@@ -53,5 +53,5 @@ func (args cli_args) evaluate() {
 		flag.Usage()
 	}
 
-	print_tree(args.file_path)
+	print_tree(args.file_path, os.Stdout)
 }

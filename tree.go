@@ -2,33 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"path"
 )
-
-func print_tree(file_name string) {
-	var headings []heading = nil
-
-	headings = get_headings(file_name)
-
-	fmt.Println(path.Base(file_name))
-
-	tree(-1, "", headings)
-}
-
-func get_root_children(headings []heading) []int {
-	var root_children []int
-
-	lowest_level := 0
-	for index, value := range headings {
-		cur_level := value.level
-		if index == 0 || cur_level <= lowest_level {
-			root_children = append(root_children, index)
-			lowest_level = cur_level
-		}
-	}
-
-	return root_children
-}
 
 func get_child_indices(header_index int, headings []heading) []int {
 	var children []int
@@ -70,18 +46,45 @@ func get_child_indices(header_index int, headings []heading) []int {
 	return children
 }
 
-func tree(index int, prefix string, headings []heading) {
+func get_root_children(headings []heading) []int {
+	var root_children []int
+
+	lowest_level := 0
+	for index, value := range headings {
+		cur_level := value.level
+		if index == 0 || cur_level <= lowest_level {
+			root_children = append(root_children, index)
+			lowest_level = cur_level
+		}
+	}
+
+	return root_children
+}
+
+func print_tree(file_name string, writer io.Writer) {
+	var headings []heading = nil
+
+	headings = get_headings(file_name)
+
+	fmt.Fprintln(writer, path.Base(file_name))
+
+	tree(-1, "", headings, writer)
+}
+
+func tree(index int, prefix string, headings []heading, writer io.Writer) {
 	children := get_child_indices(index, headings)
 
 	for index, child_index := range children {
 		pretty_numbering := pretty_print_numbering(headings[child_index].levels)
 
 		if index == (len(children) - 1) {
-			fmt.Printf("%s %s %s (%d)\n", prefix+"`--", pretty_numbering, headings[child_index].text, headings[child_index].line)
-			tree(child_index, prefix+"    ", headings)
+			fmt.Fprintf(writer,
+				"%s %s %s (%d)\n", prefix+"`--", pretty_numbering, headings[child_index].text, headings[child_index].line)
+			tree(child_index, prefix+"    ", headings, writer)
 		} else {
-			fmt.Printf("%s %s %s (%d)\n", prefix+"|--", pretty_numbering, headings[child_index].text, headings[child_index].line)
-			tree(child_index, prefix+"|   ", headings)
+			fmt.Fprintf(writer,
+				"%s %s %s (%d)\n", prefix+"|--", pretty_numbering, headings[child_index].text, headings[child_index].line)
+			tree(child_index, prefix+"|   ", headings, writer)
 		}
 	}
 }
