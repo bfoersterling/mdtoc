@@ -5,31 +5,6 @@ import (
 	"path"
 )
 
-func print_tree(file_name string) {
-	var headings []heading = nil
-
-	headings = get_headings(file_name)
-
-	fmt.Println(path.Base(file_name))
-
-	tree(-1, "", headings)
-}
-
-func get_root_children(headings []heading) []int {
-	var root_children []int
-
-	lowest_level := 0
-	for index, value := range headings {
-		cur_level := value.level
-		if index == 0 || cur_level <= lowest_level {
-			root_children = append(root_children, index)
-			lowest_level = cur_level
-		}
-	}
-
-	return root_children
-}
-
 func get_child_indices(header_index int, headings []heading) []int {
 	var children []int
 
@@ -68,6 +43,31 @@ func get_child_indices(header_index int, headings []heading) []int {
 	}
 
 	return children
+}
+
+func get_root_children(headings []heading) []int {
+	var root_children []int
+
+	lowest_level := 0
+	for index, value := range headings {
+		cur_level := value.level
+		if index == 0 || cur_level <= lowest_level {
+			root_children = append(root_children, index)
+			lowest_level = cur_level
+		}
+	}
+
+	return root_children
+}
+
+func print_tree(file_name string) {
+	var headings []heading = nil
+
+	headings = get_headings(file_name)
+
+	fmt.Println(path.Base(file_name))
+
+	tree(-1, "", headings)
 }
 
 func tree(index int, prefix string, headings []heading) {
