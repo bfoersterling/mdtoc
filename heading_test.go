@@ -24,3 +24,12 @@ func Test_get_heading_level(t *testing.T) {
 		log.Fatal("Level should be 1.")
 	}
 }
+
+func Test_is_heading(t *testing.T) {
+	// 1
+	input := "## foobar\n"
+
+	if !is_heading(input) {
+		t.Fatalf("input %q should be categorized as a header.\n", input)
+	}
+}
