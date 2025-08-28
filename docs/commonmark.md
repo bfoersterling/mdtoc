@@ -1,5 +1,12 @@
 https://spec.commonmark.org/current/
 
+#### valid markdown
+
+> Any sequence of characters is a valid CommonMark document.
+
+(https://spec.commonmark.org/0.31.2/#preliminaries) \
+(beginning of "2.1 Characters and lines")
+
 #### ATX headings
 
 https://spec.commonmark.org/0.31.2/#atx-heading
