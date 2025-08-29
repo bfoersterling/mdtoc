@@ -9,7 +9,8 @@ Read until the pretty printed heading number does not start with `1.2.` anymore.
 
 ## general strategy
 
-First determine until which heading to read.
+First determine until which heading to read.\
+(get next sibling)
 
 Then there are three options:
 - read the file again with line numbers from the headers
