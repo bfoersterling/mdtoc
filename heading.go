@@ -3,11 +3,11 @@ package main
 import "strings"
 
 type heading struct {
-	text           string
-	level          int
-	line           int
-	levels         [6]int
-	pretty_heading string
+	text             string
+	level            int
+	line             int
+	levels           [6]int
+	pretty_numbering string
 }
 
 func is_heading(line string) bool {

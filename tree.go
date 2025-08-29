@@ -77,11 +77,11 @@ func tree(index int, prefix string, headings []heading, writer io.Writer) {
 	for index, child_index := range children {
 		if index == (len(children) - 1) {
 			fmt.Fprintf(writer,
-				"%s %s %s (%d)\n", prefix+"`--", headings[child_index].pretty_heading, headings[child_index].text, headings[child_index].line)
+				"%s %s %s (%d)\n", prefix+"`--", headings[child_index].pretty_numbering, headings[child_index].text, headings[child_index].line)
 			tree(child_index, prefix+"    ", headings, writer)
 		} else {
 			fmt.Fprintf(writer,
-				"%s %s %s (%d)\n", prefix+"|--", headings[child_index].pretty_heading, headings[child_index].text, headings[child_index].line)
+				"%s %s %s (%d)\n", prefix+"|--", headings[child_index].pretty_numbering, headings[child_index].text, headings[child_index].line)
 			tree(child_index, prefix+"|   ", headings, writer)
 		}
 	}

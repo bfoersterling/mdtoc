@@ -50,7 +50,7 @@ func parse_headings(reader io.Reader) []heading {
 	var curr_hlevel int
 	var prev_hlevel int
 	var hnumbers [6]int
-	var pretty_heading string
+	var pretty_numbering string
 
 	md_scanner.Split(bufio.ScanLines)
 
@@ -76,10 +76,10 @@ func parse_headings(reader io.Reader) []heading {
 
 		hnumbers = get_heading_numbers(curr_hlevel, prev_hlevel, hnumbers)
 
-		pretty_heading = pretty_print_numbering(hnumbers)
+		pretty_numbering = pretty_print_numbering(hnumbers)
 
 		headings = append(
-			headings, heading{md_line, curr_hlevel, index, hnumbers, pretty_heading})
+			headings, heading{md_line, curr_hlevel, index, hnumbers, pretty_numbering})
 	}
 
 	return headings
