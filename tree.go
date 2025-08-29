@@ -75,15 +75,13 @@ func tree(index int, prefix string, headings []heading, writer io.Writer) {
 	children := get_child_indices(index, headings)
 
 	for index, child_index := range children {
-		pretty_numbering := pretty_print_numbering(headings[child_index].levels)
-
 		if index == (len(children) - 1) {
 			fmt.Fprintf(writer,
-				"%s %s %s (%d)\n", prefix+"`--", pretty_numbering, headings[child_index].text, headings[child_index].line)
+				"%s %s %s (%d)\n", prefix+"`--", headings[child_index].pretty_heading, headings[child_index].text, headings[child_index].line)
 			tree(child_index, prefix+"    ", headings, writer)
 		} else {
 			fmt.Fprintf(writer,
-				"%s %s %s (%d)\n", prefix+"|--", pretty_numbering, headings[child_index].text, headings[child_index].line)
+				"%s %s %s (%d)\n", prefix+"|--", headings[child_index].pretty_heading, headings[child_index].text, headings[child_index].line)
 			tree(child_index, prefix+"|   ", headings, writer)
 		}
 	}
