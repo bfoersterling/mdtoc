@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"testing"
 )
 
@@ -23,5 +22,32 @@ func Test_print_chapter(t *testing.T) {
 		t.Fatalf("print_chapter should not return an error here.\n")
 	}
 
-	fmt.Printf("%v\n", test_buffer)
+	expected_result := "test.md\n" +
+		"1.1. ## header2\n" +
+		"\n" +
+		"#### header4\n" +
+		"\n" +
+		"some text.\n" +
+		"\n" +
+		"```bash\n" +
+		"echo 'hi'\n" +
+		"```\n" +
+		"\n" +
+		"#### another header4\n" +
+		"\n" +
+		"more text.\n" +
+		"\n" +
+		"####third header4\n" +
+		"\n" +
+		"####fourth #header4\n" +
+		"\n" +
+		" ## this is not a header anymore\n" +
+		"\n" +
+		"##### header5\n" +
+		"\n"
+
+	if test_buffer.String() != expected_result {
+		t.Fatalf("test_buffer and expected_result differ.\n"+
+			"test_buffer:\n%s\nexpected_result:\n%s\n", test_buffer, expected_result)
+	}
 }
