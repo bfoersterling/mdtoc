@@ -25,7 +25,7 @@ func Test_print_chapter(t *testing.T) {
 	expected_result := "test.md\n" +
 		"1.1. ## header2\n" +
 		"\n" +
-		"#### header4\n" +
+		"1.1.1. #### header4\n" +
 		"\n" +
 		"some text.\n" +
 		"\n" +
@@ -33,17 +33,17 @@ func Test_print_chapter(t *testing.T) {
 		"echo 'hi'\n" +
 		"```\n" +
 		"\n" +
-		"#### another header4\n" +
+		"1.1.2. #### another header4\n" +
 		"\n" +
 		"more text.\n" +
 		"\n" +
-		"####third header4\n" +
+		"1.1.3. ####third header4\n" +
 		"\n" +
-		"####fourth #header4\n" +
+		"1.1.4. ####fourth #header4\n" +
 		"\n" +
 		" ## this is not a header anymore\n" +
 		"\n" +
-		"##### header5\n" +
+		"1.1.4.1. ##### header5\n" +
 		"\n"
 
 	if test_buffer.String() != expected_result {

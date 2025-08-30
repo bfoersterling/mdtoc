@@ -119,7 +119,7 @@ func parse_headings_and_lines(reader io.Reader) (headings []heading, lines []str
 
 		headings = append(
 			headings, heading{md_line, curr_hlevel, index, hnumbers, pretty_numbering})
-		lines = append(lines, md_line)
+		lines = append(lines, pretty_numbering+" "+md_line)
 	}
 
 	return
