@@ -27,7 +27,8 @@ func is_heading(line string) bool {
 	return leading_num_signs <= 6
 }
 
-func get_heading_by_number(headings []heading, numbering string) (needle heading) {
+// get heading by field pretty_numbering
+func get_heading_by_pnumber(headings []heading, numbering string) (needle heading) {
 	for _, v := range headings {
 		if v.pretty_numbering == numbering {
 			needle = v
