@@ -1,7 +1,8 @@
 ## desired behavior
 
 User input is the pretty printed heading numbering, i.e. `1.2.`.\
-(`-s` for "section" or `-b` for "branch" (since it is a tree data structure))
+(`-s` for "section" or `-b` for "branch" (since it is a tree data structure))\
+(or `-c` for "chapter")
 
 The output is every line of the document from that heading number on \
 until heading number 1.3., 2., or EOF.\
