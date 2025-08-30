@@ -1,4 +1,10 @@
+#### specification
+
 https://spec.commonmark.org/current/
+
+#### reference implementation in C (cmark)
+
+https://github.com/commonmark/cmark
 
 #### valid markdown
 
