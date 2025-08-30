@@ -7,9 +7,9 @@ import (
 )
 
 type cli_args struct {
-	chapter   string
-	file_path string
-	version   bool
+	chapter string
+	files   []string
+	version bool
 }
 
 func usage() {
@@ -31,17 +31,7 @@ func get_cli_args() cli_args {
 
 	flag.Parse()
 
-	if len(os.Args) == 1 {
-		usage()
-	}
-
-	non_flag_args := flag.Args()
-
-	if len(non_flag_args) == 1 {
-		args.file_path = non_flag_args[0]
-	} else {
-		args.file_path = ""
-	}
+	args.files = flag.Args()
 
 	return args
 }
@@ -52,15 +42,19 @@ func (args cli_args) evaluate() {
 		os.Exit(0)
 	}
 
-	if args.file_path == "" {
-		fmt.Printf("Empty file path.\n\n")
+	if len(args.files) == 0 {
+		fmt.Printf("No input files were provided.\n\n")
 		flag.Usage()
 	}
 
 	if args.chapter != "" {
-		print_chapter(args.file_path, args.chapter, os.Stdout)
+		for _, file_path := range args.files {
+			print_chapter(file_path, args.chapter, os.Stdout)
+		}
 		os.Exit(0)
 	}
 
-	print_tree(args.file_path, os.Stdout)
+	for _, file_path := range args.files {
+		print_tree(file_path, os.Stdout)
+	}
 }
