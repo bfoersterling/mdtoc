@@ -34,9 +34,10 @@ There is no official Markdown specification and there are many different \
 implementations.\
 This seems intended by the creators of the language.
 
+Commonmark seems to be the most widespread option.
+
 #### TODO
 
 - use goldmark for parsing?
 - maybe add support for "Setext-style headers"
 - maybe remove pound signs infront of headers (or introduce debug mode to show them)
-- option to print content under header x.x.x
