@@ -84,6 +84,26 @@ func Test_print_tree(t *testing.T) {
 			"test_buffer.String():\n%q\nexpected_result:\n%q\n",
 			test_buffer.String(), expected_result)
 	}
+
+	// 4 - yamlfmt.md
+	test_buffer.Reset()
+
+	expected_result = "yamlfmt.md\n" +
+		"|-- 1. # yamlfmt (1)\n" +
+		"|   |-- 1.1. ## Goals (5)\n" +
+		"|   |-- 1.2. ## Maintainers (11)\n" +
+		"|   |-- 1.3. ## Blog (15)\n" +
+		"|   |-- 1.4. ## Installation (21)\n" +
+		"|   `-- 1.5. ## Basic Usage (35)\n" +
+		"`-- 2. # Configuration File (54)\n"
+
+	print_tree("test_files/yamlfmt.md", test_buffer)
+
+	if test_buffer.String() != expected_result {
+		t.Fatalf("test_buffer.String() and expected result differ!\n"+
+			"test_buffer.String():\n%q\nexpected_result:\n%q\n",
+			test_buffer.String(), expected_result)
+	}
 }
 
 func Benchmark_print_tree(b *testing.B) {
