@@ -63,3 +63,4 @@ Commonmark seems to be the most widespread option.
 - maybe add support for "Setext-style headers"
 - maybe remove pound signs infront of headers (or introduce debug mode to show them)
 - color highlight headings for `-c` option?
+- interactive mode with "e" (edit chapter) and "c" (print chapter) options
