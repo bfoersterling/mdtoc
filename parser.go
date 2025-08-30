@@ -50,6 +50,7 @@ func parse_headings(reader io.Reader) []heading {
 	var curr_hlevel int
 	var prev_hlevel int
 	var hnumbers [6]int
+	var pretty_numbering string
 
 	md_scanner.Split(bufio.ScanLines)
 
@@ -75,11 +76,53 @@ func parse_headings(reader io.Reader) []heading {
 
 		hnumbers = get_heading_numbers(curr_hlevel, prev_hlevel, hnumbers)
 
+		pretty_numbering = pretty_print_numbering(hnumbers)
+
 		headings = append(
-			headings, heading{md_line, curr_hlevel, index, hnumbers})
+			headings, heading{md_line, curr_hlevel, index, hnumbers, pretty_numbering})
 	}
 
 	return headings
+}
+
+func parse_headings_and_lines(reader io.Reader) (headings []heading, lines []string) {
+	md_scanner := bufio.NewScanner(reader)
+	is_codeblock := false
+	index := 0
+	var curr_hlevel int
+	var prev_hlevel int
+	var hnumbers [6]int
+	var pretty_numbering string
+
+	md_scanner.Split(bufio.ScanLines)
+
+	for md_scanner.Scan() {
+		index++
+
+		md_line := md_scanner.Text()
+
+		if strings.HasPrefix(md_line, "```") {
+			is_codeblock = !is_codeblock
+		}
+
+		if is_codeblock || !is_heading(md_line) {
+			lines = append(lines, md_line)
+			continue
+		}
+
+		prev_hlevel = curr_hlevel
+		curr_hlevel = get_heading_level(md_line)
+
+		hnumbers = get_heading_numbers(curr_hlevel, prev_hlevel, hnumbers)
+
+		pretty_numbering = pretty_print_numbering(hnumbers)
+
+		headings = append(
+			headings, heading{md_line, curr_hlevel, index, hnumbers, pretty_numbering})
+		lines = append(lines, pretty_numbering+" "+md_line)
+	}
+
+	return
 }
 
 func get_headings(file_name string) []heading {
@@ -92,4 +135,16 @@ func get_headings(file_name string) []heading {
 	headings := parse_headings(file_handle)
 
 	return headings
+}
+
+func get_headings_and_lines(file_name string) (headings []heading, lines []string) {
+	file_handle, err := os.Open(file_name)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	headings, lines = parse_headings_and_lines(file_handle)
+
+	return
 }

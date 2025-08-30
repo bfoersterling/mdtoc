@@ -3,10 +3,11 @@ package main
 import "strings"
 
 type heading struct {
-	text   string
-	level  int
-	line   int
-	levels [6]int
+	text             string
+	level            int
+	line             int
+	levels           [6]int
+	pretty_numbering string
 }
 
 func is_heading(line string) bool {
@@ -26,6 +27,18 @@ func is_heading(line string) bool {
 	return leading_num_signs <= 6
 }
 
+// get heading by field pretty_numbering
+func get_heading_by_pnumber(headings []heading, numbering string) (needle heading) {
+	for _, v := range headings {
+		if v.pretty_numbering == numbering {
+			needle = v
+			return
+		}
+	}
+
+	return
+}
+
 func get_heading_level(heading_text string) int {
 	level := 0
 	for i := 0; heading_text[i] == '#'; i++ {
@@ -35,4 +48,20 @@ func get_heading_level(heading_text string) int {
 		}
 	}
 	return level
+}
+
+func get_section_end(headings []heading, start_number string) (end_line int) {
+	inside_section := false
+
+	for _, v := range headings {
+		if v.pretty_numbering == start_number {
+			inside_section = true
+		}
+		if inside_section && !strings.HasPrefix(v.pretty_numbering, start_number) {
+			end_line = v.line - 1
+			return
+		}
+	}
+
+	return
 }

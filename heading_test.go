@@ -5,6 +5,26 @@ import (
 	"testing"
 )
 
+func Test_get_heading_by_pnumber(t *testing.T) {
+	// 1
+	headings := get_headings("test_files/test.md")
+
+	expected_result := heading{
+		text:             "## header2",
+		level:            2,
+		line:             3,
+		levels:           [6]int{1, 1, 0, 0, 0, 0},
+		pretty_numbering: "1.1.",
+	}
+
+	test_result := get_heading_by_pnumber(headings, "1.1.")
+
+	if test_result != expected_result {
+		t.Fatalf("test_result and expected_result differ.\n"+
+			"%+v\n%+v\n", test_result, expected_result)
+	}
+}
+
 func Test_get_heading_level(t *testing.T) {
 	level := get_heading_level("# foo")
 

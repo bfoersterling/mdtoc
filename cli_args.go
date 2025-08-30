@@ -7,19 +7,23 @@ import (
 )
 
 type cli_args struct {
+	chapter   string
 	file_path string
 	version   bool
 }
 
 func usage() {
-	fmt.Printf("Usage: mdtoc [FILE]\n" +
-		"\n-V, --version\tprint version\n")
+	fmt.Printf("Usage: mdtoc [OPTIONS] [FILE]\n" +
+		"\n-c, --chapter [CHAPTER]\tprint chapter under header\n" +
+		"-V, --version\tprint version\n")
 	os.Exit(1)
 }
 
 func get_cli_args() cli_args {
 	args := cli_args{}
 
+	flag.StringVar(&args.chapter, "c", "", "print chapter")
+	flag.StringVar(&args.chapter, "chapter", "", "print chapter")
 	flag.BoolVar(&args.version, "V", false, "print version")
 	flag.BoolVar(&args.version, "version", false, "print version")
 
@@ -51,6 +55,11 @@ func (args cli_args) evaluate() {
 	if args.file_path == "" {
 		fmt.Printf("Empty file path.\n\n")
 		flag.Usage()
+	}
+
+	if args.chapter != "" {
+		print_chapter(args.file_path, args.chapter, os.Stdout)
+		os.Exit(0)
 	}
 
 	print_tree(args.file_path, os.Stdout)
