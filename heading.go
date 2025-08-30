@@ -27,6 +27,17 @@ func is_heading(line string) bool {
 	return leading_num_signs <= 6
 }
 
+func get_heading_by_number(headings []heading, numbering string) (needle heading) {
+	for _, v := range headings {
+		if v.pretty_numbering == numbering {
+			needle = v
+			return
+		}
+	}
+
+	return
+}
+
 func get_heading_level(heading_text string) int {
 	level := 0
 	for i := 0; heading_text[i] == '#'; i++ {
