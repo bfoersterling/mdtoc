@@ -44,15 +44,7 @@ audio.md
 
 Print the chapter under heading 3.1:
 ```
-$ ./mdtoc -c 3.1 test_files/audio.md
-audio.md
-3.1. #### pipewire - record audio
-
-If you use `pipewire` you can test your input device by recording like this:
-```
-pw-cat -r recordme
-```
-
+mdtoc -c 3.1 test_files/audio.md
 ```
 
 #### Markdown Implementations
