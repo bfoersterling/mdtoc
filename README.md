@@ -14,16 +14,45 @@ sudo just install
 
 ## Usage
 
+Print TOC:
 ```
-$ ./mdtoc test_files/README.md
-README.md
-|-- 1. # yamlfmt (1)
-|   |-- 1.1. ## Goals (5)
-|   |-- 1.2. ## Maintainers (11)
-|   |-- 1.3. ## Blog (15)
-|   |-- 1.4. ## Installation (21)
-|   `-- 1.5. ## Basic Usage (35)
-`-- 2. # Configuration File (54)
+$ ./mdtoc test_files/audio.md
+audio.md
+|-- 1. ## alsa (1)
+|   |-- 1.1. #### aplay (8)
+|   |-- 1.2. #### configuration (59)
+|   |-- 1.3. #### select default soundcard and/or pcm device (85)
+|   `-- 1.4. #### audioservers (109)
+|-- 2. ## how to figure out if you are using pulseaudio or pipewire? (114)
+|-- 3. ## pipewire (128)
+|   |-- 3.1. #### pipewire - record audio (137)
+|   `-- 3.2. #### pipe audio to pipewire (144)
+|-- 4. ## pulseaudio (151)
+|   |-- 4.1. #### installation (153)
+|   |-- 4.2. #### pulseaudio commands (161)
+|   |-- 4.3. #### testing pulseaudio (171)
+|   |-- 4.4. #### ffmpeg (188)
+|   |-- 4.5. #### play sounds on the command line (204)
+|   `-- 4.6. #### test microphone (219)
+|-- 5. ## Volume problem in movies (239)
+|   |-- 5.1. #### audacity (312)
+|   `-- 5.2. #### location of sound files that applications use (326)
+`-- 6. ## troubleshooting (346)
+    |-- 6.1. #### no audio input from headset (348)
+    `-- 6.2. #### no sound issue on Ubuntu (359)
+```
+
+Print the chapter under heading 3.1:
+```
+$ ./mdtoc -c 3.1 test_files/audio.md
+audio.md
+3.1. #### pipewire - record audio
+
+If you use `pipewire` you can test your input device by recording like this:
+```
+pw-cat -r recordme
+```
+
 ```
 
 #### Markdown Implementations
@@ -41,3 +70,4 @@ Commonmark seems to be the most widespread option.
 - use goldmark for parsing?
 - maybe add support for "Setext-style headers"
 - maybe remove pound signs infront of headers (or introduce debug mode to show them)
+- color highlight headings for `-c` option?
