@@ -4,9 +4,15 @@ import (
 	"fmt"
 	"io"
 	"path"
+	"strings"
 )
 
 func print_chapter(file_path string, chapter string, writer io.Writer) (err error) {
+	// user may enter a heading numbering without a trailing period
+	if !strings.HasSuffix(chapter, ".") {
+		chapter += "."
+	}
+
 	fmt.Fprintf(writer, "%s\n", path.Base(file_path))
 
 	headings, lines := get_headings_and_lines(file_path)
