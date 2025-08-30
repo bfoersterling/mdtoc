@@ -8,7 +8,6 @@ run:
 	go run . test_files/test.md
 
 test:
-	go run . test_files/weird_headers.md
 	go test -v
 
 bench:

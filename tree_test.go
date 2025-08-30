@@ -104,6 +104,30 @@ func Test_print_tree(t *testing.T) {
 			"test_buffer.String():\n%q\nexpected_result:\n%q\n",
 			test_buffer.String(), expected_result)
 	}
+
+	// 5 - badly formatted md document with out of tree headers
+	// this should not break completely as every sequence of chars is valid markdown
+	test_buffer.Reset()
+
+	expected_result = "weird_headers.md\n" +
+		"|-- 1. #### test markdown doc (3)\n" +
+		"|-- 1. ## header2 (5)\n" +
+		"|   |-- 1.1. #### header4 (7)\n" +
+		"|   |-- 1.2. #### another header4 (15)\n" +
+		"|   |-- 1.3. ####third header4 (19)\n" +
+		"|   `-- 1.4. ####fourth #header4 (21)\n" +
+		"|       `-- 1.4.1. ##### header5 (25)\n" +
+		"|-- 2. ## a second header2 (27)\n" +
+		"|   `-- 2.1. #### testing (29)\n" +
+		"`-- 1. # another weird out of tree header (35)\n"
+
+	print_tree("test_files/weird_headers.md", test_buffer)
+
+	if test_buffer.String() != expected_result {
+		t.Fatalf("test_buffer.String() and expected result differ!\n"+
+			"test_buffer.String():\n%q\nexpected_result:\n%q\n",
+			test_buffer.String(), expected_result)
+	}
 }
 
 func Benchmark_print_tree(b *testing.B) {
