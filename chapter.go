@@ -25,8 +25,6 @@ func print_chapter(file_path string, chapter string, writer io.Writer) (err erro
 		return
 	}
 
-	fmt.Fprintf(writer, "%s %s\n", start_header.pretty_numbering, start_header.text)
-
 	end_line := get_section_end(headings, start_header.pretty_numbering)
 
 	// if it is the last section print everything until the end
@@ -34,7 +32,7 @@ func print_chapter(file_path string, chapter string, writer io.Writer) (err erro
 		end_line = len(lines)
 	}
 
-	for _, v := range lines[start_header.line:end_line] {
+	for _, v := range lines[start_header.line-1 : end_line] {
 		fmt.Fprintf(writer, "%s\n", v)
 	}
 
