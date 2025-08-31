@@ -8,6 +8,7 @@ import (
 
 type cli_args struct {
 	chapter string
+	color   string
 	files   []string
 	version bool
 }
@@ -24,6 +25,8 @@ func get_cli_args() cli_args {
 
 	flag.StringVar(&args.chapter, "c", "", "print chapter")
 	flag.StringVar(&args.chapter, "chapter", "", "print chapter")
+	flag.StringVar(&args.color, "C", "auto", "set color to on, off, or auto")
+	flag.StringVar(&args.color, "color", "auto", "set color to on, off, or auto")
 	flag.BoolVar(&args.version, "V", false, "print version")
 	flag.BoolVar(&args.version, "version", false, "print version")
 
@@ -49,7 +52,7 @@ func (args cli_args) evaluate() {
 
 	if args.chapter != "" {
 		for _, file_path := range args.files {
-			print_chapter(file_path, args.chapter, os.Stdout)
+			print_chapter(file_path, args, os.Stdout)
 		}
 		os.Exit(0)
 	}

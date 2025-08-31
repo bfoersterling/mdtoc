@@ -7,7 +7,9 @@ import (
 	"strings"
 )
 
-func print_chapter(file_path string, chapter string, writer io.Writer) (err error) {
+func print_chapter(file_path string, args cli_args, writer io.Writer) (err error) {
+	chapter := args.chapter
+
 	// user may enter a heading numbering without a trailing period
 	if !strings.HasSuffix(chapter, ".") {
 		chapter += "."
@@ -15,7 +17,7 @@ func print_chapter(file_path string, chapter string, writer io.Writer) (err erro
 
 	fmt.Fprintf(writer, "%s\n", path.Base(file_path))
 
-	headings, lines := get_headings_and_lines(file_path)
+	headings, lines := get_headings_and_lines(file_path, args.color)
 
 	start_header := get_heading_by_pnumber(headings, chapter)
 
