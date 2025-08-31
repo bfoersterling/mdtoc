@@ -20,6 +20,7 @@ func Test_print_chapter(t *testing.T) {
 
 	// 2 - heading does exist
 	test_buffer.Reset()
+	t.Setenv("COLORTERM", "truecolor")
 	args = cli_args{
 		chapter: "1.1",
 		color:   "auto",
