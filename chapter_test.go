@@ -8,7 +8,10 @@ import (
 func Test_print_chapter(t *testing.T) {
 	// 1 - heading numbering does not exist
 	test_buffer := bytes.NewBuffer([]byte(""))
-	args := cli_args{chapter: "2.1"}
+	args := cli_args{
+		chapter: "2.1",
+		color:   "auto",
+	}
 	err := print_chapter("test_files/test.md", args, test_buffer)
 
 	if err == nil {
@@ -17,7 +20,10 @@ func Test_print_chapter(t *testing.T) {
 
 	// 2 - heading does exist
 	test_buffer.Reset()
-	args = cli_args{chapter: "1.1"}
+	args = cli_args{
+		chapter: "1.1",
+		color:   "auto",
+	}
 	err = print_chapter("test_files/test.md", args, test_buffer)
 
 	if err != nil {
