@@ -85,7 +85,7 @@ func parse_headings(reader io.Reader) []heading {
 	return headings
 }
 
-func parse_headings_and_lines(reader io.Reader) (headings []heading, lines []string) {
+func parse_headings_and_lines(reader io.Reader, color_config string) (headings []heading, lines []string) {
 	md_scanner := bufio.NewScanner(reader)
 	is_codeblock := false
 	index := 0
@@ -93,6 +93,7 @@ func parse_headings_and_lines(reader io.Reader) (headings []heading, lines []str
 	var prev_hlevel int
 	var hnumbers [6]int
 	var pretty_numbering string
+	var pretty_heading string
 
 	md_scanner.Split(bufio.ScanLines)
 
@@ -119,7 +120,10 @@ func parse_headings_and_lines(reader io.Reader) (headings []heading, lines []str
 
 		headings = append(
 			headings, heading{md_line, curr_hlevel, index, hnumbers, pretty_numbering})
-		lines = append(lines, pretty_numbering+" "+md_line)
+
+		pretty_heading = start_color_green(color_config) + pretty_numbering + " " + md_line + end_color(color_config)
+
+		lines = append(lines, pretty_heading)
 	}
 
 	return
@@ -137,14 +141,14 @@ func get_headings(file_name string) []heading {
 	return headings
 }
 
-func get_headings_and_lines(file_name string) (headings []heading, lines []string) {
+func get_headings_and_lines(file_name string, color string) (headings []heading, lines []string) {
 	file_handle, err := os.Open(file_name)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	headings, lines = parse_headings_and_lines(file_handle)
+	headings, lines = parse_headings_and_lines(file_handle, color)
 
 	return
 }
