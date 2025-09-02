@@ -29,6 +29,23 @@ func (h heading) raw() string {
 	return h.text
 }
 
+type nonheading struct {
+	line int
+	text string
+}
+
+func (nh nonheading) number() int {
+	return nh.line
+}
+
+func (nh nonheading) pretty() string {
+	return nh.text
+}
+
+func (nh nonheading) raw() string {
+	return nh.text
+}
+
 func is_heading(line string) bool {
 	if !strings.HasPrefix(line, "#") {
 		return false
