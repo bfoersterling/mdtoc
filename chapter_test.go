@@ -60,3 +60,19 @@ func Test_print_chapter(t *testing.T) {
 			"test_buffer:\n%s\nexpected_result:\n%s\n", test_buffer, expected_result)
 	}
 }
+
+func Benchmark_print_chapter(b *testing.B) {
+	// use similar test scenario as in test 2 of Test_print_chapter()
+	test_buffer := bytes.NewBuffer([]byte(""))
+
+	args := cli_args{
+		chapter: "1.1",
+		color:   "auto",
+	}
+
+	b.Setenv("COLORTERM", "truecolor")
+
+	for i := 0; i < b.N; i++ {
+		print_chapter("test_files/test.md", args, test_buffer)
+	}
+}
