@@ -2,12 +2,31 @@ package main
 
 import "strings"
 
+type line interface {
+	number() int
+	pretty() string
+	raw() string
+}
+
 type heading struct {
 	text             string
 	level            int
 	line             int
 	levels           [6]int
 	pretty_numbering string
+}
+
+func (h heading) number() int {
+	return h.line
+}
+
+func (h heading) pretty(color_config string) string {
+	return start_color_green(color_config) + h.pretty_numbering + h.text +
+		end_color(color_config)
+}
+
+func (h heading) raw() string {
+	return h.text
 }
 
 func is_heading(line string) bool {
