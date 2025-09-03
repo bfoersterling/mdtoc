@@ -85,7 +85,7 @@ func parse_headings(reader io.Reader) []heading {
 	return headings
 }
 
-func parse_headings_and_lines(reader io.Reader, color_config string) (headings []heading, lines []string) {
+func parse_headings_and_lines(reader io.Reader, color_config string) []line {
 	md_scanner := bufio.NewScanner(reader)
 	is_codeblock := false
 	index := 0
@@ -93,7 +93,7 @@ func parse_headings_and_lines(reader io.Reader, color_config string) (headings [
 	var prev_hlevel int
 	var hnumbers [6]int
 	var pretty_numbering string
-	var pretty_heading string
+	var lines []line
 
 	md_scanner.Split(bufio.ScanLines)
 
@@ -107,7 +107,12 @@ func parse_headings_and_lines(reader io.Reader, color_config string) (headings [
 		}
 
 		if is_codeblock || !is_heading(md_line) {
-			lines = append(lines, md_line)
+			nh := nonheading{
+				line: index,
+				text: md_line,
+			}
+
+			lines = append(lines, nh)
 			continue
 		}
 
@@ -118,15 +123,18 @@ func parse_headings_and_lines(reader io.Reader, color_config string) (headings [
 
 		pretty_numbering = pretty_print_numbering(hnumbers)
 
-		headings = append(
-			headings, heading{md_line, curr_hlevel, index, hnumbers, pretty_numbering})
+		h := heading{
+			level:            curr_hlevel,
+			levels:           hnumbers,
+			line:             index,
+			pretty_numbering: pretty_numbering,
+			text:             md_line,
+		}
 
-		pretty_heading = start_color_green(color_config) + pretty_numbering + " " + md_line + end_color(color_config)
-
-		lines = append(lines, pretty_heading)
+		lines = append(lines, h)
 	}
 
-	return
+	return lines
 }
 
 func get_headings(file_name string) []heading {
@@ -141,14 +149,14 @@ func get_headings(file_name string) []heading {
 	return headings
 }
 
-func get_headings_and_lines(file_name string, color string) (headings []heading, lines []string) {
+func get_lines(file_name string, color string) (lines []line) {
 	file_handle, err := os.Open(file_name)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	headings, lines = parse_headings_and_lines(file_handle, color)
+	lines = parse_headings_and_lines(file_handle, color)
 
 	return
 }

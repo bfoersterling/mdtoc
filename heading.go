@@ -4,7 +4,7 @@ import "strings"
 
 type line interface {
 	number() int
-	pretty() string
+	pretty(string) string
 	raw() string
 }
 
@@ -21,7 +21,7 @@ func (h heading) number() int {
 }
 
 func (h heading) pretty(color_config string) string {
-	return start_color_green(color_config) + h.pretty_numbering + h.text +
+	return start_color_green(color_config) + h.pretty_numbering + " " + h.text +
 		end_color(color_config)
 }
 
@@ -38,7 +38,7 @@ func (nh nonheading) number() int {
 	return nh.line
 }
 
-func (nh nonheading) pretty() string {
+func (nh nonheading) pretty(color_config string) string {
 	return nh.text
 }
 
@@ -95,6 +95,47 @@ func get_section_end(headings []heading, start_number string) (end_line int) {
 		}
 		if inside_section && !strings.HasPrefix(v.pretty_numbering, start_number) {
 			end_line = v.line - 1
+			return
+		}
+	}
+
+	return
+}
+
+// search all lines
+// and return the first heading that has that pretty_numbering
+func search_section_start(lines []line, pretty_numbering string) (start_header heading) {
+	for _, v := range lines {
+		heading, ok := v.(heading)
+
+		if !ok {
+			continue
+		}
+
+		if heading.pretty_numbering == pretty_numbering {
+			start_header = heading
+			return
+		}
+	}
+
+	return
+}
+
+func search_section_end(lines []line, start_number string) (end_line int) {
+	inside_section := false
+
+	for _, v := range lines {
+		heading, ok := v.(heading)
+
+		if !ok {
+			continue
+		}
+
+		if heading.pretty_numbering == start_number {
+			inside_section = true
+		}
+		if inside_section && !strings.HasPrefix(heading.pretty_numbering, start_number) {
+			end_line = heading.line - 1
 			return
 		}
 	}

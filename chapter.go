@@ -17,9 +17,9 @@ func print_chapter(file_path string, args cli_args, writer io.Writer) (err error
 
 	fmt.Fprintf(writer, "%s\n", path.Base(file_path))
 
-	headings, lines := get_headings_and_lines(file_path, args.color)
+	lines := get_lines(file_path, args.color)
 
-	start_header := get_heading_by_pnumber(headings, chapter)
+	start_header := search_section_start(lines, chapter)
 
 	if start_header == (heading{}) {
 		fmt.Fprintf(writer, "Heading number %s does not exist.\n", chapter)
@@ -27,7 +27,7 @@ func print_chapter(file_path string, args cli_args, writer io.Writer) (err error
 		return
 	}
 
-	end_line := get_section_end(headings, start_header.pretty_numbering)
+	end_line := search_section_end(lines, start_header.pretty_numbering)
 
 	// if it is the last section print everything until the end
 	if end_line == 0 {
@@ -35,7 +35,7 @@ func print_chapter(file_path string, args cli_args, writer io.Writer) (err error
 	}
 
 	for _, v := range lines[start_header.line-1 : end_line] {
-		fmt.Fprintf(writer, "%s\n", v)
+		fmt.Fprintf(writer, "%s\n", v.pretty(args.color))
 	}
 
 	return
