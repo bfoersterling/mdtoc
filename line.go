@@ -74,22 +74,6 @@ func get_heading_level(heading_text string) int {
 	return level
 }
 
-func get_section_end(headings []heading, start_number string) (end_line int) {
-	inside_section := false
-
-	for _, v := range headings {
-		if v.pretty_numbering == start_number {
-			inside_section = true
-		}
-		if inside_section && !strings.HasPrefix(v.pretty_numbering, start_number) {
-			end_line = v.line - 1
-			return
-		}
-	}
-
-	return
-}
-
 // search all lines
 // and return the first heading that has that pretty_numbering
 func search_section_start(lines []line, pretty_numbering string) (start_header heading) {
