@@ -85,7 +85,7 @@ func search_section(lines []line, pretty_numbering string) (section []line, err 
 	var end_line int
 
 	if len(lines) == 0 {
-		err = fmt.Errorf("Empty line slice was passed.\n")
+		err = fmt.Errorf("Empty line slice was passed.")
 		return
 	}
 
@@ -104,7 +104,7 @@ func search_section(lines []line, pretty_numbering string) (section []line, err 
 	}
 
 	if start_line == -1 {
-		err = fmt.Errorf("Section not found!\n")
+		err = fmt.Errorf("Section %q not found!", pretty_numbering)
 		return
 	}
 
@@ -128,7 +128,7 @@ func search_section(lines []line, pretty_numbering string) (section []line, err 
 	}
 
 	if start_line >= end_line {
-		err = fmt.Errorf("start_line can't be bigger than end_line.\n")
+		err = fmt.Errorf("start_line can't be bigger than end_line.")
 		return
 	}
 
