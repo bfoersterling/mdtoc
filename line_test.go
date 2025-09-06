@@ -66,4 +66,13 @@ func Test_search_section(t *testing.T) {
 	if section_lines[len(section_lines)-1].raw() != "" {
 		t.Fatalf("Last raw line of section_lines should be ''.\n")
 	}
+
+	// 2 - pretty numbering doesnt exist
+	lines = get_lines("test_files/test.md", "off")
+
+	section_lines, err = search_section(lines, "2.")
+
+	if err == nil {
+		t.Fatalf("search_section should fail with error 'Section not found'!")
+	}
 }

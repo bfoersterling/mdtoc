@@ -80,7 +80,8 @@ func get_heading_level(heading_text string) int {
 // Search through all lines and identify the start line of the section.
 // Then continue to the end of the section and return a slice of the section.
 func search_section(lines []line, pretty_numbering string) (section []line, err error) {
-	var start_line int
+	// -1 to distinguish from the first element which would be 0
+	start_line := -1
 	var end_line int
 
 	if len(lines) == 0 {
@@ -100,11 +101,11 @@ func search_section(lines []line, pretty_numbering string) (section []line, err 
 			start_line = i
 			break
 		}
+	}
 
-		if i == len(lines) {
-			err = fmt.Errorf("Section not found!\n")
-			return
-		}
+	if start_line == -1 {
+		err = fmt.Errorf("Section not found!\n")
+		return
 	}
 
 	// search end line
