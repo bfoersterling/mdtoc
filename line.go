@@ -1,6 +1,9 @@
 package main
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type line interface {
 	number() int
@@ -75,8 +78,8 @@ func get_heading_level(heading_text string) int {
 }
 
 // search all lines
-// and return the first heading that has that pretty_numbering
-func search_section_start(lines []line, pretty_numbering string) (start_header heading) {
+// and return the first line that is a heading with that pretty_numbering
+func search_section_start(lines []line, pretty_numbering string) (start_line int, err error) {
 	for _, v := range lines {
 		heading, ok := v.(heading)
 
@@ -85,16 +88,25 @@ func search_section_start(lines []line, pretty_numbering string) (start_header h
 		}
 
 		if heading.pretty_numbering == pretty_numbering {
-			start_header = heading
+			start_line = heading.line
 			return
 		}
 	}
 
+	err = fmt.Errorf("section not found")
+
 	return
 }
 
-func search_section_end(lines []line, start_number string) (end_line int) {
+// search all lines for the section start
+// then search for the section end (not very efficient)
+func search_section_end(lines []line, start_number string) (end_line int, err error) {
 	inside_section := false
+
+	if len(lines) == 0 {
+		err = fmt.Errorf("Empty lines slice was passed.\n")
+		return
+	}
 
 	for _, v := range lines {
 		heading, ok := v.(heading)
