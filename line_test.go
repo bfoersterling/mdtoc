@@ -75,4 +75,17 @@ func Test_search_section(t *testing.T) {
 	if err == nil {
 		t.Fatalf("search_section should fail with error 'Section not found'!")
 	}
+
+	// 3 - last section
+	lines = get_lines("test_files/test.md", "off")
+
+	section_lines, err = search_section(lines, "1.2.")
+
+	if section_lines[0].raw() != "## a second header2" {
+		t.Fatalf("section_lines[0].raw() should  be '## a second header2'.\n")
+	}
+
+	if section_lines[len(section_lines)-1].raw() != "```" {
+		t.Fatalf("Last line of section_lines should be '```'.\n")
+	}
 }
