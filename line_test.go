@@ -47,3 +47,23 @@ func Test_is_heading(t *testing.T) {
 		t.Fatalf("input %q should be recognized as a heading.\n", input)
 	}
 }
+
+func Test_search_section(t *testing.T) {
+	// 1
+	lines := get_lines("test_files/test.md", "off")
+
+	section_lines, err := search_section(lines, "1.1.")
+
+	if err != nil {
+		t.Fatalf("search_section failed with err:\n"+
+			"%v\n", err)
+	}
+
+	if section_lines[0].raw() != "## header2" {
+		t.Fatalf("section_lines[0].raw() should be '## header2'!\n")
+	}
+
+	if section_lines[len(section_lines)-1].raw() != "" {
+		t.Fatalf("Last raw line of section_lines should be ''.\n")
+	}
+}

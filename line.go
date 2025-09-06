@@ -77,6 +77,65 @@ func get_heading_level(heading_text string) int {
 	return level
 }
 
+// Search through all lines and identify the start line of the section.
+// Then continue to the end of the section and return a slice of the section.
+func search_section(lines []line, pretty_numbering string) (section []line, err error) {
+	var start_line int
+	var end_line int
+
+	if len(lines) == 0 {
+		err = fmt.Errorf("Empty line slice was passed.\n")
+		return
+	}
+
+	// search start line
+	for i, v := range lines {
+		h, ok := v.(heading)
+
+		if !ok {
+			continue
+		}
+
+		if h.pretty_numbering == pretty_numbering {
+			start_line = i
+			break
+		}
+
+		if i == len(lines) {
+			err = fmt.Errorf("Section not found!\n")
+			return
+		}
+	}
+
+	// search end line
+	for i, v := range lines[start_line:] {
+		h, ok := v.(heading)
+
+		if !ok {
+			continue
+		}
+
+		if !strings.HasPrefix(h.pretty_numbering, pretty_numbering) {
+			end_line = i + start_line
+			break
+		}
+	}
+
+	if end_line == 0 {
+		section = lines[start_line:]
+		return
+	}
+
+	if start_line >= end_line {
+		err = fmt.Errorf("start_line can't be bigger than end_line.\n")
+		return
+	}
+
+	section = lines[start_line:end_line]
+
+	return
+}
+
 // search all lines
 // and return the first line that is a heading with that pretty_numbering
 func search_section_start(lines []line, pretty_numbering string) (start_line int, err error) {
