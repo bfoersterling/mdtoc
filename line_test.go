@@ -89,3 +89,11 @@ func Test_search_section(t *testing.T) {
 		t.Fatalf("Last line of section_lines should be '```'.\n")
 	}
 }
+
+func Benchmark_search_section(b *testing.B) {
+	lines := get_lines("test_files/audio.md", "on")
+
+	for i := 0; i < b.N; i++ {
+		search_section(lines, "5.")
+	}
+}
