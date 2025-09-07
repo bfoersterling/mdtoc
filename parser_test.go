@@ -71,6 +71,18 @@ func Test_get_heading_numbers(t *testing.T) {
 	}
 }
 
+func Benchmark_get_headings(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		get_headings("test_files/audio.md")
+	}
+}
+
+func Benchmark_fetch_lines(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		fetch_lines("test_files/audio.md", "off")
+	}
+}
+
 func Test_parse_headings(t *testing.T) {
 	// 1
 	reader := strings.NewReader("## first section\n\n" +
@@ -84,45 +96,45 @@ func Test_parse_headings(t *testing.T) {
 
 	expected_headings := []heading{
 		heading{
-			text:           "## first section",
-			level:          2,
-			line:           1,
-			levels:         [6]int{0, 1, 0, 0, 0, 0},
+			text:             "## first section",
+			level:            2,
+			line:             1,
+			levels:           [6]int{0, 1, 0, 0, 0, 0},
 			pretty_numbering: "1.",
 		},
 		heading{
-			text:           "#### about",
-			level:          4,
-			line:           3,
-			levels:         [6]int{0, 1, 0, 1, 0, 0},
+			text:             "#### about",
+			level:            4,
+			line:             3,
+			levels:           [6]int{0, 1, 0, 1, 0, 0},
 			pretty_numbering: "1.1.",
 		},
 		heading{
-			text:           "#### details",
-			level:          4,
-			line:           5,
-			levels:         [6]int{0, 1, 0, 2, 0, 0},
+			text:             "#### details",
+			level:            4,
+			line:             5,
+			levels:           [6]int{0, 1, 0, 2, 0, 0},
 			pretty_numbering: "1.2.",
 		},
 		heading{
-			text:           "## second section",
-			level:          2,
-			line:           7,
-			levels:         [6]int{0, 2, 0, 0, 0, 0},
+			text:             "## second section",
+			level:            2,
+			line:             7,
+			levels:           [6]int{0, 2, 0, 0, 0, 0},
 			pretty_numbering: "2.",
 		},
 		heading{
-			text:           "#### tutorial",
-			level:          4,
-			line:           9,
-			levels:         [6]int{0, 2, 0, 1, 0, 0},
+			text:             "#### tutorial",
+			level:            4,
+			line:             9,
+			levels:           [6]int{0, 2, 0, 1, 0, 0},
 			pretty_numbering: "2.1.",
 		},
 		heading{
-			text:           "#### insights",
-			level:          4,
-			line:           11,
-			levels:         [6]int{0, 2, 0, 2, 0, 0},
+			text:             "#### insights",
+			level:            4,
+			line:             11,
+			levels:           [6]int{0, 2, 0, 2, 0, 0},
 			pretty_numbering: "2.2.",
 		},
 	}
