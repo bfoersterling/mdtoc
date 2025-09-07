@@ -62,6 +62,19 @@ Currently this project is using a very simplified subset of Markdown.\
 Lines starting with `#` chars are (ATX) headings.\
 Lines starting with three backticks start and end code blocks.
 
+#### Markdown Parsers
+
+Parsers like `goldmark`, `gomarkdown`, or `blackfriday` are good \
+for converting markdown to html but not good for using them as \
+parsers.\
+`gomarkdown` can extract headings and heading levels, but doesnt provide \
+the position of the tokens.
+
+Maybe build a parser for a simplified Markdown implementation \
+that creates an AST with token position, literal string, \
+token type information and things like heading levels.\
+=> ast node interface with types (heading, code block, citation) as structs that implement it
+
 #### TODO
 
 - use goldmark for parsing?
