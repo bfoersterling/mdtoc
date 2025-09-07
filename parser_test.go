@@ -71,19 +71,13 @@ func Test_get_heading_numbers(t *testing.T) {
 	}
 }
 
-func Benchmark_get_headings(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		get_headings("test_files/audio.md")
-	}
-}
-
 func Benchmark_fetch_lines(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		fetch_lines("test_files/audio.md", "off")
 	}
 }
 
-func Test_parse_headings(t *testing.T) {
+func Test_parse_lines(t *testing.T) {
 	// 1
 	reader := strings.NewReader("## first section\n\n" +
 		"#### about\n\n" +
@@ -92,7 +86,7 @@ func Test_parse_headings(t *testing.T) {
 		"#### tutorial\n\n" +
 		"#### insights\n")
 
-	test_headings := parse_headings(reader)
+	lines := parse_lines(reader, "off")
 
 	expected_headings := []heading{
 		heading{
@@ -138,6 +132,8 @@ func Test_parse_headings(t *testing.T) {
 			pretty_numbering: "2.2.",
 		},
 	}
+
+	test_headings := extract_headings(lines)
 
 	for i, _ := range test_headings {
 		if test_headings[i] != expected_headings[i] {

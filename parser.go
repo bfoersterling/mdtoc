@@ -9,12 +9,15 @@ import (
 	"strings"
 )
 
-func pretty_print_numbering(level_count [6]int) (heading_number string) {
-	for _, level := range level_count {
-		if level == 0 {
+func extract_headings(lines []line) (headings []heading) {
+	for _, line := range lines {
+		h, ok := line.(heading)
+
+		if !ok {
 			continue
 		}
-		heading_number += strconv.Itoa(level) + "."
+
+		headings = append(headings, h)
 	}
 
 	return
@@ -42,50 +45,18 @@ func get_heading_numbers(current_level int, previous_level int, current_level_co
 	return
 }
 
-func parse_headings(reader io.Reader) []heading {
-	md_scanner := bufio.NewScanner(reader)
-	var headings []heading
-	is_codeblock := false
-	index := 0
-	var curr_hlevel int
-	var prev_hlevel int
-	var hnumbers [6]int
-	var pretty_numbering string
-
-	md_scanner.Split(bufio.ScanLines)
-
-	for md_scanner.Scan() {
-		index++
-
-		md_line := md_scanner.Text()
-
-		if strings.HasPrefix(md_line, "```") {
-			is_codeblock = !is_codeblock
-		}
-
-		if is_codeblock {
+func pretty_print_numbering(level_count [6]int) (heading_number string) {
+	for _, level := range level_count {
+		if level == 0 {
 			continue
 		}
-
-		if !is_heading(md_line) {
-			continue
-		}
-
-		prev_hlevel = curr_hlevel
-		curr_hlevel = get_heading_level(md_line)
-
-		hnumbers = get_heading_numbers(curr_hlevel, prev_hlevel, hnumbers)
-
-		pretty_numbering = pretty_print_numbering(hnumbers)
-
-		headings = append(
-			headings, heading{md_line, curr_hlevel, index, hnumbers, pretty_numbering})
+		heading_number += strconv.Itoa(level) + "."
 	}
 
-	return headings
+	return
 }
 
-func parse_headings_and_lines(reader io.Reader, color_config string) []line {
+func parse_lines(reader io.Reader, color_config string) []line {
 	md_scanner := bufio.NewScanner(reader)
 	is_codeblock := false
 	index := 0
@@ -137,18 +108,6 @@ func parse_headings_and_lines(reader io.Reader, color_config string) []line {
 	return lines
 }
 
-func get_headings(file_name string) []heading {
-	file_handle, err := os.Open(file_name)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	headings := parse_headings(file_handle)
-
-	return headings
-}
-
 func fetch_lines(file_name string, color string) (lines []line) {
 	file_handle, err := os.Open(file_name)
 
@@ -156,7 +115,7 @@ func fetch_lines(file_name string, color string) (lines []line) {
 		log.Fatal(err)
 	}
 
-	lines = parse_headings_and_lines(file_handle, color)
+	lines = parse_lines(file_handle, color)
 
 	return
 }
