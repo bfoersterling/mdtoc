@@ -68,3 +68,4 @@ Lines starting with three backticks start and end code blocks.
 - maybe add support for "Setext-style headers"
 - maybe remove pound signs infront of headers (or introduce debug mode to show them)
 - interactive mode with "e" (edit chapter) and "c" (print chapter) options
+- color highlight code blocks in print chapter mode (=> new `code` struct that implements `line`)
