@@ -28,7 +28,8 @@ func Test_print_chapter(t *testing.T) {
 	err = print_chapter("test_files/test.md", args, test_buffer)
 
 	if err != nil {
-		t.Fatalf("print_chapter should not return an error here.\n")
+		t.Fatalf("print_chapter should not return an error here.\n"+
+			"%v\n", err)
 	}
 
 	expected_result := "test.md\n" +

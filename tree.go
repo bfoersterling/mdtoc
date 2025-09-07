@@ -64,7 +64,10 @@ func get_root_children(headings []heading) []int {
 func print_tree(file_name string, writer io.Writer) {
 	var headings []heading = nil
 
-	headings = get_headings(file_name)
+	// currently we don't need colors when printing the heading tree
+	lines := fetch_lines(file_name, "off")
+
+	headings = extract_headings(lines)
 
 	fmt.Fprintln(writer, path.Base(file_name))
 

@@ -52,7 +52,12 @@ func (args cli_args) evaluate() {
 
 	if args.chapter != "" {
 		for _, file_path := range args.files {
-			print_chapter(file_path, args, os.Stdout)
+			err := print_chapter(file_path, args, os.Stdout)
+
+			if err != nil {
+				fmt.Printf("%v\n", err)
+				os.Exit(1)
+			}
 		}
 		os.Exit(0)
 	}
