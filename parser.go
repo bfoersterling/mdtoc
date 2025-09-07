@@ -149,7 +149,7 @@ func get_headings(file_name string) []heading {
 	return headings
 }
 
-func get_lines(file_name string, color string) (lines []line) {
+func fetch_lines(file_name string, color string) (lines []line) {
 	file_handle, err := os.Open(file_name)
 
 	if err != nil {

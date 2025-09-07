@@ -50,7 +50,7 @@ func Test_is_heading(t *testing.T) {
 
 func Test_search_section(t *testing.T) {
 	// 1
-	lines := get_lines("test_files/test.md", "off")
+	lines := fetch_lines("test_files/test.md", "off")
 
 	section_lines, err := search_section(lines, "1.1.")
 
@@ -68,7 +68,7 @@ func Test_search_section(t *testing.T) {
 	}
 
 	// 2 - pretty numbering doesnt exist
-	lines = get_lines("test_files/test.md", "off")
+	lines = fetch_lines("test_files/test.md", "off")
 
 	section_lines, err = search_section(lines, "2.")
 
@@ -77,7 +77,7 @@ func Test_search_section(t *testing.T) {
 	}
 
 	// 3 - last section
-	lines = get_lines("test_files/test.md", "off")
+	lines = fetch_lines("test_files/test.md", "off")
 
 	section_lines, err = search_section(lines, "1.2.")
 
@@ -91,7 +91,7 @@ func Test_search_section(t *testing.T) {
 }
 
 func Benchmark_search_section(b *testing.B) {
-	lines := get_lines("test_files/audio.md", "on")
+	lines := fetch_lines("test_files/audio.md", "on")
 
 	for i := 0; i < b.N; i++ {
 		search_section(lines, "5.")

@@ -17,7 +17,7 @@ func print_chapter(file_path string, args cli_args, writer io.Writer) (err error
 
 	fmt.Fprintf(writer, "%s\n", path.Base(file_path))
 
-	lines := get_lines(file_path, args.color)
+	lines := fetch_lines(file_path, args.color)
 
 	section_lines, err := search_section(lines, chapter)
 
