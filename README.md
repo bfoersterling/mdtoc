@@ -55,7 +55,12 @@ There is no official Markdown specification and there are many different \
 implementations.\
 This seems intended by the creators of the language.
 
-Commonmark seems to be the most widespread option.
+Commonmark seems to be the most widespread option.\
+But it is hard to implement.
+
+Currently this project is using a very simplified subset of Markdown.\
+Lines starting with `#` chars are (ATX) headings.\
+Lines starting with three backticks start and end code blocks.
 
 #### TODO
 
