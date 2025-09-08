@@ -18,13 +18,12 @@ func Test_pretty_print_heading_numbering(t *testing.T) {
 
 func Test_get_heading_numbers(t *testing.T) {
 	// 1
-	previous_level := 0
 	current_level := 1
 	current_lc := [6]int{0, 0, 0, 0, 0, 0}
 
 	expected_result := [6]int{1, 0, 0, 0, 0, 0}
 
-	test_lc := get_heading_numbers(current_level, previous_level, current_lc)
+	test_lc := get_heading_numbers(current_level, current_lc)
 
 	if test_lc != expected_result {
 		t.Fatalf("test_lc and expected_result differ!\n"+
@@ -32,12 +31,11 @@ func Test_get_heading_numbers(t *testing.T) {
 	}
 
 	// 2
-	previous_level = 4
 	current_level = 6
 	current_lc = [6]int{1, 2, 0, 8, 0, 1}
 	expected_result = [6]int{1, 2, 0, 8, 0, 2}
 
-	test_lc = get_heading_numbers(current_level, previous_level, current_lc)
+	test_lc = get_heading_numbers(current_level, current_lc)
 
 	if test_lc != expected_result {
 		t.Fatalf("test_lc and expected_result differ!\n"+
@@ -45,25 +43,23 @@ func Test_get_heading_numbers(t *testing.T) {
 	}
 
 	// 3 - move up heading levels
-	previous_level = 4
 	current_level = 2
 	current_lc = [6]int{0, 1, 0, 3, 0, 0}
 	expected_result = [6]int{0, 2, 0, 0, 0, 0}
 
-	test_lc = get_heading_numbers(current_level, previous_level, current_lc)
+	test_lc = get_heading_numbers(current_level, current_lc)
 
 	if test_lc != expected_result {
 		t.Fatalf("test_lc and expected_result differ!\n"+
 			"test_lc:\n%v\nexpected_result:\n%v\n", test_lc, expected_result)
 	}
 
-	// 3 - move up heading levels with more filled levels in between
-	previous_level = 6
+	// 4 - move up heading levels with more filled levels in between
 	current_level = 2
 	current_lc = [6]int{1, 2, 0, 5, 0, 2}
 	expected_result = [6]int{1, 3, 0, 0, 0, 0}
 
-	test_lc = get_heading_numbers(current_level, previous_level, current_lc)
+	test_lc = get_heading_numbers(current_level, current_lc)
 
 	if test_lc != expected_result {
 		t.Fatalf("test_lc and expected_result differ!\n"+
