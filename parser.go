@@ -23,23 +23,17 @@ func extract_headings(lines []line) (headings []heading) {
 	return
 }
 
-// get raw heading numbering
+// Get raw heading numbering.
 // i.e. [0 1 0 2 0 0]
-// this output could then be pretty printed by omitting zeros
-// but you need a logic when you switch levels
-// when you add a new subheading or when you go up a level to
-// finish the section
-// just incrementing the current level is not enough
-func get_heading_numbers(current_level int, previous_level int, current_level_count [6]int) (level_count [6]int) {
+// This output can then be pretty printed by omitting zeros.
+func get_heading_numbers(current_level int, current_level_count [6]int) (level_count [6]int) {
 	level_count = current_level_count
 
 	level_count[current_level-1]++
 
-	// going up a heading level includes clearing all child levels
-	if current_level < previous_level {
-		for i := current_level; i < 6; i++ {
-			level_count[i] = 0
-		}
+	// clear lower levels
+	for i := current_level; i < 6; i++ {
+		level_count[i] = 0
 	}
 
 	return
@@ -61,7 +55,6 @@ func parse_lines(reader io.Reader, color_config string) []line {
 	is_codeblock := false
 	index := 0
 	var curr_hlevel int
-	var prev_hlevel int
 	var hnumbers [6]int
 	var pretty_numbering string
 	var lines []line
@@ -87,10 +80,9 @@ func parse_lines(reader io.Reader, color_config string) []line {
 			continue
 		}
 
-		prev_hlevel = curr_hlevel
 		curr_hlevel = get_heading_level(md_line)
 
-		hnumbers = get_heading_numbers(curr_hlevel, prev_hlevel, hnumbers)
+		hnumbers = get_heading_numbers(curr_hlevel, hnumbers)
 
 		pretty_numbering = pretty_print_numbering(hnumbers)
 
