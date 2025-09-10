@@ -5,10 +5,16 @@ import (
 	"io"
 	"path"
 	"strings"
+
+	fc "github.com/fatih/color"
 )
 
 func print_chapter(file_path string, args cli_args, writer io.Writer) (err error) {
 	chapter := args.chapter
+
+	if args.color == "off" {
+		fc.NoColor = true
+	}
 
 	// user may enter a heading numbering without a trailing period
 	if !strings.HasSuffix(chapter, ".") {
