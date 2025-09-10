@@ -27,7 +27,7 @@ func print_chapter(file_path string, args cli_args, writer io.Writer) (err error
 
 	//for _, v := range lines[start_line-1 : end_line] {
 	for _, v := range section_lines {
-		fmt.Fprintf(writer, "%s\n", v.pretty(args.color))
+		fmt.Fprintf(writer, "%s\n", v.pretty())
 	}
 
 	return
