@@ -14,6 +14,8 @@ func print_chapter(file_path string, args cli_args, writer io.Writer) (err error
 
 	if args.color == "off" {
 		fc.NoColor = true
+	} else if args.color == "on" {
+		fc.NoColor = false
 	}
 
 	// user may enter a heading numbering without a trailing period
