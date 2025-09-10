@@ -23,3 +23,7 @@ automatically disable color by default in all supported software.
 output streams (for example if the output were piped directly to less).
 
 > The color package also disables color output if the NO_COLOR environment variable is set to a non-empty string.
+
+TODO:\
+Test if this lib https://github.com/mattn/go-isatty/tree/master detects \
+a container (golang:alpine) as tty or not and investigate why.
