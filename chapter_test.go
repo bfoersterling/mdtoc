@@ -40,7 +40,7 @@ func Test_print_chapter(t *testing.T) {
 		"some text.\n" +
 		"\n" +
 		"```bash\n" +
-		"echo 'hi'\n" +
+		"\033[100;33mecho 'hi'\033[0;0m\n" +
 		"```\n" +
 		"\n" +
 		"\033[32m1.1.2. #### another header4\033[0m\n" +
