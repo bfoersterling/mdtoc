@@ -9,6 +9,11 @@ import (
 	"strings"
 )
 
+const (
+	STATE_NORMAL = iota
+	STATE_CODEBLOCK
+)
+
 func extract_headings(lines []line) (headings []heading) {
 	for _, line := range lines {
 		h, ok := line.(heading)
@@ -19,6 +24,18 @@ func extract_headings(lines []line) (headings []heading) {
 
 		headings = append(headings, h)
 	}
+
+	return
+}
+
+func fetch_lines(file_name string, color string) (lines []line) {
+	file_handle, err := os.Open(file_name)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	lines = parse_lines(file_handle, color)
 
 	return
 }
@@ -39,6 +56,10 @@ func get_heading_numbers(current_level int, current_level_count [6]int) (level_c
 	return
 }
 
+func is_codeblock_toggle(line string) bool {
+	return strings.HasPrefix(line, "```")
+}
+
 func pretty_print_numbering(level_count [6]int) (heading_number string) {
 	for _, level := range level_count {
 		if level == 0 {
@@ -52,12 +73,10 @@ func pretty_print_numbering(level_count [6]int) (heading_number string) {
 
 func parse_lines(reader io.Reader, color_config string) []line {
 	md_scanner := bufio.NewScanner(reader)
-	is_codeblock := false
 	index := 0
-	var curr_hlevel int
 	var hnumbers [6]int
-	var pretty_numbering string
 	var lines []line
+	state := STATE_NORMAL
 
 	md_scanner.Split(bufio.ScanLines)
 
@@ -66,48 +85,61 @@ func parse_lines(reader io.Reader, color_config string) []line {
 
 		md_line := md_scanner.Text()
 
-		if strings.HasPrefix(md_line, "```") {
-			is_codeblock = !is_codeblock
+		switch state {
+		case STATE_CODEBLOCK:
+			state = scan_codeblock(state, md_line, &lines)
+		case STATE_NORMAL:
+			state = scan_normal(state, md_line, &hnumbers, &lines)
 		}
-
-		if is_codeblock || !is_heading(md_line) {
-			nh := nonheading{
-				line: index,
-				text: md_line,
-			}
-
-			lines = append(lines, nh)
-			continue
-		}
-
-		curr_hlevel = get_heading_level(md_line)
-
-		hnumbers = get_heading_numbers(curr_hlevel, hnumbers)
-
-		pretty_numbering = pretty_print_numbering(hnumbers)
-
-		h := heading{
-			level:            curr_hlevel,
-			levels:           hnumbers,
-			line:             index,
-			pretty_numbering: pretty_numbering,
-			text:             md_line,
-		}
-
-		lines = append(lines, h)
 	}
 
 	return lines
 }
 
-func fetch_lines(file_name string, color string) (lines []line) {
-	file_handle, err := os.Open(file_name)
+func scan_codeblock(current_state int, raw_line string, lines *[]line) (new_state int) {
+	new_state = current_state
 
-	if err != nil {
-		log.Fatal(err)
+	if strings.HasPrefix(raw_line, "```") {
+		new_state = STATE_NORMAL
 	}
 
-	lines = parse_lines(file_handle, color)
+	nh := nonheading{
+		line: len(*lines) + 1,
+		text: raw_line,
+	}
+	*lines = append(*lines, nh)
+
+	return
+}
+
+func scan_normal(current_state int, raw_line string, hnumbers *[6]int, lines *[]line) (new_state int) {
+	if is_codeblock_toggle(raw_line) {
+		new_state = STATE_CODEBLOCK
+	}
+
+	if !is_heading(raw_line) {
+		nh := nonheading{
+			line: len(*lines) + 1,
+			text: raw_line,
+		}
+		*lines = append(*lines, nh)
+		return
+	}
+
+	heading_level := get_heading_level(raw_line)
+
+	*hnumbers = get_heading_numbers(heading_level, *hnumbers)
+
+	pretty_numbering := pretty_print_numbering(*hnumbers)
+
+	h := heading{
+		level:            heading_level,
+		levels:           *hnumbers,
+		line:             len(*lines) + 1,
+		pretty_numbering: pretty_numbering,
+		text:             raw_line,
+	}
+	*lines = append(*lines, h)
 
 	return
 }
