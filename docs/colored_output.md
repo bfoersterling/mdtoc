@@ -24,6 +24,12 @@ output streams (for example if the output were piped directly to less).
 
 > The color package also disables color output if the NO_COLOR environment variable is set to a non-empty string.
 
-TODO:\
-Test if this lib https://github.com/mattn/go-isatty/tree/master detects \
-a container (golang:alpine) as tty or not and investigate why.
+> NoColor defines if the output is colorized or not.\
+It's dynamically set to false or true based on the stdout's file descriptor \
+referring to a terminal or not.\
+It's also set to true if the NO_COLOR environment variable is set \
+(regardless of its value).
+
+=> So you set `NoColor` to true or false if you want to force/disable colors.\
+If you do not set it, it will look for the env var `NO_COLOR` and check if \
+it is in a tty.
