@@ -101,13 +101,20 @@ func scan_codeblock(current_state int, raw_line string, lines *[]line) (new_stat
 
 	if strings.HasPrefix(raw_line, "```") {
 		new_state = STATE_NORMAL
+		nh := nonheading{
+			line: len(*lines) + 1,
+			text: raw_line,
+		}
+		*lines = append(*lines, nh)
+		return
 	}
 
-	nh := nonheading{
+	c := codeline{
 		line: len(*lines) + 1,
 		text: raw_line,
 	}
-	*lines = append(*lines, nh)
+
+	*lines = append(*lines, c)
 
 	return
 }
