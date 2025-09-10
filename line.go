@@ -3,12 +3,33 @@ package main
 import (
 	"fmt"
 	"strings"
+
+	fc "github.com/fatih/color"
 )
 
 type line interface {
 	number() int
-	pretty(string) string
+	pretty() string
 	raw() string
+}
+
+type codeline struct {
+	line int
+	text string
+}
+
+func (c codeline) number() int {
+	return c.line
+}
+
+func (c codeline) pretty() string {
+	color := fc.New().Add(fc.BgHiBlack, fc.FgYellow)
+
+	return color.Sprintf("%s", c.text)
+}
+
+func (c codeline) raw() string {
+	return c.text
 }
 
 type heading struct {
@@ -23,9 +44,8 @@ func (h heading) number() int {
 	return h.line
 }
 
-func (h heading) pretty(color_config string) string {
-	return start_color_green(color_config) + h.pretty_numbering + " " + h.text +
-		end_color(color_config)
+func (h heading) pretty() string {
+	return fc.GreenString(h.pretty_numbering + " " + h.text)
 }
 
 func (h heading) raw() string {
@@ -41,7 +61,7 @@ func (nh nonheading) number() int {
 	return nh.line
 }
 
-func (nh nonheading) pretty(color_config string) string {
+func (nh nonheading) pretty() string {
 	return nh.text
 }
 

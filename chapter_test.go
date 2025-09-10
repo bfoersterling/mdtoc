@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"testing"
+
+	fc "github.com/fatih/color"
 )
 
 func Test_print_chapter(t *testing.T) {
@@ -20,7 +22,10 @@ func Test_print_chapter(t *testing.T) {
 
 	// 2 - heading does exist
 	test_buffer.Reset()
-	t.Setenv("COLORTERM", "truecolor")
+
+	// make color output work in github actions
+	fc.NoColor = false
+
 	args = cli_args{
 		chapter: "1.1",
 		color:   "auto",
@@ -33,32 +38,32 @@ func Test_print_chapter(t *testing.T) {
 	}
 
 	expected_result := "test.md\n" +
-		"\033[0;32m1.1. ## header2\033[0m\n" +
+		"\033[32m1.1. ## header2\033[0m\n" +
 		"\n" +
-		"\033[0;32m1.1.1. #### header4\033[0m\n" +
+		"\033[32m1.1.1. #### header4\033[0m\n" +
 		"\n" +
 		"some text.\n" +
 		"\n" +
 		"```bash\n" +
-		"echo 'hi'\n" +
+		"\033[100;33mecho 'hi'\033[0;0m\n" +
 		"```\n" +
 		"\n" +
-		"\033[0;32m1.1.2. #### another header4\033[0m\n" +
+		"\033[32m1.1.2. #### another header4\033[0m\n" +
 		"\n" +
 		"more text.\n" +
 		"\n" +
-		"\033[0;32m1.1.3. ####third header4\033[0m\n" +
+		"\033[32m1.1.3. ####third header4\033[0m\n" +
 		"\n" +
-		"\033[0;32m1.1.4. ####fourth #header4\033[0m\n" +
+		"\033[32m1.1.4. ####fourth #header4\033[0m\n" +
 		"\n" +
 		" ## this is not a header anymore\n" +
 		"\n" +
-		"\033[0;32m1.1.4.1. ##### header5\033[0m\n" +
+		"\033[32m1.1.4.1. ##### header5\033[0m\n" +
 		"\n"
 
 	if test_buffer.String() != expected_result {
 		t.Fatalf("test_buffer and expected_result differ.\n"+
-			"test_buffer:\n%s\nexpected_result:\n%s\n", test_buffer, expected_result)
+			"test_buffer:\n%q\nexpected_result:\n%q\n", test_buffer, expected_result)
 	}
 }
 
