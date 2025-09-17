@@ -5,6 +5,75 @@ import (
 	"testing"
 )
 
+func Test_fetch_lines(t *testing.T) {
+	// 1
+	test_lines := fetch_lines("test_files/late_out_of_tree.md", "off")
+
+	test_headings := extract_headings(test_lines)
+
+	expected_headings := []heading{
+		heading{
+			text:             "# my documentation",
+			line:             1,
+			level:            1,
+			levels:           [6]int{1, 0, 0, 0, 0, 0},
+			pretty_numbering: "1.",
+		},
+		heading{
+			text:             "#### sources",
+			line:             3,
+			level:            4,
+			levels:           [6]int{1, 0, 0, 1, 0, 0},
+			pretty_numbering: "1.1.",
+		},
+		heading{
+			text:             "#### usage",
+			line:             9,
+			level:            4,
+			levels:           [6]int{1, 0, 0, 2, 0, 0},
+			pretty_numbering: "1.2.",
+		},
+		heading{
+			text:             "## out of tree",
+			line:             13,
+			level:            2,
+			levels:           [6]int{1, 1, 0, 0, 0, 0},
+			pretty_numbering: "1.1.",
+		},
+		heading{
+			text:             "#### sub out of tree 1",
+			line:             15,
+			level:            4,
+			levels:           [6]int{1, 1, 0, 1, 0, 0},
+			pretty_numbering: "1.1.1.",
+		},
+		heading{
+			text:             "#### sub out of tree 2",
+			line:             17,
+			level:            4,
+			levels:           [6]int{1, 1, 0, 2, 0, 0},
+			pretty_numbering: "1.1.2.",
+		},
+	}
+
+	if len(test_headings) != len(expected_headings) {
+		t.Fatalf("test_headings and expected_headings do not have the same length.\n")
+	}
+
+	for i, _ := range test_headings {
+		if test_headings[i] != expected_headings[i] {
+			t.Fatalf("test_heading[%d] and expected_heading[%d] differ!\n"+
+				"test_heading:\n%+v\nexpected_heading:\n%+v\n", i, i, test_headings[i], expected_headings[i])
+		}
+	}
+}
+
+func Benchmark_fetch_lines(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		fetch_lines("test_files/audio.md", "off")
+	}
+}
+
 func Test_pretty_print_heading_numbering(t *testing.T) {
 	// 1
 	hnum := [6]int{1, 2, 0, 8, 0, 2}
@@ -64,12 +133,6 @@ func Test_get_heading_numbers(t *testing.T) {
 	if test_lc != expected_result {
 		t.Fatalf("test_lc and expected_result differ!\n"+
 			"test_lc:\n%v\nexpected_result:\n%v\n", test_lc, expected_result)
-	}
-}
-
-func Benchmark_fetch_lines(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		fetch_lines("test_files/audio.md", "off")
 	}
 }
 
