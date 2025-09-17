@@ -2,8 +2,26 @@ package main
 
 import (
 	"bytes"
+	"slices"
 	"testing"
 )
+
+func Test_get_child_indices(t *testing.T) {
+	// 1
+	test_lines := fetch_lines("test_files/late_out_of_tree.md", "off")
+	test_headings := extract_headings(test_lines)
+
+	test_child_indices := get_child_indices(0, test_headings)
+
+	// out of tree header should also be recognized as a child
+	expected_child_indices := []int{1, 2, 3}
+
+	if slices.Compare(test_child_indices, expected_child_indices) != 0 {
+		t.Fatalf("test_child_indices and expected_child_indices differ!\n"+
+			"test_child_indices:\n%v\n"+
+			"expected_child_indices:\n%v\n", test_child_indices, expected_child_indices)
+	}
+}
 
 func Test_get_root_children(t *testing.T) {
 	// 1
