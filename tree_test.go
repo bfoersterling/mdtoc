@@ -5,6 +5,23 @@ import (
 	"testing"
 )
 
+func Test_get_root_children(t *testing.T) {
+	// 1
+	test_lines := fetch_lines("test_files/late_out_of_tree.md", "off")
+	test_headings := extract_headings(test_lines)
+
+	root_children_indices := get_root_children(test_headings)
+
+	// there is only one root child, which is a level 1 heading in this case
+	if len(root_children_indices) != 1 {
+		t.Fatalf("There should be only one root child.")
+	}
+
+	if root_children_indices[0] != 0 {
+		t.Fatalf("The root child should be the first heading with index 0.\n")
+	}
+}
+
 func Test_print_tree(t *testing.T) {
 	// 1
 	test_buffer := bytes.NewBuffer([]byte(""))
