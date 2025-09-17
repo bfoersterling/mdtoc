@@ -4,7 +4,27 @@ import (
 	"fmt"
 	"io"
 	"path"
+	"slices"
 )
+
+func is_direct_child(parent heading, child heading) bool {
+	if slices.Compare(child.levels[:parent.level], parent.levels[:parent.level]) != 0 {
+		return false
+	}
+
+	counter := 0
+	for _, v := range child.levels[parent.level:] {
+		if v > 0 {
+			counter++
+		}
+	}
+
+	if counter > 1 {
+		return false
+	}
+
+	return true
+}
 
 func get_child_indices(header_index int, headings []heading) []int {
 	var children []int

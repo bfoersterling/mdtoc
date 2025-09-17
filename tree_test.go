@@ -40,6 +40,53 @@ func Test_get_root_children(t *testing.T) {
 	}
 }
 
+func Test_is_direct_child(t *testing.T) {
+	// 1
+	root_heading := heading{
+		level:  1,
+		levels: [6]int{1, 0, 0, 0, 0, 0},
+	}
+	child_heading := heading{
+		level:  4,
+		levels: [6]int{1, 0, 0, 1, 0, 0},
+	}
+
+	if !is_direct_child(root_heading, child_heading) {
+		t.Fatalf("child_heading should be a direct child of root_heading.\n"+
+			"root_heading:\n%+v\nchild_heading:\n%+v\n", root_heading, child_heading)
+	}
+
+	// 2
+	root_heading = heading{
+		level:  1,
+		levels: [6]int{1, 0, 0, 0, 0, 0},
+	}
+	child_heading = heading{
+		level:  6,
+		levels: [6]int{1, 0, 0, 1, 0, 1},
+	}
+
+	if is_direct_child(root_heading, child_heading) {
+		t.Fatalf("child_heading should NOT be a direct child of root_heading.\n"+
+			"root_heading:\n%+v\nchild_heading:\n%+v\n", root_heading, child_heading)
+	}
+
+	// 3 - two root headings
+	root_heading = heading{
+		level:  1,
+		levels: [6]int{1, 0, 0, 0, 0, 0},
+	}
+	child_heading = heading{
+		level:  1,
+		levels: [6]int{2, 0, 0, 0, 0, 0},
+	}
+
+	if is_direct_child(root_heading, child_heading) {
+		t.Fatalf("child_heading should NOT be a direct child of root_heading.\n"+
+			"root_heading:\n%+v\nchild_heading:\n%+v\n", root_heading, child_heading)
+	}
+}
+
 func Test_print_tree(t *testing.T) {
 	// 1
 	test_buffer := bytes.NewBuffer([]byte(""))
