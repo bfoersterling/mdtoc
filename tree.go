@@ -15,17 +15,17 @@ func get_child_indices(header_index int, headings []heading) []int {
 		return children
 	}
 
-	parent_level := headings[header_index].level
-
 	if header_index >= (len(headings) - 1) {
 		return nil
 	}
+
+	parent := headings[header_index]
 
 	next_level := headings[header_index+1].level
 
 	child_level := 0
 
-	if next_level <= parent_level {
+	if next_level <= parent.level {
 		return nil
 	} else {
 		child_level = next_level
@@ -35,7 +35,7 @@ func get_child_indices(header_index int, headings []heading) []int {
 	for i := (header_index + 1); i < len(headings); i++ {
 		cur_level = headings[i].level
 
-		if is_direct_child(headings[header_index], headings[i]) {
+		if is_direct_child(parent, headings[i]) {
 			children = append(children, i)
 		}
 
