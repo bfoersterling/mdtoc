@@ -70,6 +70,7 @@ func get_root_children(headings []heading) []int {
 // ## bar,
 // foo and bar are both direct children of root.
 func is_direct_child(parent heading, child heading) bool {
+	// the first numbers until the parent level have to match
 	if slices.Compare(child.levels[:parent.level], parent.levels[:parent.level]) != 0 {
 		return false
 	}
@@ -81,7 +82,9 @@ func is_direct_child(parent heading, child heading) bool {
 		}
 	}
 
-	if counter > 1 {
+	// children of children have more than 1 non-zero element
+	// if parent and child are the same counter would be 0
+	if counter != 1 {
 		return false
 	}
 
