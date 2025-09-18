@@ -7,32 +7,6 @@ import (
 	"slices"
 )
 
-// Out of tree children are also considered direct children.
-// This is intentional.
-// Given the subsequent headings
-// # root,
-// #### foo and
-// ## bar,
-// foo and bar are both direct children of root.
-func is_direct_child(parent heading, child heading) bool {
-	if slices.Compare(child.levels[:parent.level], parent.levels[:parent.level]) != 0 {
-		return false
-	}
-
-	counter := 0
-	for _, v := range child.levels[parent.level:] {
-		if v > 0 {
-			counter++
-		}
-	}
-
-	if counter > 1 {
-		return false
-	}
-
-	return true
-}
-
 func get_child_indices(header_index int, headings []heading) []int {
 	var children []int
 
@@ -86,6 +60,32 @@ func get_root_children(headings []heading) []int {
 	}
 
 	return root_children
+}
+
+// Out of tree children are also considered direct children.
+// This is intentional.
+// Given the subsequent headings
+// # root,
+// #### foo and
+// ## bar,
+// foo and bar are both direct children of root.
+func is_direct_child(parent heading, child heading) bool {
+	if slices.Compare(child.levels[:parent.level], parent.levels[:parent.level]) != 0 {
+		return false
+	}
+
+	counter := 0
+	for _, v := range child.levels[parent.level:] {
+		if v > 0 {
+			counter++
+		}
+	}
+
+	if counter > 1 {
+		return false
+	}
+
+	return true
 }
 
 func print_tree(file_name string, writer io.Writer) {
