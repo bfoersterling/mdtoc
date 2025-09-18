@@ -62,6 +62,8 @@ func get_root_children(headings []heading) []int {
 	return root_children
 }
 
+// A "direct" child is a child that is not a grandchild, or great-grandchild,
+// but the child of "parent".
 // Out of tree children are also considered direct children.
 // This is intentional.
 // Given the subsequent headings
