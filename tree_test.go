@@ -225,6 +225,25 @@ func Test_print_tree(t *testing.T) {
 			"test_buffer.String():\n%q\nexpected_result:\n%q\n",
 			test_buffer.String(), expected_result)
 	}
+
+	// 6 - for a bug fix where an out of tree heading did not show up
+	test_buffer.Reset()
+
+	expected_result = "late_out_of_tree.md\n" +
+		"`-- 1. # my documentation (1)\n" +
+		"    |-- 1.1. #### sources (3)\n" +
+		"    |-- 1.2. #### usage (9)\n" +
+		"    `-- 1.1. ## out of tree (13)\n" +
+		"        |-- 1.1.1. #### sub out of tree 1 (15)\n" +
+		"        `-- 1.1.2. #### sub out of tree 2 (17)\n"
+
+	print_tree("test_files/late_out_of_tree.md", test_buffer)
+
+	if test_buffer.String() != expected_result {
+		t.Fatalf("test_buffer.String() and expected result differ!\n"+
+			"test_buffer.String():\n%q\nexpected_result:\n%q\n",
+			test_buffer.String(), expected_result)
+	}
 }
 
 func Benchmark_print_tree(b *testing.B) {
