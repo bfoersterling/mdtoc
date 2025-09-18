@@ -2,8 +2,105 @@ package main
 
 import (
 	"bytes"
+	"slices"
 	"testing"
 )
+
+func Test_get_child_indices(t *testing.T) {
+	// 1
+	test_lines := fetch_lines("test_files/late_out_of_tree.md", "off")
+	test_headings := extract_headings(test_lines)
+
+	test_child_indices := get_child_indices(0, test_headings)
+
+	// out of tree header should also be recognized as a child
+	expected_child_indices := []int{1, 2, 3}
+
+	if slices.Compare(test_child_indices, expected_child_indices) != 0 {
+		t.Fatalf("test_child_indices and expected_child_indices differ!\n"+
+			"test_child_indices:\n%v\n"+
+			"expected_child_indices:\n%v\n", test_child_indices, expected_child_indices)
+	}
+}
+
+func Test_get_root_children(t *testing.T) {
+	// 1
+	test_lines := fetch_lines("test_files/late_out_of_tree.md", "off")
+	test_headings := extract_headings(test_lines)
+
+	root_children_indices := get_root_children(test_headings)
+
+	// there is only one root child, which is a level 1 heading in this case
+	if len(root_children_indices) != 1 {
+		t.Fatalf("There should be only one root child.")
+	}
+
+	if root_children_indices[0] != 0 {
+		t.Fatalf("The root child should be the first heading with index 0.\n")
+	}
+}
+
+func Test_is_direct_child(t *testing.T) {
+	// 1
+	root_heading := heading{
+		level:  1,
+		levels: [6]int{1, 0, 0, 0, 0, 0},
+	}
+	child_heading := heading{
+		level:  4,
+		levels: [6]int{1, 0, 0, 1, 0, 0},
+	}
+
+	if !is_direct_child(root_heading, child_heading) {
+		t.Fatalf("child_heading should be a direct child of root_heading.\n"+
+			"root_heading:\n%+v\nchild_heading:\n%+v\n", root_heading, child_heading)
+	}
+
+	// 2
+	root_heading = heading{
+		level:  1,
+		levels: [6]int{1, 0, 0, 0, 0, 0},
+	}
+	child_heading = heading{
+		level:  6,
+		levels: [6]int{1, 0, 0, 1, 0, 1},
+	}
+
+	if is_direct_child(root_heading, child_heading) {
+		t.Fatalf("child_heading should NOT be a direct child of root_heading.\n"+
+			"root_heading:\n%+v\nchild_heading:\n%+v\n", root_heading, child_heading)
+	}
+
+	// 3 - two root headings
+	root_heading = heading{
+		level:  1,
+		levels: [6]int{1, 0, 0, 0, 0, 0},
+	}
+	child_heading = heading{
+		level:  1,
+		levels: [6]int{2, 0, 0, 0, 0, 0},
+	}
+
+	if is_direct_child(root_heading, child_heading) {
+		t.Fatalf("child_heading should NOT be a direct child of root_heading.\n"+
+			"root_heading:\n%+v\nchild_heading:\n%+v\n", root_heading, child_heading)
+	}
+
+	// 4 - both headings are the same
+	root_heading = heading{
+		level:  2,
+		levels: [6]int{0, 1, 0, 0, 0, 0},
+	}
+	child_heading = heading{
+		level:  2,
+		levels: [6]int{0, 1, 0, 0, 0, 0},
+	}
+
+	if is_direct_child(root_heading, child_heading) {
+		t.Fatalf("child_heading should NOT be a direct child of root_heading.\n"+
+			"root_heading:\n%+v\nchild_heading:\n%+v\n", root_heading, child_heading)
+	}
+}
 
 func Test_print_tree(t *testing.T) {
 	// 1
@@ -122,6 +219,25 @@ func Test_print_tree(t *testing.T) {
 		"`-- 1. # another weird out of tree header (35)\n"
 
 	print_tree("test_files/weird_headers.md", test_buffer)
+
+	if test_buffer.String() != expected_result {
+		t.Fatalf("test_buffer.String() and expected result differ!\n"+
+			"test_buffer.String():\n%q\nexpected_result:\n%q\n",
+			test_buffer.String(), expected_result)
+	}
+
+	// 6 - for a bug fix where an out of tree heading did not show up
+	test_buffer.Reset()
+
+	expected_result = "late_out_of_tree.md\n" +
+		"`-- 1. # my documentation (1)\n" +
+		"    |-- 1.1. #### sources (3)\n" +
+		"    |-- 1.2. #### usage (9)\n" +
+		"    `-- 1.1. ## out of tree (13)\n" +
+		"        |-- 1.1.1. #### sub out of tree 1 (15)\n" +
+		"        `-- 1.1.2. #### sub out of tree 2 (17)\n"
+
+	print_tree("test_files/late_out_of_tree.md", test_buffer)
 
 	if test_buffer.String() != expected_result {
 		t.Fatalf("test_buffer.String() and expected result differ!\n"+

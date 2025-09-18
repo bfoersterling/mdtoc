@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"path"
+	"slices"
 )
 
 func get_child_indices(header_index int, headings []heading) []int {
@@ -14,17 +15,17 @@ func get_child_indices(header_index int, headings []heading) []int {
 		return children
 	}
 
-	parent_level := headings[header_index].level
-
 	if header_index >= (len(headings) - 1) {
 		return nil
 	}
+
+	parent := headings[header_index]
 
 	next_level := headings[header_index+1].level
 
 	child_level := 0
 
-	if next_level <= parent_level {
+	if next_level <= parent.level {
 		return nil
 	} else {
 		child_level = next_level
@@ -34,7 +35,7 @@ func get_child_indices(header_index int, headings []heading) []int {
 	for i := (header_index + 1); i < len(headings); i++ {
 		cur_level = headings[i].level
 
-		if cur_level == child_level {
+		if is_direct_child(parent, headings[i]) {
 			children = append(children, i)
 		}
 
@@ -59,6 +60,35 @@ func get_root_children(headings []heading) []int {
 	}
 
 	return root_children
+}
+
+// Out of tree children are also considered direct children.
+// This is intentional.
+// Given the subsequent headings
+// # root,
+// #### foo and
+// ## bar,
+// foo and bar are both direct children of root.
+func is_direct_child(parent heading, child heading) bool {
+	// the first numbers until the parent level have to match
+	if slices.Compare(child.levels[:parent.level], parent.levels[:parent.level]) != 0 {
+		return false
+	}
+
+	counter := 0
+	for _, v := range child.levels[parent.level:] {
+		if v > 0 {
+			counter++
+		}
+	}
+
+	// children of children have more than 1 non-zero element
+	// if parent and child are the same counter would be 0
+	if counter != 1 {
+		return false
+	}
+
+	return true
 }
 
 func print_tree(file_name string, writer io.Writer) {
