@@ -7,6 +7,13 @@ import (
 	"slices"
 )
 
+// Out of tree children are also considered direct children.
+// This is intentional.
+// Given the subsequent headings
+// # root,
+// #### foo and
+// ## bar,
+// foo and bar are both direct children of root.
 func is_direct_child(parent heading, child heading) bool {
 	if slices.Compare(child.levels[:parent.level], parent.levels[:parent.level]) != 0 {
 		return false
