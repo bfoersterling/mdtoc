@@ -71,7 +71,7 @@ func (args cli_args) evaluate() {
 
 	if mode == chapter_mode {
 		for _, file_path := range args.files {
-			err := print_chapter(file_path, args, os.Stdout)
+			err := print_chapter(file_path, args.chapter, args.color, os.Stdout)
 
 			if err != nil {
 				fmt.Printf("%v\n", err)
@@ -82,7 +82,7 @@ func (args cli_args) evaluate() {
 	}
 
 	if mode == interactive_mode {
-		fmt.Printf("\n> TODO\n")
+		do_interactive(args)
 		os.Exit(0)
 	}
 

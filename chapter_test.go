@@ -14,7 +14,7 @@ func Test_print_chapter(t *testing.T) {
 		chapter: "2.1",
 		color:   "auto",
 	}
-	err := print_chapter("test_files/test.md", args, test_buffer)
+	err := print_chapter("test_files/test.md", args.chapter, args.color, test_buffer)
 
 	if err == nil {
 		t.Fatalf("The heading 2.1. should not exist in test_files/test.md.\n")
@@ -30,7 +30,7 @@ func Test_print_chapter(t *testing.T) {
 		chapter: "1.1",
 		color:   "auto",
 	}
-	err = print_chapter("test_files/test.md", args, test_buffer)
+	err = print_chapter("test_files/test.md", args.chapter, args.color, test_buffer)
 
 	if err != nil {
 		t.Fatalf("print_chapter should not return an error here.\n"+
@@ -79,6 +79,6 @@ func Benchmark_print_chapter(b *testing.B) {
 	b.Setenv("COLORTERM", "truecolor")
 
 	for i := 0; i < b.N; i++ {
-		print_chapter("test_files/test.md", args, test_buffer)
+		print_chapter("test_files/test.md", args.chapter, args.color, test_buffer)
 	}
 }

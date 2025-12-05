@@ -9,12 +9,10 @@ import (
 	fc "github.com/fatih/color"
 )
 
-func print_chapter(file_path string, args cli_args, writer io.Writer) (err error) {
-	chapter := args.chapter
-
-	if args.color == "off" {
+func print_chapter(file_path string, chapter string, color string, writer io.Writer) (err error) {
+	if color == "off" {
 		fc.NoColor = true
-	} else if args.color == "on" {
+	} else if color == "on" {
 		fc.NoColor = false
 	}
 
@@ -25,7 +23,7 @@ func print_chapter(file_path string, args cli_args, writer io.Writer) (err error
 
 	fmt.Fprintf(writer, "%s\n", path.Base(file_path))
 
-	lines := fetch_lines(file_path, args.color)
+	lines := fetch_lines(file_path, color)
 
 	section_lines, err := search_section(lines, chapter)
 
@@ -33,7 +31,6 @@ func print_chapter(file_path string, args cli_args, writer io.Writer) (err error
 		return
 	}
 
-	//for _, v := range lines[start_line-1 : end_line] {
 	for _, v := range section_lines {
 		fmt.Fprintf(writer, "%s\n", v.pretty())
 	}
