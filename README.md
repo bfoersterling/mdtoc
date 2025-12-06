@@ -1,3 +1,5 @@
+# mdtoc
+
 ## Installation
 
 Download the latest release.
@@ -47,6 +49,8 @@ Print the chapter under heading 3.1:
 mdtoc -c 3.1 test_files/audio.md
 ```
 
+## Architecture
+
 #### Markdown Implementations
 
 https://en.wikipedia.org/wiki/Markdown
@@ -75,9 +79,9 @@ that creates an AST with token position, literal string, \
 token type information and things like heading levels.\
 => ast node interface with types (heading, code block, citation) as structs that implement it
 
-#### TODO
+## TODO
 
 - use goldmark for parsing?
 - maybe add support for "Setext-style headers"
 - maybe remove pound signs infront of headers (or introduce debug mode to show them)
-- interactive mode with "e" (edit chapter) and "c" (print chapter) options
+- extend interactive mode with "e" (edit chapter) after a chapter was printed
