@@ -16,9 +16,10 @@ type cli_args struct {
 
 func usage() {
 	fmt.Printf("Usage: mdtoc [OPTIONS] [FILE]\n" +
-		"\n-c, --chapter [CHAPTER]\tprint chapter under header\n" +
-		"-i, --interactive\tinteractive mode\n" +
-		"-V, --version\t\tprint version\n")
+		"\n-C, --color [off/auto/on]\tenable/disable colors\n" +
+		"-c, --chapter [CHAPTER]\t\tprint chapter under header\n" +
+		"-i, --interactive\t\tinteractive mode\n" +
+		"-V, --version\t\t\tprint version\n")
 	os.Exit(1)
 }
 

@@ -85,3 +85,4 @@ token type information and things like heading levels.\
 - maybe add support for "Setext-style headers"
 - maybe remove pound signs infront of headers (or introduce debug mode to show them)
 - extend interactive mode with "e" (edit chapter) after a chapter was printed
+- bugfix: --color off doesnt work in interactive mode
