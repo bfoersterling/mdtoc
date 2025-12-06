@@ -13,8 +13,12 @@ test:
 bench:
 	go test -v -bench="."
 
-install: default
+install: build
 	install -v -m 755 mdtoc /usr/local/bin/.
+
+install_latest_release:
+	wget https://github.com/bfoersterling/mdtoc/releases/latest/download/mdtoc_linux_amd64 -O /tmp/mdtoc
+	sudo install -v -m 755 /tmp/mdtoc /usr/local/bin
 
 clean:
 	go clean
