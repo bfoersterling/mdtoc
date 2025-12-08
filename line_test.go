@@ -88,6 +88,17 @@ func Test_search_section(t *testing.T) {
 	if section_lines[len(section_lines)-1].raw() != "```" {
 		t.Fatalf("Last line of section_lines should be '```'.\n")
 	}
+
+	// 4 - no trailing dot
+
+	lines = fetch_lines("test_files/test.md", "off")
+
+	section_lines, err = search_section(lines, "1.1")
+
+	if err != nil {
+		t.Fatalf("search_section failed with err:\n"+
+			"%v\n", err)
+	}
 }
 
 func Benchmark_search_section(b *testing.B) {
