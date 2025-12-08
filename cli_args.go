@@ -9,6 +9,7 @@ import (
 type cli_args struct {
 	chapter     string
 	color       string
+	edit        string
 	files       []string
 	interactive bool
 	version     bool
@@ -18,6 +19,7 @@ func usage() {
 	fmt.Printf("Usage: mdtoc [OPTIONS] [FILE]\n" +
 		"\n-C, --color [off/auto/on]\tenable/disable colors\n" +
 		"-c, --chapter [CHAPTER]\t\tprint chapter under header\n" +
+		"-e, --edit [CHAPTER]\t\tedit chapter under header\n" +
 		"-i, --interactive\t\tinteractive mode\n" +
 		"-V, --version\t\t\tprint version\n")
 	os.Exit(1)
@@ -30,6 +32,8 @@ func get_cli_args() cli_args {
 	flag.StringVar(&args.chapter, "chapter", "", "print chapter")
 	flag.StringVar(&args.color, "C", "auto", "set color to on, off, or auto")
 	flag.StringVar(&args.color, "color", "auto", "set color to on, off, or auto")
+	flag.StringVar(&args.edit, "e", "", "edit the chapter")
+	flag.StringVar(&args.edit, "edit", "", "edit the chapter")
 	flag.BoolVar(&args.interactive, "i", false, "interactive mode")
 	flag.BoolVar(&args.interactive, "interactive", false, "interactive mode")
 	flag.BoolVar(&args.version, "V", false, "print version")
@@ -59,6 +63,7 @@ func (args cli_args) evaluate() {
 		summary_mode = iota
 		interactive_mode
 		chapter_mode
+		edit_mode
 	)
 
 	var mode int = summary_mode
@@ -66,6 +71,8 @@ func (args cli_args) evaluate() {
 	switch {
 	case args.chapter != "":
 		mode = chapter_mode
+	case args.edit != "":
+		mode = edit_mode
 	case args.interactive:
 		mode = interactive_mode
 	}
@@ -80,6 +87,15 @@ func (args cli_args) evaluate() {
 			}
 		}
 		os.Exit(0)
+	}
+
+	if mode == edit_mode {
+		err := edit_chapter(args.files[0], args.edit)
+
+		if err != nil {
+			fmt.Printf("%v\n", err)
+			os.Exit(1)
+		}
 	}
 
 	if mode == interactive_mode {
