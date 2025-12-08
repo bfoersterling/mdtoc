@@ -21,7 +21,7 @@ func edit_chapter(file_path string, chapter string) (err error) {
 
 	// vim, nvim and helix support the +lineno syntax
 	if editor != "vim" && editor != "nvim" && editor != "helix" {
-		err = fmt.Errorf("The editor %q is not supported.")
+		err = fmt.Errorf("The editor %q is not supported.", editor)
 		return err
 	}
 
