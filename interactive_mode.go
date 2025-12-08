@@ -29,6 +29,8 @@ func do_interactive(args cli_args) {
 		panic(err)
 	}
 
+	// maybe implement a caching mechanism or prefetch data
+
 	for {
 		line, err := rli.Readline()
 

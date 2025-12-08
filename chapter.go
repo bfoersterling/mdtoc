@@ -3,11 +3,44 @@ package main
 import (
 	"fmt"
 	"io"
+	"os"
+	"os/exec"
 	"path"
+	"strconv"
 	"strings"
 
 	fc "github.com/fatih/color"
 )
+
+func edit_chapter(file_path string, chapter string) (err error) {
+	editor := os.Getenv("EDITOR")
+
+	if len(editor) == 0 {
+		editor = "vim"
+	}
+
+	// vim, nvim and helix support the +lineno syntax
+	if editor != "vim" && editor != "nvim" && editor != "helix" {
+		err = fmt.Errorf("The editor %q is not supported.")
+		return err
+	}
+
+	lines := fetch_lines(file_path, "off")
+
+	chapter_lines, err := search_section(lines, chapter)
+
+	if err != nil {
+		return err
+	}
+
+	cmd_args := "+" + strconv.Itoa(chapter_lines[0].number())
+
+	cmd := exec.Command(editor, cmd_args)
+
+	cmd.Run()
+
+	return err
+}
 
 func print_chapter(file_path string, chapter string, color string, writer io.Writer) (err error) {
 	if color == "off" {
