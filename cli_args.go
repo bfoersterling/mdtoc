@@ -96,6 +96,8 @@ func (args cli_args) evaluate() {
 			fmt.Printf("%v\n", err)
 			os.Exit(1)
 		}
+
+		os.Exit(0)
 	}
 
 	if mode == interactive_mode {
