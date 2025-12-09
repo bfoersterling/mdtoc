@@ -35,7 +35,11 @@ func edit_chapter(file_path string, chapter string) (err error) {
 
 	cmd_args := "+" + strconv.Itoa(chapter_lines[0].number())
 
-	cmd := exec.Command(editor, cmd_args)
+	cmd := exec.Command(editor, file_path, cmd_args)
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
 	cmd.Run()
 
