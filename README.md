@@ -16,6 +16,24 @@ sudo just install
 
 ## Usage
 
+#### NEW: interactive mode
+
+```
+mdtoc -i README.md
+```
+
+Print chapter:
+```
+mdtoc> 1.1
+```
+
+Edit chapter that was printed most recently:
+```
+mdtoc> e
+```
+
+#### non-interactive mode
+
 Print TOC:
 ```
 $ ./mdtoc test_files/audio.md
@@ -47,6 +65,11 @@ audio.md
 Print the chapter under heading 3.1:
 ```
 mdtoc -c 3.1 test_files/audio.md
+```
+
+Edit chapter with `$EDITOR` (defaults to `vim`):
+```
+mdtoc -e 3.1 test_files/audio.md
 ```
 
 ## Architecture
