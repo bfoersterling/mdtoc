@@ -99,6 +99,7 @@ func get_heading_level(heading_text string) int {
 
 // Search through all lines and identify the start line of the section.
 // Then continue to the end of the section and return a slice of the section.
+// A trailing dot is not mandatory for "pretty_numbering".
 func search_section(lines []line, pretty_numbering string) (section []line, err error) {
 	// -1 to distinguish from the first element which would be 0
 	start_line := -1
@@ -107,6 +108,10 @@ func search_section(lines []line, pretty_numbering string) (section []line, err 
 	if len(lines) == 0 {
 		err = fmt.Errorf("Empty line slice was passed.")
 		return
+	}
+
+	if !strings.HasSuffix(pretty_numbering, ".") {
+		pretty_numbering += "."
 	}
 
 	// search start line
