@@ -1,6 +1,6 @@
 module mdtoc
 
-go 1.22.2
+go 1.23
 
 require (
 	github.com/chzyer/readline v1.5.1
@@ -10,5 +10,8 @@ require (
 require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-pointer v0.0.1 // indirect
+	github.com/tree-sitter-grammars/tree-sitter-markdown v0.5.1 // indirect
+	github.com/tree-sitter/go-tree-sitter v0.25.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 )

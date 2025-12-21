@@ -74,6 +74,27 @@ func Benchmark_fetch_lines(b *testing.B) {
 	}
 }
 
+func Test_fetch_syntax_tree(t *testing.T) {
+	tree, err := fetch_syntax_tree("test_files/audio.md")
+
+	defer tree.Close()
+
+	if err != nil {
+		t.Fatalf("fetch_syntax_tree() failed with err: %v",
+			err)
+	}
+
+	if tree == nil {
+		t.Fatalf("fetch_syntax_tree() returned nil.")
+	}
+}
+
+func Benchmark_fetch_syntax_tree(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		fetch_syntax_tree("test_files/audio.md")
+	}
+}
+
 func Test_pretty_print_heading_numbering(t *testing.T) {
 	// 1
 	hnum := [6]int{1, 2, 0, 8, 0, 2}

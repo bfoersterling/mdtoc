@@ -7,6 +7,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	tree_sitter_md "github.com/tree-sitter-grammars/tree-sitter-markdown/bindings/go"
+	tree_sitter "github.com/tree-sitter/go-tree-sitter"
 )
 
 const (
@@ -36,6 +39,40 @@ func fetch_lines(file_name string, color string) (lines []line) {
 	}
 
 	lines = parse_lines(file_handle, color)
+
+	return
+}
+
+// tree-sitter engine
+// Caller has to Close() the returned tree.
+func fetch_syntax_tree(file_name string) (tree *tree_sitter.Tree, err error) {
+	var source []byte
+
+	file, err := os.Open(file_name)
+
+	if err != nil {
+		return
+	}
+
+	defer file.Close()
+
+	_, err = file.Read(source)
+
+	if err != nil {
+		return
+	}
+
+	parser := tree_sitter.NewParser()
+
+	defer parser.Close()
+
+	err = parser.SetLanguage(tree_sitter.NewLanguage(tree_sitter_md.Language()))
+
+	if err != nil {
+		return
+	}
+
+	tree = parser.Parse(source, nil)
 
 	return
 }
