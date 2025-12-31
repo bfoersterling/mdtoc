@@ -111,13 +111,14 @@ First cd into the `test` dir, then execute this:
 ```
 
 ```
-66 passed, 586 failed, 0 errored, 0 skipped
+80 passed, 586 failed, 0 errored, 0 skipped
 ```
-=> 11.3% Commonmark compliance
+=> 14.0% Commonmark compliance
 
 ## TODO
 
-- use goldmark for parsing?
-- maybe add support for "Setext-style headers"
-- maybe remove pound signs infront of headers (or introduce debug mode to show them)
+- support for "setext-style headers"
+- citationline struct
+- inline interface with additional inline parsing stage
+- increase Commonmark compliance or rewrite in C with `libcmark`
 - option to search for regex in headings
