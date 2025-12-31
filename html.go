@@ -1,37 +1,31 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
-	"os"
-	"slices"
 	"strconv"
 )
 
-func print_html(files []string, writer io.Writer) {
-	var lines []line
+func print_html(files []string, writer io.Writer) (err error) {
+	md_content, err := aggregate_md(files)
 
-	if len(files) == 0 {
-		lines = parse_lines(os.Stdin, "off")
-
-		html := generate_html(lines)
-
-		fmt.Fprintf(writer, html)
-
+	if err != nil {
 		return
 	}
 
-	for _, file := range files {
-		new_lines := fetch_lines(file, "off")
-		lines = slices.Concat(lines, new_lines)
-	}
+	reader := bytes.NewReader(md_content)
 
-	html := generate_html(lines)
+	html := generate_html(reader)
 
 	fmt.Fprintf(writer, html)
+
+	return
 }
 
-func generate_html(lines []line) (html string) {
+func generate_html(reader io.Reader) (html string) {
+	lines := parse_lines(reader, "off")
+
 	for _, line := range lines {
 		switch v := line.(type) {
 		case heading:
