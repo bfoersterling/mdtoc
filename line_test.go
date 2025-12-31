@@ -5,6 +5,30 @@ import (
 	"testing"
 )
 
+func Test_extract_atx_heading_text(t *testing.T) {
+	// 1
+	input := "####\tfoo"
+	expected_output := "foo"
+
+	output := extract_atx_heading_text(input)
+
+	if output != expected_output {
+		t.Fatalf("output and expected_output differ.\n"+
+			"output:\n%q\nexpected_output:\n%q", output, expected_output)
+	}
+
+	// 2
+	input = "# foo"
+	expected_output = "foo"
+
+	output = extract_atx_heading_text(input)
+
+	if output != expected_output {
+		t.Fatalf("output and expected_output differ.\n"+
+			"output:\n%q\nexpected_output:\n%q", output, expected_output)
+	}
+}
+
 func Test_get_heading_level(t *testing.T) {
 	level := get_heading_level("# foo")
 
@@ -59,8 +83,8 @@ func Test_search_section(t *testing.T) {
 			"%v\n", err)
 	}
 
-	if section_lines[0].raw() != "## header2" {
-		t.Fatalf("section_lines[0].raw() should be '## header2'!\n")
+	if section_lines[0].raw() != "header2" {
+		t.Fatalf("section_lines[0].raw() should be 'header2'!\n")
 	}
 
 	if section_lines[len(section_lines)-1].raw() != "" {
@@ -81,8 +105,8 @@ func Test_search_section(t *testing.T) {
 
 	section_lines, err = search_section(lines, "1.2.")
 
-	if section_lines[0].raw() != "## a second header2" {
-		t.Fatalf("section_lines[0].raw() should  be '## a second header2'.\n")
+	if section_lines[0].raw() != "a second header2" {
+		t.Fatalf("section_lines[0].raw() should  be 'a second header2'.\n")
 	}
 
 	if section_lines[len(section_lines)-1].raw() != "```" {
