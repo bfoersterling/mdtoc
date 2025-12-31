@@ -57,7 +57,7 @@ func (args cli_args) evaluate() {
 		os.Exit(0)
 	}
 
-	if len(args.files) == 0 {
+	if len(args.files) == 0 && !args.html {
 		fmt.Printf("No input files were provided.\n\n")
 		flag.Usage()
 	}
@@ -112,9 +112,7 @@ func (args cli_args) evaluate() {
 	}
 
 	if mode == html_mode {
-		for _, file_path := range args.files {
-			print_html(file_path, os.Stdout)
-		}
+		print_html(args.files, os.Stdout)
 		os.Exit(0)
 	}
 
