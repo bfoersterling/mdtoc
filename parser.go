@@ -144,7 +144,7 @@ func scan_normal(current_state int, raw_line string, hnumbers *[6]int, lines *[]
 		levels:           *hnumbers,
 		line:             len(*lines) + 1,
 		pretty_numbering: pretty_numbering,
-		text:             raw_line,
+		text:             extract_atx_heading_text(raw_line),
 	}
 	*lines = append(*lines, h)
 

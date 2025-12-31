@@ -97,6 +97,18 @@ func get_heading_level(heading_text string) int {
 	return level
 }
 
+func extract_atx_heading_text(line string) string {
+	line = strings.TrimSpace(line)
+
+	for i, r := range line {
+		if r != '#' {
+			return strings.TrimSpace(line[i:])
+		}
+	}
+
+	return line
+}
+
 // Search through all lines and identify the start line of the section.
 // Then continue to the end of the section and return a slice of the section.
 // A trailing dot is not mandatory for "pretty_numbering".
