@@ -11,6 +11,7 @@ type cli_args struct {
 	color       string
 	edit        string
 	files       []string
+	html        bool
 	interactive bool
 	version     bool
 }
@@ -21,6 +22,7 @@ func usage() {
 		"-c, --chapter [CHAPTER]\t\tprint chapter under header\n" +
 		"-e, --edit [CHAPTER]\t\tedit chapter under header\n" +
 		"-i, --interactive\t\tinteractive mode\n" +
+		"--html\t\thtml output (for spec tests)\n" +
 		"-V, --version\t\t\tprint version\n")
 	os.Exit(1)
 }
@@ -36,6 +38,7 @@ func get_cli_args() cli_args {
 	flag.StringVar(&args.edit, "edit", "", "edit the chapter")
 	flag.BoolVar(&args.interactive, "i", false, "interactive mode")
 	flag.BoolVar(&args.interactive, "interactive", false, "interactive mode")
+	flag.BoolVar(&args.html, "html", false, "html output (for spec tests)")
 	flag.BoolVar(&args.version, "V", false, "print version")
 	flag.BoolVar(&args.version, "version", false, "print version")
 
@@ -64,6 +67,7 @@ func (args cli_args) evaluate() {
 		interactive_mode
 		chapter_mode
 		edit_mode
+		html_mode
 	)
 
 	var mode int = summary_mode
@@ -75,6 +79,8 @@ func (args cli_args) evaluate() {
 		mode = edit_mode
 	case args.interactive:
 		mode = interactive_mode
+	case args.html:
+		mode = html_mode
 	}
 
 	if mode == chapter_mode {
@@ -102,6 +108,13 @@ func (args cli_args) evaluate() {
 
 	if mode == interactive_mode {
 		do_interactive(args)
+		os.Exit(0)
+	}
+
+	if mode == html_mode {
+		for _, file_path := range args.files {
+			print_html(file_path, os.Stdout)
+		}
 		os.Exit(0)
 	}
 
