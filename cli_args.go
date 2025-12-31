@@ -13,6 +13,7 @@ type cli_args struct {
 	files       []string
 	html        bool
 	interactive bool
+	unsafe      bool
 	version     bool
 }
 
@@ -22,7 +23,8 @@ func usage() {
 		"-c, --chapter [CHAPTER]\t\tprint chapter under header\n" +
 		"-e, --edit [CHAPTER]\t\tedit chapter under header\n" +
 		"-i, --interactive\t\tinteractive mode\n" +
-		"--html\t\thtml output (for spec tests)\n" +
+		"-html\t\t\t\thtml output (for spec tests)\n" +
+		"-unsafe\t\t\t\t(not implemented) (for spec tests)\n" +
 		"-V, --version\t\t\tprint version\n")
 	os.Exit(1)
 }
@@ -39,6 +41,7 @@ func get_cli_args() cli_args {
 	flag.BoolVar(&args.interactive, "i", false, "interactive mode")
 	flag.BoolVar(&args.interactive, "interactive", false, "interactive mode")
 	flag.BoolVar(&args.html, "html", false, "html output (for spec tests)")
+	flag.BoolVar(&args.unsafe, "unsafe", false, "unsafe mode (for spec tests)")
 	flag.BoolVar(&args.version, "V", false, "print version")
 	flag.BoolVar(&args.version, "version", false, "print version")
 
