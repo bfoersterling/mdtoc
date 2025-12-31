@@ -102,6 +102,19 @@ that creates an AST with token position, literal string, \
 token type information and things like heading levels.\
 => ast node interface with types (heading, code block, citation) as structs that implement it
 
+## Commonmark Spec Coverage
+
+In a checked out https://github.com/commonmark/cmark/tree/master repo.\
+First cd into the `test` dir, then execute this:
+```
+./spec_tests.py -p "/path/to/mdtoc -html"
+```
+
+```
+66 passed, 586 failed, 0 errored, 0 skipped
+```
+=> 11.3% Commonmark compliance
+
 ## TODO
 
 - use goldmark for parsing?
