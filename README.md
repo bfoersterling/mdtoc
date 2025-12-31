@@ -121,4 +121,5 @@ First cd into the `test` dir, then execute this:
 - citationline struct
 - inline interface with additional inline parsing stage
 - increase Commonmark compliance or rewrite in C with `libcmark`
+- add "prologue" (chapter 0) when there are nodes before the first header
 - option to search for regex in headings
