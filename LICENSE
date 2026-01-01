@@ -5,6 +5,7 @@
  Libraries:
  - Fatih Arslan (https://github.com/fatih/color)
  - chzyer (https://github.com/chzyer/readline)
+ - Yusuke Inuzuka (for _test/spec.json from github.com/yuin/goldmark)
 
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
