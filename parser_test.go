@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -11,43 +12,43 @@ func Test_fetch_lines(t *testing.T) {
 
 	test_headings := extract_headings(test_lines)
 
-	expected_headings := []heading{
-		heading{
+	expected_headings := []atx_heading{
+		atx_heading{
 			text:             "my documentation",
 			line:             1,
 			level:            1,
 			levels:           [6]int{1, 0, 0, 0, 0, 0},
 			pretty_numbering: "1.",
 		},
-		heading{
+		atx_heading{
 			text:             "sources",
 			line:             3,
 			level:            4,
 			levels:           [6]int{1, 0, 0, 1, 0, 0},
 			pretty_numbering: "1.1.",
 		},
-		heading{
+		atx_heading{
 			text:             "usage",
 			line:             9,
 			level:            4,
 			levels:           [6]int{1, 0, 0, 2, 0, 0},
 			pretty_numbering: "1.2.",
 		},
-		heading{
+		atx_heading{
 			text:             "out of tree",
 			line:             13,
 			level:            2,
 			levels:           [6]int{1, 1, 0, 0, 0, 0},
 			pretty_numbering: "1.1.",
 		},
-		heading{
+		atx_heading{
 			text:             "sub out of tree 1",
 			line:             15,
 			level:            4,
 			levels:           [6]int{1, 1, 0, 1, 0, 0},
 			pretty_numbering: "1.1.1.",
 		},
-		heading{
+		atx_heading{
 			text:             "sub out of tree 2",
 			line:             17,
 			level:            4,
@@ -71,7 +72,7 @@ func Test_fetch_lines(t *testing.T) {
 	test_lines = fetch_lines("test_files/no_blank_lines.md", "off")
 
 	expected_lines := []line{
-		heading{
+		atx_heading{
 			text:             "regular level 2 header",
 			line:             1,
 			level:            2,
@@ -82,7 +83,7 @@ func Test_fetch_lines(t *testing.T) {
 			text: "Bar.",
 			line: 2,
 		},
-		heading{
+		atx_heading{
 			text:             "regular level 4 header",
 			line:             3,
 			level:            4,
@@ -182,43 +183,43 @@ func Test_parse_lines(t *testing.T) {
 
 	lines := parse_lines(reader, "off")
 
-	expected_headings := []heading{
-		heading{
+	expected_headings := []atx_heading{
+		atx_heading{
 			text:             "first section",
 			level:            2,
 			line:             1,
 			levels:           [6]int{0, 1, 0, 0, 0, 0},
 			pretty_numbering: "1.",
 		},
-		heading{
+		atx_heading{
 			text:             "about",
 			level:            4,
 			line:             3,
 			levels:           [6]int{0, 1, 0, 1, 0, 0},
 			pretty_numbering: "1.1.",
 		},
-		heading{
+		atx_heading{
 			text:             "details",
 			level:            4,
 			line:             5,
 			levels:           [6]int{0, 1, 0, 2, 0, 0},
 			pretty_numbering: "1.2.",
 		},
-		heading{
+		atx_heading{
 			text:             "second section",
 			level:            2,
 			line:             7,
 			levels:           [6]int{0, 2, 0, 0, 0, 0},
 			pretty_numbering: "2.",
 		},
-		heading{
+		atx_heading{
 			text:             "tutorial",
 			level:            4,
 			line:             9,
 			levels:           [6]int{0, 2, 0, 1, 0, 0},
 			pretty_numbering: "2.1.",
 		},
-		heading{
+		atx_heading{
 			text:             "insights",
 			level:            4,
 			line:             11,
@@ -233,6 +234,56 @@ func Test_parse_lines(t *testing.T) {
 		if test_headings[i] != expected_headings[i] {
 			t.Fatalf("test_heading[%d] and expected_heading[%d] differ!\n"+
 				"test_heading:\n%+v\nexpected_heading:\n%+v\n", i, i, test_headings[i], expected_headings[i])
+		}
+	}
+
+	// 2
+	reader = strings.NewReader("## first section\n" +
+		"Foo.\n" +
+		"---\n" +
+		"Bar.\n" +
+		"---- trailing stuff\n" +
+		"#### insights\n")
+
+	lines = parse_lines(reader, "off")
+
+	expected_lines := []line{
+		atx_heading{
+			text:             "first section",
+			level:            2,
+			line:             1,
+			levels:           [6]int{0, 1, 0, 0, 0, 0},
+			pretty_numbering: "1.",
+		},
+		nonheading{
+			text: "Foo.",
+			line: 2,
+		},
+		dashed_line{
+			text: "---",
+			line: 3,
+		},
+		nonheading{
+			text: "Bar.",
+			line: 4,
+		},
+		nonheading{
+			text: "---- trailing stuff",
+			line: 5,
+		},
+		atx_heading{
+			text:             "insights",
+			line:             6,
+			level:            4,
+			levels:           [6]int{0, 1, 0, 1, 0, 0},
+			pretty_numbering: "1.1.",
+		},
+	}
+
+	for i, line := range lines {
+		if line != expected_lines[i] {
+			fmt.Printf("line %d and expected_lines[%d] differ.\n", i, i)
+			t.Fatalf("line:\n%+v\nexpected_lines[i]:\n%+v\n", line, expected_lines[i])
 		}
 	}
 }

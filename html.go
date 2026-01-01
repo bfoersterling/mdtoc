@@ -29,7 +29,7 @@ func generate_html(reader io.Reader) (html []byte) {
 
 	for _, line := range lines {
 		switch v := line.(type) {
-		case heading:
+		case atx_heading:
 			html_buffer.WriteString("<h")
 			html_buffer.WriteString(strconv.Itoa(v.level))
 			html_buffer.WriteString(">")
@@ -41,6 +41,8 @@ func generate_html(reader io.Reader) (html []byte) {
 			html_buffer.WriteString("<code>")
 			html_buffer.WriteString(v.text)
 			html_buffer.WriteString("</code>")
+		case dashed_line:
+			html_buffer.WriteString("<hr />")
 		case nonheading:
 			html_buffer.WriteString("<p>")
 			html_buffer.WriteString(v.text)

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"unicode"
 
 	fc "github.com/fatih/color"
 )
@@ -32,7 +33,7 @@ func (c codeline) raw() string {
 	return c.text
 }
 
-type heading struct {
+type atx_heading struct {
 	text             string
 	level            int
 	line             int
@@ -40,16 +41,34 @@ type heading struct {
 	pretty_numbering string
 }
 
-func (h heading) number() int {
+func (h atx_heading) number() int {
 	return h.line
 }
 
-func (h heading) pretty() string {
+func (h atx_heading) pretty() string {
 	return fc.GreenString(h.pretty_numbering + " " + h.text)
 }
 
-func (h heading) raw() string {
+func (h atx_heading) raw() string {
 	return h.text
+}
+
+type dashed_line struct {
+	line int
+	text string
+}
+
+func (d dashed_line) number() int {
+	return d.line
+}
+
+func (d dashed_line) pretty() string {
+	color := fc.New().Add(fc.BgBlack, fc.FgBlue)
+	return color.Sprintf("%s", d.text)
+}
+
+func (d dashed_line) raw() string {
+	return d.text
 }
 
 type nonheading struct {
@@ -69,7 +88,7 @@ func (nh nonheading) raw() string {
 	return nh.text
 }
 
-func is_heading(line string) bool {
+func is_atx_heading(line string) bool {
 	if !strings.HasPrefix(line, "#") {
 		return false
 	}
@@ -86,7 +105,26 @@ func is_heading(line string) bool {
 	return leading_num_signs <= 6
 }
 
-func get_heading_level(heading_text string) int {
+func is_dashed(line string) bool {
+	dash_count := 0
+	for _, r := range line {
+		if r == '-' {
+			dash_count++
+			continue
+		}
+		if !unicode.IsSpace(r) {
+			return false
+		}
+	}
+
+	if dash_count > 2 {
+		return true
+	} else {
+		return false
+	}
+}
+
+func get_atx_heading_level(heading_text string) int {
 	level := 0
 	for i := 0; heading_text[i] == '#'; i++ {
 		level += 1
@@ -128,7 +166,7 @@ func search_section(lines []line, pretty_numbering string) (section []line, err 
 
 	// search start line
 	for i, v := range lines {
-		h, ok := v.(heading)
+		h, ok := v.(atx_heading)
 
 		if !ok {
 			continue
@@ -147,7 +185,7 @@ func search_section(lines []line, pretty_numbering string) (section []line, err 
 
 	// search end line
 	for i, v := range lines[start_line:] {
-		h, ok := v.(heading)
+		h, ok := v.(atx_heading)
 
 		if !ok {
 			continue

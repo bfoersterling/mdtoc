@@ -42,11 +42,11 @@ func Test_get_root_children(t *testing.T) {
 
 func Test_is_direct_child(t *testing.T) {
 	// 1
-	root_heading := heading{
+	root_heading := atx_heading{
 		level:  1,
 		levels: [6]int{1, 0, 0, 0, 0, 0},
 	}
-	child_heading := heading{
+	child_heading := atx_heading{
 		level:  4,
 		levels: [6]int{1, 0, 0, 1, 0, 0},
 	}
@@ -57,11 +57,11 @@ func Test_is_direct_child(t *testing.T) {
 	}
 
 	// 2
-	root_heading = heading{
+	root_heading = atx_heading{
 		level:  1,
 		levels: [6]int{1, 0, 0, 0, 0, 0},
 	}
-	child_heading = heading{
+	child_heading = atx_heading{
 		level:  6,
 		levels: [6]int{1, 0, 0, 1, 0, 1},
 	}
@@ -72,11 +72,11 @@ func Test_is_direct_child(t *testing.T) {
 	}
 
 	// 3 - two root headings
-	root_heading = heading{
+	root_heading = atx_heading{
 		level:  1,
 		levels: [6]int{1, 0, 0, 0, 0, 0},
 	}
-	child_heading = heading{
+	child_heading = atx_heading{
 		level:  1,
 		levels: [6]int{2, 0, 0, 0, 0, 0},
 	}
@@ -87,11 +87,11 @@ func Test_is_direct_child(t *testing.T) {
 	}
 
 	// 4 - both headings are the same
-	root_heading = heading{
+	root_heading = atx_heading{
 		level:  2,
 		levels: [6]int{0, 1, 0, 0, 0, 0},
 	}
-	child_heading = heading{
+	child_heading = atx_heading{
 		level:  2,
 		levels: [6]int{0, 1, 0, 0, 0, 0},
 	}
