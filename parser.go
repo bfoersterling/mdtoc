@@ -14,9 +14,9 @@ const (
 	STATE_CODEBLOCK
 )
 
-func extract_headings(lines []line) (headings []heading) {
+func extract_headings(lines []line) (headings []atx_heading) {
 	for _, line := range lines {
-		h, ok := line.(heading)
+		h, ok := line.(atx_heading)
 
 		if !ok {
 			continue
@@ -124,7 +124,7 @@ func scan_normal(current_state int, raw_line string, hnumbers *[6]int, lines *[]
 		new_state = STATE_CODEBLOCK
 	}
 
-	if !is_heading(raw_line) {
+	if !is_atx_heading(raw_line) {
 		nh := nonheading{
 			line: len(*lines) + 1,
 			text: raw_line,
@@ -133,13 +133,13 @@ func scan_normal(current_state int, raw_line string, hnumbers *[6]int, lines *[]
 		return
 	}
 
-	heading_level := get_heading_level(raw_line)
+	heading_level := get_atx_heading_level(raw_line)
 
 	*hnumbers = get_heading_numbers(heading_level, *hnumbers)
 
 	pretty_numbering := pretty_print_numbering(*hnumbers)
 
-	h := heading{
+	h := atx_heading{
 		level:            heading_level,
 		levels:           *hnumbers,
 		line:             len(*lines) + 1,

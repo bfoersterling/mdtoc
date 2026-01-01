@@ -7,7 +7,7 @@ import (
 	"slices"
 )
 
-func get_child_indices(header_index int, headings []heading) []int {
+func get_child_indices(header_index int, headings []atx_heading) []int {
 	var children []int
 
 	if header_index == -1 {
@@ -47,7 +47,7 @@ func get_child_indices(header_index int, headings []heading) []int {
 	return children
 }
 
-func get_root_children(headings []heading) []int {
+func get_root_children(headings []atx_heading) []int {
 	var root_children []int
 
 	lowest_level := 0
@@ -71,7 +71,7 @@ func get_root_children(headings []heading) []int {
 // #### foo and
 // ## bar,
 // foo and bar are both direct children of root.
-func is_direct_child(parent heading, child heading) bool {
+func is_direct_child(parent atx_heading, child atx_heading) bool {
 	// the first numbers until the parent level have to match
 	if slices.Compare(child.levels[:parent.level], parent.levels[:parent.level]) != 0 {
 		return false
@@ -94,7 +94,7 @@ func is_direct_child(parent heading, child heading) bool {
 }
 
 func print_tree(file_name string, writer io.Writer) {
-	var headings []heading = nil
+	var headings []atx_heading = nil
 
 	// currently we don't need colors when printing the heading tree
 	lines := fetch_lines(file_name, "off")
@@ -106,7 +106,7 @@ func print_tree(file_name string, writer io.Writer) {
 	tree(-1, "", headings, writer)
 }
 
-func tree(index int, prefix string, headings []heading, writer io.Writer) {
+func tree(index int, prefix string, headings []atx_heading, writer io.Writer) {
 	children := get_child_indices(index, headings)
 
 	for index, child_index := range children {

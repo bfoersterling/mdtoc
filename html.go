@@ -29,7 +29,7 @@ func generate_html(reader io.Reader) (html []byte) {
 
 	for _, line := range lines {
 		switch v := line.(type) {
-		case heading:
+		case atx_heading:
 			html_buffer.WriteString("<h")
 			html_buffer.WriteString(strconv.Itoa(v.level))
 			html_buffer.WriteString(">")
