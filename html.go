@@ -41,6 +41,8 @@ func generate_html(reader io.Reader) (html []byte) {
 			html_buffer.WriteString("<code>")
 			html_buffer.WriteString(v.text)
 			html_buffer.WriteString("</code>")
+		case dashed_line:
+			html_buffer.WriteString("<hr />")
 		case nonheading:
 			html_buffer.WriteString("<p>")
 			html_buffer.WriteString(v.text)

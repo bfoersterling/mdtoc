@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -266,7 +267,7 @@ func Test_parse_lines(t *testing.T) {
 			text: "Bar.",
 			line: 4,
 		},
-		dashed_line{
+		nonheading{
 			text: "---- trailing stuff",
 			line: 5,
 		},
@@ -281,8 +282,8 @@ func Test_parse_lines(t *testing.T) {
 
 	for i, line := range lines {
 		if line != expected_lines[i] {
-			t.Fatalf("line and expected_lines[i] differ.\n"+
-				"line:\n%q\nexpected_lines[i]:\n%q\n", line, expected_lines[i])
+			fmt.Printf("line %d and expected_lines[%d] differ.\n", i, i)
+			t.Fatalf("line:\n%+v\nexpected_lines[i]:\n%+v\n", line, expected_lines[i])
 		}
 	}
 }

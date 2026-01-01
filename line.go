@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"unicode"
 
 	fc "github.com/fatih/color"
 )
@@ -62,7 +63,7 @@ func (d dashed_line) number() int {
 }
 
 func (d dashed_line) pretty() string {
-	color := fc.New().Add(fc.BgBlue, fc.FgBlack)
+	color := fc.New().Add(fc.BgBlack, fc.FgBlue)
 	return color.Sprintf("%s", d.text)
 }
 
@@ -105,7 +106,18 @@ func is_atx_heading(line string) bool {
 }
 
 func is_dashed(line string) bool {
-	if strings.HasPrefix(line, "---") {
+	dash_count := 0
+	for _, r := range line {
+		if r == '-' {
+			dash_count++
+			continue
+		}
+		if !unicode.IsSpace(r) {
+			return false
+		}
+	}
+
+	if dash_count > 2 {
 		return true
 	} else {
 		return false
