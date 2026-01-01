@@ -124,6 +124,15 @@ func scan_normal(current_state int, raw_line string, hnumbers *[6]int, lines *[]
 		new_state = STATE_CODEBLOCK
 	}
 
+	if is_dashed(raw_line) {
+		dl := dashed_line{
+			line: len(*lines) + 1,
+			text: raw_line,
+		}
+		*lines = append(*lines, dl)
+		return
+	}
+
 	if !is_atx_heading(raw_line) {
 		nh := nonheading{
 			line: len(*lines) + 1,

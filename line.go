@@ -52,6 +52,24 @@ func (h atx_heading) raw() string {
 	return h.text
 }
 
+type dashed_line struct {
+	line int
+	text string
+}
+
+func (d dashed_line) number() int {
+	return d.line
+}
+
+func (d dashed_line) pretty() string {
+	color := fc.New().Add(fc.BgBlue, fc.FgBlack)
+	return color.Sprintf("%s", d.text)
+}
+
+func (d dashed_line) raw() string {
+	return d.text
+}
+
 type nonheading struct {
 	line int
 	text string
@@ -84,6 +102,14 @@ func is_atx_heading(line string) bool {
 
 	// lines starting with over six pound signs are not headers
 	return leading_num_signs <= 6
+}
+
+func is_dashed(line string) bool {
+	if strings.HasPrefix(line, "---") {
+		return true
+	} else {
+		return false
+	}
 }
 
 func get_atx_heading_level(heading_text string) int {

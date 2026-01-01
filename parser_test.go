@@ -235,4 +235,54 @@ func Test_parse_lines(t *testing.T) {
 				"test_heading:\n%+v\nexpected_heading:\n%+v\n", i, i, test_headings[i], expected_headings[i])
 		}
 	}
+
+	// 2
+	reader = strings.NewReader("## first section\n" +
+		"Foo.\n" +
+		"---\n" +
+		"Bar.\n" +
+		"---- trailing stuff\n" +
+		"#### insights\n")
+
+	lines = parse_lines(reader, "off")
+
+	expected_lines := []line{
+		atx_heading{
+			text:             "first section",
+			level:            2,
+			line:             1,
+			levels:           [6]int{0, 1, 0, 0, 0, 0},
+			pretty_numbering: "1.",
+		},
+		nonheading{
+			text: "Foo.",
+			line: 2,
+		},
+		dashed_line{
+			text: "---",
+			line: 3,
+		},
+		nonheading{
+			text: "Bar.",
+			line: 4,
+		},
+		dashed_line{
+			text: "---- trailing stuff",
+			line: 5,
+		},
+		atx_heading{
+			text:             "insights",
+			line:             6,
+			level:            4,
+			levels:           [6]int{0, 1, 0, 1, 0, 0},
+			pretty_numbering: "1.1.",
+		},
+	}
+
+	for i, line := range lines {
+		if line != expected_lines[i] {
+			t.Fatalf("line and expected_lines[i] differ.\n"+
+				"line:\n%q\nexpected_lines[i]:\n%q\n", line, expected_lines[i])
+		}
+	}
 }

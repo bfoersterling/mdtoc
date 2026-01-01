@@ -72,6 +72,15 @@ func Test_is_atx_heading(t *testing.T) {
 	}
 }
 
+func Test_is_dashed(t *testing.T) {
+	// 1
+	input := "---\n"
+
+	if !is_dashed(input) {
+		t.Fatalf("input %q should be categorized as a dashed line.\n", input)
+	}
+}
+
 func Test_search_section(t *testing.T) {
 	// 1
 	lines := fetch_lines("test_files/test.md", "off")
