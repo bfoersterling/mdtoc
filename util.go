@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"os"
 )
 
@@ -9,14 +10,18 @@ import (
 // or read from stdin if no files is an empty slice.
 func aggregate_md(files []string) (md_content []byte, err error) {
 	if len(files) == 0 {
+		var buffer bytes.Buffer
 		reader := os.Stdin
 		stdin_scanner := bufio.NewScanner(reader)
 
 		stdin_scanner.Split(bufio.ScanLines)
 
 		for stdin_scanner.Scan() {
-			md_content = append(md_content, stdin_scanner.Bytes()...)
+			buffer.WriteString(stdin_scanner.Text())
+			buffer.WriteString("\n")
 		}
+
+		md_content = buffer.Bytes()
 
 		return
 	} else {
