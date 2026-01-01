@@ -10,6 +10,10 @@ run:
 test:
 	go test -v
 
+[working-directory("test_files")]
+test_spec:
+	go run run_against_spec.go
+
 bench:
 	go test -v -bench="."
 
