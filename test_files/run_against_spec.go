@@ -73,5 +73,9 @@ func main() {
 		example.run_spec_test(&res)
 	}
 
-	fmt.Printf("%+v\n", res)
+	fmt.Printf("\nResult: %+v\n", res)
+
+	var percentage float32 = (float32(res.ok) / float32(len(examples))) * 100
+
+	fmt.Printf("\nCommonmark compliance: %f%%\n", percentage)
 }
