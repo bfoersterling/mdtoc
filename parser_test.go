@@ -66,6 +66,41 @@ func Test_fetch_lines(t *testing.T) {
 				"test_heading:\n%+v\nexpected_heading:\n%+v\n", i, i, test_headings[i], expected_headings[i])
 		}
 	}
+
+	// 2 - no blank lines between headings
+	test_lines = fetch_lines("test_files/no_blank_lines.md", "off")
+
+	expected_lines := []line{
+		heading{
+			text:             "regular level 2 header",
+			line:             1,
+			level:            2,
+			levels:           [6]int{0, 1, 0, 0, 0, 0},
+			pretty_numbering: "1.",
+		},
+		nonheading{
+			text: "Bar.",
+			line: 2,
+		},
+		heading{
+			text:             "regular level 4 header",
+			line:             3,
+			level:            4,
+			levels:           [6]int{0, 1, 0, 1, 0, 0},
+			pretty_numbering: "1.1.",
+		},
+		nonheading{
+			text: "Foo.",
+			line: 4,
+		},
+	}
+
+	for i, line := range test_lines {
+		if line != expected_lines[i] {
+			t.Fatalf("line and expected_lines[i] differ.\n"+
+				"line:\n%v\nexpected_lines[i]:\n%v\n", line, expected_lines[i])
+		}
+	}
 }
 
 func Benchmark_fetch_lines(b *testing.B) {
