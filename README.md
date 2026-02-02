@@ -7,6 +7,14 @@ Makes it easy to work with large Markdown files.
 
 Fully Commonmark compliant.
 
+#### installation
+
+Download the latest release or build it with `make`.
+
+Dependencies:
+- cmark
+- readline
+
 #### usage
 
 Without arguments `mdtoc` will print a table of content.
