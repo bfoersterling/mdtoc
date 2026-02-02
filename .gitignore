@@ -1,0 +1,4 @@
+mdtoc
+tags
+test/check_mdtoc
+*.out

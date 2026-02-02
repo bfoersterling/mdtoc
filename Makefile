@@ -1,0 +1,57 @@
+.PHONY: all clean tags test
+
+BINARY = "mdtoc"
+
+TEST_BINARY = "check_mdtoc"
+
+COMPILE_DATE = "$(shell date "+%Y-%m-%d")"
+
+GIT_TAG = "$(shell git describe --tags --abbrev=0)"
+
+CFLAGS = -g -std=gnu23 -Wall \
+		 -DVERSION=\"$(GIT_TAG)\" \
+		 -DCOMPILE_DATE=\"$(COMPILE_DATE)\"
+
+SOURCE_FILES = \
+			   chapter.c \
+			   interactive.c \
+			   main.c \
+			   parser.c \
+			   pretty_printer.c \
+			   stream.c \
+			   string_util.c
+
+TEST_DIR = "test"
+
+TEST_SOURCES = \
+			   $(TEST_DIR)/chapter_test.c \
+			   $(TEST_DIR)/parser_test.c \
+			   $(TEST_DIR)/pretty_printer_test.c \
+			   $(TEST_DIR)/stream_test.c \
+			   $(TEST_DIR)/string_util_test.c \
+			   $(TEST_DIR)/unit_testing.c
+
+all:
+	clang $(CFLAGS) -o $(BINARY) $(SOURCE_FILES) -lcmark -lreadline
+
+clean:
+	rm -fv $(BINARY) $(TEST_DIR)/$(TEST_BINARY)
+
+tags:
+	ctags --language-force=C --C-kinds=+p /usr/include/cmark.h *.c
+
+test:
+	clang $(CFLAGS) -o $(TEST_DIR)/$(TEST_BINARY) \
+		$(TEST_SOURCES) -lcmark -lcheck
+	valgrind -q --exit-on-first-error=yes --error-exitcode=1 ./$(TEST_DIR)/$(TEST_BINARY)
+
+test_leaks:
+	clang $(CFLAGS) -o $(TEST_DIR)/$(TEST_BINARY) \
+		$(TEST_SOURCES) -lcmark -lcheck
+	valgrind ./test/check_mdtoc |& grep "lost"
+
+docker_build:
+	docker build -t mdtoc-image .docker
+
+docker_run:
+	docker run --rm -it -v $(shell pwd):/mdtoc mdtoc-image
