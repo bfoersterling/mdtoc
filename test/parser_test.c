@@ -363,8 +363,10 @@ START_TEST (test_print_colored_markdown)
 		"used by VTE, iTerm2, and mintty, among others.";
 	const char* expected_8 =
 		"\033[35mA non-xterm extension is the hyperlink, "
-		"\033[36mESC ]8;;link ST\033[35m from 2017,\n"
-		"used by VTE, iTerm2, and mintty, among others."
+		"\033[36mESC ]8;;link ST\033[0m\033[35m from 2017,"
+		"\n"
+		"\033[35mused by VTE, iTerm2, and mintty, among others."
+		"\n"
 		"\033[0m";
 
 	size_t buffer_size_8 = strlen(expected_8) * 2;
