@@ -356,6 +356,28 @@ START_TEST (test_print_colored_markdown)
 
 	free(buffer_7);
 	fclose(stream_7);
+
+	// 8 - block quote with inline code
+	const char* input_8 =
+		"> A non-xterm extension is the hyperlink, `ESC ]8;;link ST` from 2017,\\\n"
+		"used by VTE, iTerm2, and mintty, among others.";
+	const char* expected_8 =
+		"\033[35mA non-xterm extension is the hyperlink, "
+		"\033[36mESC ]8;;link ST\033[35m from 2017,\n"
+		"used by VTE, iTerm2, and mintty, among others."
+		"\033[0m";
+
+	size_t buffer_size_8 = strlen(expected_8) * 2;
+	char* buffer_8 = malloc(buffer_size_8);
+	memset(buffer_8, 0, buffer_size_8);
+	FILE* stream_8 = fmemopen(buffer_8, buffer_size_8, "w");
+
+	print_colored_markdown(input_8, stream_8);
+
+	ck_assert_str_eq(buffer_8, expected_8);
+
+	free(buffer_8);
+	fclose(stream_8);
 }
 
 START_TEST (test_update_heading_levels)
