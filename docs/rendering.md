@@ -106,3 +106,12 @@ used by VTE, iTerm2, and mintty, among others.
 For now do not use it.\
 Maybe test multiple terminals and put it in if it is supported by most \
 terminals.
+
+## using a state?
+
+A `block_quote` for example is not the direct parent of the underlying inline \
+nodes like `text` or `code`.\
+There is a `paragraph` in between.
+
+Proposition: Inline nodes are mutually exclusive.\
+=> False, `strong` is the parent of `text`.

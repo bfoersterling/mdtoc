@@ -6,6 +6,7 @@
 
 // Prototypes for static functions.
 static int determine_item_pos(cmark_node* node);
+static bool inside_block_quote(cmark_node* node);
 static bool is_block_node(cmark_node* node);
 [[maybe_unused]] static bool needs_leading_nl(cmark_node* node);
 static int number_of_leading_nl(cmark_node* node);
@@ -40,6 +41,22 @@ determine_item_pos(cmark_node* node)
 	}
 
 	return i;
+}
+
+// If one ancestor is a block quote, the node is inside a block quote.
+	static bool
+inside_block_quote(cmark_node* node)
+{
+	for(
+			cmark_node* parent = cmark_node_parent(node);
+			parent != NULL;
+			parent = cmark_node_parent(parent)
+	   ) {
+		if (cmark_node_get_type(parent) == CMARK_NODE_BLOCK_QUOTE)
+			return true;
+	}
+
+	return false;
 }
 
 	static bool
@@ -88,7 +105,6 @@ number_of_trailing_nl(cmark_node* node)
 	static void
 pretty_print_cmark_block_quote(cmark_node* node, FILE* stream)
 {
-	fprintf(stream, "\033[35m");
 }
 
 	static void
@@ -299,6 +315,9 @@ pretty_print_cmark_text(cmark_node* node, FILE* stream)
 	// interrupted by code nodes.
 	if (parent_type == CMARK_NODE_STRONG)
 		fprintf(stream, "\033[1m");
+
+	if (inside_block_quote(node))
+		fprintf(stream, "\033[35m");
 
 	fprintf(stream, "%s", cmark_node_get_literal(node));
 
