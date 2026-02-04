@@ -1,0 +1,12 @@
+name: "Unit Tests"
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    container: ghcr.io/bfoersterling/cdevel:latest
+    steps:
+      - name: check out repo
+        uses: actions/checkout@v4
+      - run: make test
