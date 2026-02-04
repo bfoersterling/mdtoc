@@ -1,0 +1,3 @@
+FROM alpine:latest
+
+RUN apk add clang dev-readline dev-cmark make
