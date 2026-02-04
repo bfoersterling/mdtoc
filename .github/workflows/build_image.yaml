@@ -22,7 +22,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/cdevel:latest -f .docker/Dockerfile_alpine
+          docker build -t ghcr.io/${{ github.repository_owner }}/cdevel:latest \
+            -f .docker/Dockerfile_alpine .
 
       - name: Push Docker image
         run: |
