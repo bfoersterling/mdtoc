@@ -12,6 +12,7 @@
 // Static function prototypes.
 static void append_heading(struct heading** head, char* text, int level, int levels[6], int line);
 static struct heading* find_connector(struct heading* node, int level);
+static void insert_preamble_heading(struct heading** head, const char* source_code);
 static void parse_headings_from_node(cmark_node* node, struct heading** head, int levels[6]);
 static void print_colored_cmark_tree(cmark_node* node, const char* source_code, FILE* stream);
 static void print_heading(struct heading* h, int indentation_level, FILE* stream);
@@ -115,6 +116,30 @@ free_heading_tree(struct heading* node) {
 
 	free(node->text);
 	free(node);
+}
+
+// Insert artificial heading for everything before the first heading
+// unless there is no text.
+// This function has to be called AFTER all headings have been parsed
+// and the heading tree has already been generated.
+static void
+insert_preamble_heading(struct heading** head, const char* source_code)
+{
+	// Which level do we give this artificial heading?
+	// The same level as the first real heading (heading number 1.)?
+	// If there are no headings at all -> level 1.
+	// The levels field should be all zeros.
+
+	if (*head == NULL)
+		return;
+
+	struct heading* first_heading = (*head)->first_child;
+
+	if (first_heading != NULL && first_heading->line == 1)
+		return;
+
+	// TODO: Store the lines from source_code until the first heading
+	// in a variable.
 }
 
 // Return the last node of a tree branch.
