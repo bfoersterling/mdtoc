@@ -8,7 +8,6 @@
 static int determine_item_pos(cmark_node* node);
 static bool inside_block_quote(cmark_node* node);
 static int number_of_leading_nl(cmark_node* node);
-[[maybe_unused]] static int number_of_trailing_nl(cmark_node* node);
 static void pretty_print_cmark_block_quote(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_code(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_code_block(cmark_node* node, FILE* stream);
@@ -63,15 +62,6 @@ number_of_leading_nl(cmark_node* node)
 	if (cmark_node_get_type(cmark_node_parent(node)) == CMARK_NODE_DOCUMENT
 			&& cmark_node_previous(node) != NULL)
 		return 1;
-
-	return 0;
-}
-
-	static int
-number_of_trailing_nl(cmark_node* node)
-{
-	//cmark_node_type node_type = cmark_node_get_type(node);
-	//cmark_node_type parent_type = cmark_node_get_type(cmark_node_parent(node));
 
 	return 0;
 }
