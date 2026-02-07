@@ -136,10 +136,6 @@ insert_preamble_heading(struct heading** head, const char* source_code)
 	if (first_heading != NULL && first_heading->line == 1)
 		return;
 
-	// TODO: Check if preamble_text consists of whitespace only?
-	//char* preamble_text = string_line_span(1, first_heading->line);
-	//free(preamble_text);
-
 	struct heading* new_node = malloc(sizeof(struct heading));
 	// Give the artificial heading the same level as the first real heading
 	// (which is heading number 1.).
@@ -150,8 +146,6 @@ insert_preamble_heading(struct heading** head, const char* source_code)
 	if (first_heading != NULL)
 		new_node->level = first_heading->level;
 
-	// TODO: Adjust the pretty headings function so this will output "0." for
-	// this heading.
 	memset(new_node->levels, 0, sizeof(int)*6);
 	// The root node is already all zeros...
 	// And the levels field is a unique value...
