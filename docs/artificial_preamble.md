@@ -5,8 +5,18 @@ this section.
 
 Markdown files without headings will not show any chapters.
 
-## possible solutions
+## implemented solution
 
 Insert artificial preamble heading after the root heading.
 
+## alternate ways
+
 Print a warning that text has been detected before the first heading.
+
+This goes somewhat against the Commonmark spec which says:\
+> Any sequence of characters is a valid CommonMark document.
+
+So even whitespace is valid markdown.
+
+Linting with warnings or errors goes against this \
+and this is not the goal of this tool.
