@@ -169,6 +169,28 @@ START_TEST (test_parse_headings)
 	free(buffer_3);
 	fclose(stream_3);
 	free_heading_tree(head_3);
+
+	// 4 - empty file should not have a toc
+	const char* source_4 =
+		"";
+
+	const char* expected_4 =
+		"";
+
+	struct heading* head_4 = parse_headings(source_4);
+
+	size_t buffer_size_4 = 64;
+	char* buffer_4 = malloc(buffer_size_4);
+	memset(buffer_4, 0, buffer_size_4);
+	FILE* stream_4 = fmemopen(buffer_4, buffer_size_4, "w");
+
+	print_heading_tree(head_4, 0, stream_4);
+
+	ck_assert_str_eq(buffer_4, expected_4);
+
+	free(buffer_4);
+	fclose(stream_4);
+	free_heading_tree(head_4);
 }
 
 START_TEST (test_pretty_heading_levels)
