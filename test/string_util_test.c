@@ -373,7 +373,7 @@ START_TEST (test_string_line_span)
 
 	free(output_5);
 
-	// 6 - Out of range.
+	// 6 - End line number out of range.
 	const char* input_6 =
 		"line 1\n"
 		"line 2\n"
@@ -388,6 +388,21 @@ START_TEST (test_string_line_span)
 	ck_assert_str_eq(output_6, expected_6);
 
 	free(output_6);
+
+	// 7 - Everything out of range.
+	const char* input_7 =
+		"line 1\n"
+		"line 2\n"
+		"line 3\n";
+
+	const char* expected_7 =
+		"";
+
+	char* output_7 = string_line_span(input_7, 5, 10);
+
+	ck_assert_str_eq(output_7, expected_7);
+
+	free(output_7);
 }
 
 START_TEST (test_trim_space)

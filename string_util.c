@@ -6,7 +6,7 @@
 
 // UNUSED
 // "buffer" needs to be an allocated string.
-void
+	void
 ensure_trailing_dot(char** buffer)
 {
 	if (buffer == NULL || *buffer == NULL)
@@ -30,7 +30,7 @@ ensure_trailing_dot(char** buffer)
 // Returns a pointer to the first occurence of a digit in "s"
 // or NULL if there is no digit in "s".
 // No memory is allocated - don't free the return value.
-const char*
+	const char*
 first_digit_in_str(const char* s)
 {
 	if (s == NULL)
@@ -87,7 +87,7 @@ merge_strings(const char* s1, const char* s2) {
 // cmark starts counting at 1, but the end col may be 0 if there is an
 // empty line.
 // We start at 0 for line and column.
-void
+	void
 print_by_line_column(
 		const char* s,
 		int from_line, int from_col,
@@ -157,7 +157,7 @@ str_from_int(int num) {
 // Return lines "from_line"-"to_line" from "s".
 // The first line is line 1.
 // Returns NULL if the line span could not be found in "s".
-char*
+	char*
 string_line_span(const char* s, int from_line, int to_line)
 {
 	if (s == NULL || *s == '\0')
