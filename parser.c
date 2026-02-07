@@ -12,6 +12,7 @@
 // Static function prototypes.
 static void append_heading(struct heading** head, char* text, int level, int levels[6], int line);
 static struct heading* find_connector(struct heading* node, int level);
+static void insert_preamble_heading(struct heading** head, const char* source_code);
 static void parse_headings_from_node(cmark_node* node, struct heading** head, int levels[6]);
 static void print_colored_cmark_tree(cmark_node* node, const char* source_code, FILE* stream);
 static void print_heading(struct heading* h, int indentation_level, FILE* stream);
@@ -92,7 +93,10 @@ find_heading_by_numbering(
 
 	char* node_numbering = pretty_heading_levels(node->levels);
 
-	if (strcmp(node_numbering, needle_numbering) == 0) {
+	// The artificial root node with level 0 should not be found.
+	// If an artificial preamble node exists however that should be found.
+	if (strcmp(node_numbering, needle_numbering) == 0
+			&& node->level != 0) {
 		*result = node;
 	}
 
@@ -115,6 +119,50 @@ free_heading_tree(struct heading* node) {
 
 	free(node->text);
 	free(node);
+}
+
+// Insert artificial heading for everything before the first heading
+// unless there is no text.
+// This function has to be called AFTER all headings have been parsed
+// and the heading tree has already been generated.
+	static void
+insert_preamble_heading(struct heading** head, const char* source_code)
+{
+	if (*head == NULL)
+		return;
+
+	struct heading* first_heading = (*head)->first_child;
+
+	if (first_heading != NULL && first_heading->line == 1)
+		return;
+
+	struct heading* new_node = malloc(sizeof(struct heading));
+	// Give the artificial heading the same level as the first real heading
+	// (which is heading number 1.).
+	// If there are no headings at all -> level 1 because only the root of the
+	// tree should be level 0.
+	new_node->level = 1;
+
+	if (first_heading != NULL)
+		new_node->level = first_heading->level;
+
+	memset(new_node->levels, 0, sizeof(int)*6);
+	// The root node is already all zeros...
+	// And the levels field is a unique value...
+	memcpy(new_node->levels, (int[]){0,0,0,0,0,0}, sizeof(int)*6);
+	new_node->line = 1;
+	// We need to allocate this literal string because all other nodes allocate
+	// this member and you cannot free a literal.
+	const char* new_node_text = "preamble";
+	size_t new_node_text_size = strlen(new_node_text) + 1;
+	new_node->text = malloc(new_node_text_size);
+	memset(new_node->text, 0, new_node_text_size);
+	strcpy(new_node->text, new_node_text);
+	new_node->first_child = NULL;
+	new_node->next = first_heading;
+	new_node->parent = *head;
+
+	(*head)->first_child = new_node;
 }
 
 // Return the last node of a tree branch.
@@ -147,6 +195,8 @@ parse_headings(const char* source_code) {
 	push_heading(&head, "", 0, hlevels, 0);
 
 	parse_headings_from_node(root_node, &head, hlevels);
+
+	insert_preamble_heading(&head, source_code);
 
 	cmark_node_free(root_node);
 
@@ -207,6 +257,11 @@ pretty_heading_levels(int levels[6]) {
 		strcat(buffer, ".");
 		free(level_str);
 	}
+
+	// Check for preamble heading.
+	if (memcmp(levels, (int[]){0,0,0,0,0,0}, sizeof(int)*6) == 0
+			&& strcmp(buffer, "") == 0)
+		strcpy(buffer, "0.");
 
 	return buffer;
 }

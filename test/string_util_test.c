@@ -293,6 +293,118 @@ START_TEST (test_str_from_int)
 	free(output_2);
 }
 
+START_TEST (test_string_line_span)
+{
+	// 1 - Last two lines.
+	const char* input_1 =
+		"line 1\n"
+		"line 2\n"
+		"line 3\n";
+
+	const char* expected_1 =
+		"line 2\n"
+		"line 3\n";
+
+	char* output_1 = string_line_span(input_1, 2, 3);
+
+	ck_assert_str_eq(output_1, expected_1);
+
+	free(output_1);
+
+	// 2 - Only second line.
+	const char* input_2 =
+		"line 1\n"
+		"line 2\n"
+		"line 3\n";
+
+	const char* expected_2 =
+		"line 2\n";
+
+	char* output_2 = string_line_span(input_2, 2, 2);
+
+	ck_assert_str_eq(output_2, expected_2);
+
+	free(output_2);
+
+	// 3 - Only the first line.
+	const char* input_3 =
+		"line 1\n"
+		"line 2\n"
+		"line 3\n";
+
+	const char* expected_3 =
+		"line 1\n";
+
+	char* output_3 = string_line_span(input_3, 1, 1);
+
+	ck_assert_str_eq(output_3, expected_3);
+
+	free(output_3);
+
+	// 4 - Only the last line.
+	const char* input_4 =
+		"line 1\n"
+		"line 2\n"
+		"line 3\n";
+
+	const char* expected_4 =
+		"line 3\n";
+
+	char* output_4 = string_line_span(input_4, 3, 3);
+
+	ck_assert_str_eq(output_4, expected_4);
+
+	free(output_4);
+
+	// 5 - All three lines.
+	const char* input_5 =
+		"line 1\n"
+		"line 2\n"
+		"line 3\n";
+
+	const char* expected_5 =
+		"line 1\n"
+		"line 2\n"
+		"line 3\n";
+
+	char* output_5 = string_line_span(input_5, 1, 3);
+
+	ck_assert_str_eq(output_5, expected_5);
+
+	free(output_5);
+
+	// 6 - End line number out of range.
+	const char* input_6 =
+		"line 1\n"
+		"line 2\n"
+		"line 3\n";
+
+	const char* expected_6 =
+		"line 2\n"
+		"line 3\n";
+
+	char* output_6 = string_line_span(input_6, 2, 10);
+
+	ck_assert_str_eq(output_6, expected_6);
+
+	free(output_6);
+
+	// 7 - Everything out of range.
+	const char* input_7 =
+		"line 1\n"
+		"line 2\n"
+		"line 3\n";
+
+	const char* expected_7 =
+		"";
+
+	char* output_7 = string_line_span(input_7, 5, 10);
+
+	ck_assert_str_eq(output_7, expected_7);
+
+	free(output_7);
+}
+
 START_TEST (test_trim_space)
 {
 	size_t buffer_size_1 = 256;
@@ -353,6 +465,7 @@ string_util_suite(void) {
 	TCase* tc_merge_strings = tcase_create("test_merge_strings");
 	TCase* tc_print_by_line_column = tcase_create("test_print_by_line_column");
 	TCase* tc_str_from_int = tcase_create("test_str_from_int");
+	TCase* tc_string_line_span = tcase_create("test_string_line_span");
 	TCase* tc_trim_space = tcase_create("test_trim_space");
 
 	tcase_add_test(tc_ensure_trailing_dot, test_ensure_trailing_dot);
@@ -361,6 +474,7 @@ string_util_suite(void) {
 	tcase_add_test(tc_merge_strings, test_merge_strings);
 	tcase_add_test(tc_print_by_line_column, test_print_by_line_column);
 	tcase_add_test(tc_str_from_int, test_str_from_int);
+	tcase_add_test(tc_string_line_span, test_string_line_span);
 	tcase_add_test(tc_trim_space, test_trim_space);
 
 	suite_add_tcase(s, tc_ensure_trailing_dot);
@@ -369,6 +483,7 @@ string_util_suite(void) {
 	suite_add_tcase(s, tc_merge_strings);
 	suite_add_tcase(s, tc_print_by_line_column);
 	suite_add_tcase(s, tc_str_from_int);
+	suite_add_tcase(s, tc_string_line_span);
 	suite_add_tcase(s, tc_trim_space);
 
 	return s;

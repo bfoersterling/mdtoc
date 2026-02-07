@@ -137,6 +137,38 @@ START_TEST (test_parse_headings)
 	free(buffer_2);
 	fclose(stream_2);
 	free_heading_tree(head_2);
+
+	// 3 - preamble
+	const char* source_3 =
+		"> Start with a quote.\n"
+		"## foo\n"
+		"Foo.\n";
+
+	const char* expected_3 =
+		"0. preamble (1)\n"
+		"1. foo (2)\n";
+
+	struct heading* head_3 = parse_headings(source_3);
+
+	ck_assert(head_3 != NULL);
+	ck_assert(head_3->first_child != NULL);
+	ck_assert_str_eq(head_3->first_child->text, "preamble");
+	ck_assert_int_eq(head_3->first_child->level, 2);
+	ck_assert(head_3->first_child->next != NULL);
+	ck_assert_str_eq(head_3->first_child->next->text, "foo");
+
+	size_t buffer_size_3 = strlen(expected_3) * 2;
+	char* buffer_3 = malloc(buffer_size_3);
+	memset(buffer_3, 0, buffer_size_3);
+	FILE* stream_3 = fmemopen(buffer_3, buffer_size_3, "w");
+
+	print_heading_tree(head_3, 0, stream_3);
+
+	ck_assert_str_eq(buffer_3, expected_3);
+
+	free(buffer_3);
+	fclose(stream_3);
+	free_heading_tree(head_3);
 }
 
 START_TEST (test_pretty_heading_levels)

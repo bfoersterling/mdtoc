@@ -153,6 +153,9 @@ read_file(const char* file_path) {
 // Caller has to free the returned buffer.
 char*
 read_file_section(FILE* source_file, long from, long to) {
+	if (to == 0)
+		return NULL;
+
 	assert(from < to);
 
 	long initial_file_pos = ftell(source_file);

@@ -93,6 +93,7 @@ edit_chapter(const char* file_path, const char* chapter)
 	return 0;
 }
 
+// UNUSED
 // Caller has to free the returned buffer.
 // Returns the "chapter" in "source_file" or NULL if it could not be found.
 	char*
@@ -169,7 +170,9 @@ print_chapter_no_color(FILE* source_file, const char* chapter, FILE* stream)
 
 	char* section = read_file_section(source_file, start_pos, end_pos);
 
-	fprintf(stream, "%s", section);
+	if (section != NULL)
+		fprintf(stream, "%s", section);
+
 	fflush(stream);
 
 	free(section);
@@ -216,7 +219,8 @@ print_chapter_with_color(FILE* source_file, const char* chapter, FILE* stream)
 
 	char* section = read_file_section(source_file, start_pos, end_pos);
 
-	print_colored_markdown(section, stream);
+	if (section != NULL)
+		print_colored_markdown(section, stream);
 
 	free(source);
 	free(numbering);
