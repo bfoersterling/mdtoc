@@ -153,6 +153,48 @@ str_from_int(int num) {
 	return buffer;
 }
 
+// Caller has to free the returned buffer.
+// Return lines "from_line"-"to_line" from "s".
+// The first line is line 1.
+// Returns NULL if the line span could not be found in "s".
+char*
+string_line_span(const char* s, int from_line, int to_line)
+{
+	if (s == NULL || *s == '\0')
+		return NULL;
+
+	if (from_line < 1 || from_line > to_line)
+		return NULL;
+
+	char* s_copy = strdup(s);
+	size_t buffer_size = strlen(s) + 1;
+	char* buffer = malloc(buffer_size);
+	memset(buffer, 0, buffer_size);
+
+	int line_number = 1;
+	for(
+			char* line = strtok(s_copy, "\r\n");
+			line != NULL;
+			line = strtok(NULL, "\r\n")
+	   ) {
+		if (line_number < from_line) {
+			line_number++;
+			continue;
+		}
+
+		if (line_number > to_line)
+			break;
+
+		strcat(buffer, line);
+		strcat(buffer, "\n");
+
+		line_number++;
+	}
+
+	free(s_copy);
+	return buffer;
+}
+
 // Removes leading and trailing whitespace from s.
 // s needs to be an allocated buffer.
 void
