@@ -136,6 +136,10 @@ insert_preamble_heading(struct heading** head, const char* source_code)
 	if (first_heading != NULL && first_heading->line == 1)
 		return;
 
+	// No need for a preamble when the markdown file is empty.
+	if (strlen(source_code) == 0)
+		return;
+
 	struct heading* new_node = malloc(sizeof(struct heading));
 	// Give the artificial heading the same level as the first real heading
 	// (which is heading number 1.).
