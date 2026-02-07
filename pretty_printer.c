@@ -347,5 +347,10 @@ pretty_print_heading_levels(int levels[6], FILE* stream)
 
 		fprintf(stream, "%d.", levels[i]);
 	}
+
+	// Preamble heading.
+	if (memcmp(levels, (int[]){0,0,0,0,0,0}, sizeof(int)*6) == 0)
+		fprintf(stream, "0.");
+
 	fflush(stream);
 }
