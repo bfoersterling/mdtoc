@@ -7,8 +7,6 @@
 // Prototypes for static functions.
 static int determine_item_pos(cmark_node* node);
 static bool inside_block_quote(cmark_node* node);
-static bool is_block_node(cmark_node* node);
-[[maybe_unused]] static bool needs_leading_nl(cmark_node* node);
 static int number_of_leading_nl(cmark_node* node);
 [[maybe_unused]] static int number_of_trailing_nl(cmark_node* node);
 static void pretty_print_cmark_block_quote(cmark_node* node, FILE* stream);
@@ -55,30 +53,6 @@ inside_block_quote(cmark_node* node)
 		if (cmark_node_get_type(parent) == CMARK_NODE_BLOCK_QUOTE)
 			return true;
 	}
-
-	return false;
-}
-
-	static bool
-is_block_node(cmark_node* node)
-{
-	cmark_node_type type = cmark_node_get_type(node);
-
-	if (type >= 1 && type <= 10)
-		return true;
-
-	return false;
-}
-
-	static bool
-needs_leading_nl(cmark_node* node)
-{
-	// The first node does not need a leading new line.
-	if (cmark_node_previous(node) == NULL)
-		return false;
-
-	if (is_block_node(node))
-		return true;
 
 	return false;
 }
