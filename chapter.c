@@ -192,7 +192,7 @@ print_chapter_with_color(FILE* source_file, const char* chapter, FILE* stream)
 
 	fread(source, source_size, 1, source_file);
 
-	struct heading* root = parse_headings_from_stream(source_file);
+	struct heading* root = parse_headings(source);
 	assert(root != NULL);
 	struct heading* chapter_heading = NULL;
 
