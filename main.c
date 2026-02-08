@@ -1,6 +1,8 @@
+#include <errno.h>
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "chapter.h"
 #include "interactive.h"
@@ -36,7 +38,15 @@ handle_cli_args(int argc, char** argv)
 					fprintf(stderr, "Option \"-c\" requires exactly one file!\n");
 					exit(1);
 				}
-				FILE* md_file = fopen(argv[optind - option_index], "r");
+				const char* file_path = argv[optind - option_index];
+
+				FILE* md_file = fopen(file_path, "r");
+
+				if (md_file == NULL) {
+					fprintf(stderr, "Error opening file \"%s\": %s\n",
+							file_path, strerror(errno));
+					exit(1);
+				}
 
 				print_chapter(md_file, optarg, stdout);
 

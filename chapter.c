@@ -132,6 +132,10 @@ fetch_chapter(FILE* source_file, const char* chapter)
 	void
 print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 {
+	if (*chapter == '\0') {
+		fprintf(stream, "Provided chapter was an empty string.\n");
+		return;
+	}
 	if (use_color())
 		print_chapter_with_color(source_file, chapter, stream);
 	else
@@ -141,10 +145,6 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 	void
 print_chapter_no_color(FILE* source_file, const char* chapter, FILE* stream)
 {
-	if (*chapter == '\0') {
-		fprintf(stream, "Provided chapter was an empty string.\n");
-		return;
-	}
 	assert(source_file != NULL);
 	assert(stream != NULL);
 
@@ -183,10 +183,6 @@ print_chapter_no_color(FILE* source_file, const char* chapter, FILE* stream)
 	void
 print_chapter_with_color(FILE* source_file, const char* chapter, FILE* stream)
 {
-	if (*chapter == '\0') {
-		fprintf(stream, "Provided chapter was an empty string.\n");
-		return;
-	}
 	assert(source_file != NULL);
 	assert(stream != NULL);
 
