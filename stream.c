@@ -6,8 +6,9 @@
 #include <string.h>
 
 // Return the number of lines in file "stream".
-int
-count_lines(FILE* stream) {
+	int
+count_lines(FILE* stream)
+{
 	assert(stream != NULL);
 
 	long initial_file_pos = ftell(stream);
@@ -28,8 +29,9 @@ count_lines(FILE* stream) {
 	return line_count;
 }
 
-long
-file_size(FILE* stream) {
+	long
+file_size(FILE* stream)
+{
 	assert(stream != NULL);
 
 	long end_pos = 0;
@@ -46,8 +48,9 @@ file_size(FILE* stream) {
 
 // Read from stdin.
 // Caller has to free the returned buffer.
-char*
-get_user_input(void) {
+	char*
+get_user_input(void)
+{
 	size_t buffer_size = 32768;
 	char* buffer = malloc(buffer_size);
 	memset(buffer, 0, buffer_size);
@@ -64,8 +67,9 @@ get_user_input(void) {
 // Returns the file position of the end of the line "line"
 // in file "source_file".
 // Returns -1 if the line was not found.
-long
-line_end_pos(FILE* source_file, int line) {
+	long
+line_end_pos(FILE* source_file, int line)
+{
 	assert(line > 0);
 	assert(source_file != NULL);
 
@@ -96,8 +100,9 @@ line_end_pos(FILE* source_file, int line) {
 // Returns the file position of the start of the line "line"
 // in file "source_file".
 // Returns -1 if the line was not found.
-long
-line_start_pos(FILE* source_file, int line) {
+	long
+line_start_pos(FILE* source_file, int line)
+{
 	assert(line > 0);
 	assert(source_file != NULL);
 
@@ -127,8 +132,9 @@ line_start_pos(FILE* source_file, int line) {
 
 // Caller has to free the returned buffer.
 // Error messages go to stderr.
-char*
-read_file(const char* file_path) {
+	char*
+read_file(const char* file_path)
+{
 	FILE* f = fopen(file_path, "r");
 
 	if (f == NULL) {
@@ -151,8 +157,9 @@ read_file(const char* file_path) {
 
 // Read only a part of a file, starting from byte "from" until byte "to".
 // Caller has to free the returned buffer.
-char*
-read_file_section(FILE* source_file, long from, long to) {
+	char*
+read_file_section(FILE* source_file, long from, long to)
+{
 	if (to == 0)
 		return NULL;
 

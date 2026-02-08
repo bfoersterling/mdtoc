@@ -47,8 +47,9 @@ first_digit_in_str(const char* s)
 // Caller needs to free the returned buffer.
 // 1.1 -> 1.1.
 // 1.1. -> 1.1.
-char*
-numbering_with_trailing_dot(const char* s) {
+	char*
+numbering_with_trailing_dot(const char* s)
+{
 	assert(s != NULL);
 
 	size_t buffer_size = 2048;
@@ -68,8 +69,9 @@ numbering_with_trailing_dot(const char* s) {
 // s1 and s2 remain unchanged.
 // s1 and s2 may be literal strings or pointers to allocated memory.
 // Returns NULL on error.
-char*
-merge_strings(const char* s1, const char* s2) {
+	char*
+merge_strings(const char* s1, const char* s2)
+{
 	if (s1 == NULL || s2 == NULL)
 		return NULL;
 
@@ -140,8 +142,9 @@ print_by_line_column(
 }
 
 // Caller has to free the returned buffer.
-char*
-str_from_int(int num) {
+	char*
+str_from_int(int num)
+{
 	// INT_MAX is 2147483647 in limits.h => 10 digits.
 	// A buffer of 16 bytes should be enough for any int.
 	size_t buffer_size = 16;
@@ -197,8 +200,9 @@ string_line_span(const char* s, int from_line, int to_line)
 
 // Removes leading and trailing whitespace from s.
 // s needs to be an allocated buffer.
-void
-trim_space(char* s) {
+	void
+trim_space(char* s)
+{
 	char* duplicate = strdup(s);
 
 	memset(s, 0, strlen(s));

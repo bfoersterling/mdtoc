@@ -22,8 +22,9 @@ static void ia_toc(const char* file_path, const char* user_input);
 
 // Add command to history if it is not already the last entry.
 // Returns true if it was added otherwise false.
-static void
-add_history_only_once(const char* command) {
+	static void
+add_history_only_once(const char* command)
+{
 	HIST_ENTRY* cur_hist = history_get(history_length);
 
 	if (history_length == 0) {
@@ -41,8 +42,9 @@ add_history_only_once(const char* command) {
 	}
 }
 
-static char*
-complete_commands (const char* text, int state) {
+	static char*
+complete_commands(const char* text, int state)
+{
 	if (state != 0) {
 		return (char*)NULL;
 	}
@@ -84,8 +86,9 @@ complete_commands (const char* text, int state) {
 	return (char*)NULL;
 }
 
-static void
-ia_chapter(const char* file_path, const char* user_input) {
+	static void
+ia_chapter(const char* file_path, const char* user_input)
+{
 	char* user_input_copy = strdup(user_input);
 	// chapter will point to the numbering token.
 	char* chapter = NULL;
@@ -142,8 +145,9 @@ ia_chapter(const char* file_path, const char* user_input) {
 	free(user_input_copy);
 }
 
-static void
-ia_edit(const char* file_path, const char* user_input) {
+	static void
+ia_edit(const char* file_path, const char* user_input)
+{
 	char* user_input_copy = strdup(user_input);
 	const char* chapter = NULL;
 
@@ -185,8 +189,9 @@ ia_edit(const char* file_path, const char* user_input) {
 	free(user_input_copy);
 }
 
-static void
-ia_help(const char* user_input) {
+	static void
+ia_help(const char* user_input)
+{
 	char* user_input_copy = strdup(user_input);
 	// topic will point to the help topic.
 	char* topic = NULL;
@@ -232,8 +237,9 @@ ia_help(const char* user_input) {
 	free(user_input_copy);
 }
 
-static void
-ia_help_topic(const char* topic) {
+	static void
+ia_help_topic(const char* topic)
+{
 	if (strcmp(topic, "chapter") == 0) {
 		printf("chapter CHAPTER\n\n");
 		printf("example:\n\"chapter 2.1\"\n");
@@ -243,8 +249,9 @@ ia_help_topic(const char* topic) {
 	}
 }
 
-static void
-ia_toc(const char* file_path, const char* user_input) {
+	static void
+ia_toc(const char* file_path, const char* user_input)
+{
 	if (strlen(user_input) > 3) {
 		printf("Command \"toc\" has no additional arguments.\n");
 		return;
@@ -252,8 +259,9 @@ ia_toc(const char* file_path, const char* user_input) {
 	print_toc(file_path, stdout);
 }
 
-void
-do_interactive(const char* file_path) {
+	void
+do_interactive(const char* file_path)
+{
 	if (file_path == NULL || *file_path == '\0') {
 		fprintf(stderr, "Please provide exactly one file for interactive mode.\n");
 		return;

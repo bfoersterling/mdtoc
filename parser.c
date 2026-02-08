@@ -22,8 +22,9 @@ static void push_heading(struct heading** head, char* text, int level, int level
 static void traverse_tree(cmark_node* node, int level);
 static void update_heading_levels(int current_level, int levels[6]);
 
-static void
-append_heading(struct heading** head, char* text, int level, int levels[6], int line) {
+	static void
+append_heading(struct heading** head, char* text, int level, int levels[6], int line)
+{
 	// Tree is empty.
 	if (*head == NULL) {
 		push_heading(head, text, level, levels, 0);
@@ -64,8 +65,9 @@ append_heading(struct heading** head, char* text, int level, int levels[6], int 
 // "node" should be the root of the tree.
 // "level" is the level of the new heading that will be attached to the
 // connector.
-static struct heading*
-find_connector(struct heading* node, int level) {
+	static struct heading*
+find_connector(struct heading* node, int level)
+{
 	if (node->next != NULL)
 		node = find_connector(node->next, level);
 
@@ -83,12 +85,13 @@ find_connector(struct heading* node, int level) {
 // (To improve readability and code style, performance is sacrifized here.
 // Performance could be improved by replacing recursion with loops and break
 // on discovery.)
-void
+	void
 find_heading_by_numbering(
 		struct heading* node,
 		const char* needle_numbering,
 		struct heading** result
-		) {
+		)
+{
 	assert(node != NULL);
 
 	char* node_numbering = pretty_heading_levels(node->levels);
@@ -109,8 +112,9 @@ find_heading_by_numbering(
 		find_heading_by_numbering(node->next, needle_numbering, result);
 }
 
-void
-free_heading_tree(struct heading* node) {
+	void
+free_heading_tree(struct heading* node)
+{
 	if (node->first_child != NULL)
 		free_heading_tree(node->first_child);
 
@@ -175,8 +179,9 @@ insert_preamble_heading(struct heading** head, const char* source_code)
 // of the entire tree.
 // If "node" is not the root node, it will return the last node of the
 // subtree.
-struct heading*
-last_heading(struct heading* node) {
+	struct heading*
+last_heading(struct heading* node)
+{
 	if (node->first_child != NULL)
 		node = last_heading(node->first_child);
 
@@ -187,8 +192,9 @@ last_heading(struct heading* node) {
 }
 
 // Get the root/head node of a tree with headings from the source code.
-struct heading*
-parse_headings(const char* source_code) {
+	struct heading*
+parse_headings(const char* source_code)
+{
 	cmark_node* root_node = cmark_parse_document(source_code, strlen(source_code), 0);
 
 	struct heading* head = NULL;
@@ -207,8 +213,9 @@ parse_headings(const char* source_code) {
 	return head;
 }
 
-static void
-parse_headings_from_node(cmark_node* node, struct heading** head, int hlevels[6]) {
+	static void
+parse_headings_from_node(cmark_node* node, struct heading** head, int hlevels[6])
+{
 	if (cmark_node_get_type(node) == CMARK_NODE_HEADING) {
 		int hlevel = cmark_node_get_heading_level(node);
 		update_heading_levels(hlevel, hlevels);
@@ -227,8 +234,9 @@ parse_headings_from_node(cmark_node* node, struct heading** head, int hlevels[6]
 }
 
 // Read markdown file from an open stream instead of from a char pointer.
-struct heading*
-parse_headings_from_stream(FILE* source_file) {
+	struct heading*
+parse_headings_from_stream(FILE* source_file)
+{
 	long initial_file_pos = ftell(source_file);
 	size_t file_content_size = file_size(source_file) + 1;
 	char* file_content = malloc(file_content_size);
@@ -246,8 +254,9 @@ parse_headings_from_stream(FILE* source_file) {
 }
 
 // Caller has to free the returned buffer.
-char*
-pretty_heading_levels(int levels[6]) {
+	char*
+pretty_heading_levels(int levels[6])
+{
 	size_t buffer_size = 512;
 	char* buffer = malloc(buffer_size);
 	memset(buffer, 0, buffer_size);
@@ -270,8 +279,9 @@ pretty_heading_levels(int levels[6]) {
 	return buffer;
 }
 
-void
-print_ast(const char* source_code) {
+	void
+print_ast(const char* source_code)
+{
 	cmark_node* root_node = cmark_parse_document(
 			source_code,
 			strlen(source_code),
@@ -316,8 +326,9 @@ print_colored_markdown(const char* source_code, FILE* stream)
 	cmark_node_free(cmark_root);
 }
 
-void
-print_heading_tree(struct heading* node, int recursion_level, FILE* stream) {
+	void
+print_heading_tree(struct heading* node, int recursion_level, FILE* stream)
+{
 	print_heading(node, recursion_level, stream);
 
 	if (node->first_child != NULL)
@@ -327,8 +338,9 @@ print_heading_tree(struct heading* node, int recursion_level, FILE* stream) {
 		print_heading_tree(node->next, recursion_level, stream);
 }
 
-static void
-print_heading(struct heading* h, int indentation_level, FILE* stream) {
+	static void
+print_heading(struct heading* h, int indentation_level, FILE* stream)
+{
 	// Do not print the artificial root.
 	if (h->level == 0)
 		return;
@@ -339,16 +351,18 @@ print_heading(struct heading* h, int indentation_level, FILE* stream) {
 	fflush(stream);
 }
 
-static void
-print_indentation(int level, FILE* stream) {
+	static void
+print_indentation(int level, FILE* stream)
+{
 	for (int i = 0; i < level; i++) {
 		fprintf(stream, "  ");
 	}
 	fflush(stream);
 }
 
-static void
-print_node(cmark_node* node) {
+	static void
+print_node(cmark_node* node)
+{
 	printf("%s", cmark_node_get_type_string(node));
 	printf(" [%d, %d] ",
 			cmark_node_get_start_line(node),
@@ -358,8 +372,9 @@ print_node(cmark_node* node) {
 			cmark_node_get_end_column(node));
 }
 
-void
-print_toc(const char* file_path, FILE* output_stream) {
+	void
+print_toc(const char* file_path, FILE* output_stream)
+{
 	FILE* source_file = fopen(file_path, "r");
 
 	if (source_file == NULL) {
@@ -377,8 +392,9 @@ print_toc(const char* file_path, FILE* output_stream) {
 }
 
 // Push a new node to the root of the tree.
-static void
-push_heading(struct heading** head, char* text, int level, int levels[6], int line) {
+	static void
+push_heading(struct heading** head, char* text, int level, int levels[6], int line)
+{
 	struct heading* new_node = malloc(sizeof(struct heading));
 	size_t text_size = strlen(text) + 1;
 	new_node->text = malloc(text_size);
@@ -398,8 +414,9 @@ push_heading(struct heading** head, char* text, int level, int levels[6], int li
 	*head = new_node;
 }
 
-static void
-traverse_tree(cmark_node* node, int level) {
+	static void
+traverse_tree(cmark_node* node, int level)
+{
 	for (int i = 0; i<level; i++) {
 		printf("  ");
 	}
@@ -414,8 +431,9 @@ traverse_tree(cmark_node* node, int level) {
 	}
 }
 
-static void
-update_heading_levels(int current_level, int levels[6]) {
+	static void
+update_heading_levels(int current_level, int levels[6])
+{
 	assert(current_level >= 1 && current_level <= 6);
 	levels[current_level-1]++;
 

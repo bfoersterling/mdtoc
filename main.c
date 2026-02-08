@@ -12,8 +12,9 @@ static void handle_cli_args(int argc, char** argv);
 static void print_version(void);
 static void usage(void);
 
-static void
-handle_cli_args(int argc, char** argv) {
+	static void
+handle_cli_args(int argc, char** argv)
+{
 	static struct option cli_args[] = {
 		{"chapter", required_argument, 0, 'c'},
 		{"edit", required_argument, 0, 'e'},
@@ -66,15 +67,16 @@ handle_cli_args(int argc, char** argv) {
 	}
 }
 
-static void
+	static void
 print_version(void)
 {
 	printf("mdtoc version %s comiled at %s.\n", VERSION, COMPILE_DATE);
 	exit(0);
 }
 
-static void
-usage(void) {
+	static void
+usage(void)
+{
 	printf("mdtoc [OPTION]... FILE...\n\n");
 	printf("-c/--chapter CHAPTER FILE\tprint specific chapter ");
 	printf("-e/--edit CHAPTER FILE\tprint specific chapter ");
@@ -83,8 +85,9 @@ usage(void) {
 	printf("-i/--interactive FILE\t\tinteractive mode\n");
 }
 
-int
-main(int argc, char** argv) {
+	int
+main(int argc, char** argv)
+{
 	handle_cli_args(argc, argv);
 
 	if (argc == 1) {
