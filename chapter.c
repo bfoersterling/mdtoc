@@ -129,7 +129,7 @@ fetch_chapter(FILE* source_file, const char* chapter)
 	return read_file_section(source_file, start_pos, end_pos);
 }
 
-void
+	void
 print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 {
 	if (use_color())
