@@ -293,6 +293,22 @@ START_TEST (test_str_from_int)
 	free(output_2);
 }
 
+START_TEST (test_string_line_end_byte)
+{
+	// 1 - no newlines
+	ck_assert_int_eq(string_line_end_byte("line 1", 1), 5);
+
+	// 2 - two normal lines
+	ck_assert_int_eq(string_line_end_byte("line 1\nline 2\n", 2), 13);
+
+	// 3 - line 0 does not exist and should return -1
+	ck_assert_int_eq(string_line_end_byte("line 1\n", 0), -1);
+
+	// 4 - upper out of bounds
+	ck_assert_int_eq(string_line_end_byte("line 1\n", 2), -1);
+	ck_assert_int_eq(string_line_end_byte("line 1\n", 3), -1);
+}
+
 START_TEST (test_string_line_span)
 {
 	// 1 - Last two lines.
@@ -493,6 +509,7 @@ string_util_suite(void) {
 	TCase* tc_merge_strings = tcase_create("test_merge_strings");
 	TCase* tc_print_by_line_column = tcase_create("test_print_by_line_column");
 	TCase* tc_str_from_int = tcase_create("test_str_from_int");
+	TCase* tc_string_line_end_byte = tcase_create("test_string_line_end_byte");
 	TCase* tc_string_line_span = tcase_create("test_string_line_span");
 	TCase* tc_trim_space = tcase_create("test_trim_space");
 
@@ -502,6 +519,7 @@ string_util_suite(void) {
 	tcase_add_test(tc_merge_strings, test_merge_strings);
 	tcase_add_test(tc_print_by_line_column, test_print_by_line_column);
 	tcase_add_test(tc_str_from_int, test_str_from_int);
+	tcase_add_test(tc_string_line_end_byte, test_string_line_end_byte);
 	tcase_add_test(tc_string_line_span, test_string_line_span);
 	tcase_add_test(tc_trim_space, test_trim_space);
 
@@ -511,6 +529,7 @@ string_util_suite(void) {
 	suite_add_tcase(s, tc_merge_strings);
 	suite_add_tcase(s, tc_print_by_line_column);
 	suite_add_tcase(s, tc_str_from_int);
+	suite_add_tcase(s, tc_string_line_end_byte);
 	suite_add_tcase(s, tc_string_line_span);
 	suite_add_tcase(s, tc_trim_space);
 
