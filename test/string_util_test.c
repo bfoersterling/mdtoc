@@ -379,13 +379,9 @@ START_TEST (test_string_line_span)
 		"line 2\n"
 		"line 3\n";
 
-	const char* expected_6 =
-		"line 2\n"
-		"line 3\n";
-
 	char* output_6 = string_line_span(input_6, 2, 10);
 
-	ck_assert_str_eq(output_6, expected_6);
+	ck_assert(output_6 == NULL);
 
 	free(output_6);
 
@@ -395,14 +391,46 @@ START_TEST (test_string_line_span)
 		"line 2\n"
 		"line 3\n";
 
-	const char* expected_7 =
-		"";
-
 	char* output_7 = string_line_span(input_7, 5, 10);
 
-	ck_assert_str_eq(output_7, expected_7);
+	ck_assert(output_7 == NULL);
 
 	free(output_7);
+
+	// 8 - Empty lines in between.
+	const char* input_8 =
+		"line 1\n"
+		"\n"
+		"line 3\n"
+		"\n"
+		"line 5\n";
+
+	const char* expected_8 =
+		"line 3\n"
+		"\n"
+		"line 5\n";
+
+	char* output_8 = string_line_span(input_8, 3, 5);
+
+	ck_assert_str_eq(output_8, expected_8);
+
+	free(output_8);
+
+	// 9 - Empty line at start of span.
+	const char* input_9 =
+		"line 1\n"
+		"\n"
+		"line 3\n";
+
+	const char* expected_9 =
+		"\n"
+		"line 3\n";
+
+	char* output_9 = string_line_span(input_9, 2, 3);
+
+	ck_assert_str_eq(output_9, expected_9);
+
+	free(output_9);
 }
 
 START_TEST (test_trim_space)
