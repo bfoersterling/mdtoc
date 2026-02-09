@@ -449,6 +449,21 @@ START_TEST (test_string_line_span)
 	free(output_9);
 }
 
+START_TEST (test_string_line_start_byte)
+{
+	// 1
+	ck_assert_int_eq(string_line_start_byte("line 1", 1), 0);
+
+	// 2 - There is no line 0.
+	ck_assert_int_eq(string_line_start_byte("line 1", 0), -1);
+
+	// 3 - upper out of bounds
+	ck_assert_int_eq(string_line_start_byte("line 1", 2), -1);
+
+	// 4 - start of line 2.
+	ck_assert_int_eq(string_line_start_byte("line 1\nline 2\n", 2), 7);
+}
+
 START_TEST (test_trim_space)
 {
 	size_t buffer_size_1 = 256;
@@ -511,6 +526,7 @@ string_util_suite(void) {
 	TCase* tc_str_from_int = tcase_create("test_str_from_int");
 	TCase* tc_string_line_end_byte = tcase_create("test_string_line_end_byte");
 	TCase* tc_string_line_span = tcase_create("test_string_line_span");
+	TCase* tc_string_line_start_byte = tcase_create("test_string_line_start_byte");
 	TCase* tc_trim_space = tcase_create("test_trim_space");
 
 	tcase_add_test(tc_ensure_trailing_dot, test_ensure_trailing_dot);
@@ -521,6 +537,7 @@ string_util_suite(void) {
 	tcase_add_test(tc_str_from_int, test_str_from_int);
 	tcase_add_test(tc_string_line_end_byte, test_string_line_end_byte);
 	tcase_add_test(tc_string_line_span, test_string_line_span);
+	tcase_add_test(tc_string_line_start_byte, test_string_line_start_byte);
 	tcase_add_test(tc_trim_space, test_trim_space);
 
 	suite_add_tcase(s, tc_ensure_trailing_dot);
@@ -531,6 +548,7 @@ string_util_suite(void) {
 	suite_add_tcase(s, tc_str_from_int);
 	suite_add_tcase(s, tc_string_line_end_byte);
 	suite_add_tcase(s, tc_string_line_span);
+	suite_add_tcase(s, tc_string_line_start_byte);
 	suite_add_tcase(s, tc_trim_space);
 
 	return s;
