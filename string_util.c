@@ -156,6 +156,26 @@ str_from_int(int num)
 	return buffer;
 }
 
+	int
+string_line_end_byte(const char* s, int line)
+{
+	int index = 0;
+	int cur_line = 1;
+
+	for (char* p = (char*)s; *p != '\0'; p++) {
+		if (cur_line == line
+				&& (*p == '\n' || *(p+1) == '\0' ))
+			return index;
+
+		if (*p == '\n')
+			cur_line++;
+
+		index++;
+	}
+
+	return -1;
+}
+
 // Caller has to free the returned buffer.
 // Return lines "from_line"-"to_line" from "s".
 // The first line is line 1.
@@ -196,6 +216,23 @@ string_line_span(const char* s, int from_line, int to_line)
 
 	free(s_copy);
 	return buffer;
+}
+
+	int
+string_line_start_byte(const char* s, int line)
+{
+	int cur_line = 1;
+
+	for (int i = 0; i < strlen(s); i++) {
+		if (cur_line == line)
+			return i;
+
+		if (s[i] == '\n') {
+			cur_line++;
+		}
+	}
+
+	return -1;
 }
 
 // Removes leading and trailing whitespace from s.
