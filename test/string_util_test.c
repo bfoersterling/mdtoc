@@ -293,6 +293,22 @@ START_TEST (test_str_from_int)
 	free(output_2);
 }
 
+START_TEST (test_string_line_end_byte)
+{
+	// 1 - no newlines
+	ck_assert_int_eq(string_line_end_byte("line 1", 1), 5);
+
+	// 2 - two normal lines
+	ck_assert_int_eq(string_line_end_byte("line 1\nline 2\n", 2), 13);
+
+	// 3 - line 0 does not exist and should return -1
+	ck_assert_int_eq(string_line_end_byte("line 1\n", 0), -1);
+
+	// 4 - upper out of bounds
+	ck_assert_int_eq(string_line_end_byte("line 1\n", 2), -1);
+	ck_assert_int_eq(string_line_end_byte("line 1\n", 3), -1);
+}
+
 START_TEST (test_string_line_span)
 {
 	// 1 - Last two lines.
@@ -379,13 +395,9 @@ START_TEST (test_string_line_span)
 		"line 2\n"
 		"line 3\n";
 
-	const char* expected_6 =
-		"line 2\n"
-		"line 3\n";
-
 	char* output_6 = string_line_span(input_6, 2, 10);
 
-	ck_assert_str_eq(output_6, expected_6);
+	ck_assert(output_6 == NULL);
 
 	free(output_6);
 
@@ -395,14 +407,61 @@ START_TEST (test_string_line_span)
 		"line 2\n"
 		"line 3\n";
 
-	const char* expected_7 =
-		"";
-
 	char* output_7 = string_line_span(input_7, 5, 10);
 
-	ck_assert_str_eq(output_7, expected_7);
+	ck_assert(output_7 == NULL);
 
 	free(output_7);
+
+	// 8 - Empty lines in between.
+	const char* input_8 =
+		"line 1\n"
+		"\n"
+		"line 3\n"
+		"\n"
+		"line 5\n";
+
+	const char* expected_8 =
+		"line 3\n"
+		"\n"
+		"line 5\n";
+
+	char* output_8 = string_line_span(input_8, 3, 5);
+
+	ck_assert_str_eq(output_8, expected_8);
+
+	free(output_8);
+
+	// 9 - Empty line at start of span.
+	const char* input_9 =
+		"line 1\n"
+		"\n"
+		"line 3\n";
+
+	const char* expected_9 =
+		"\n"
+		"line 3\n";
+
+	char* output_9 = string_line_span(input_9, 2, 3);
+
+	ck_assert_str_eq(output_9, expected_9);
+
+	free(output_9);
+}
+
+START_TEST (test_string_line_start_byte)
+{
+	// 1
+	ck_assert_int_eq(string_line_start_byte("line 1", 1), 0);
+
+	// 2 - There is no line 0.
+	ck_assert_int_eq(string_line_start_byte("line 1", 0), -1);
+
+	// 3 - upper out of bounds
+	ck_assert_int_eq(string_line_start_byte("line 1", 2), -1);
+
+	// 4 - start of line 2.
+	ck_assert_int_eq(string_line_start_byte("line 1\nline 2\n", 2), 7);
 }
 
 START_TEST (test_trim_space)
@@ -465,7 +524,9 @@ string_util_suite(void) {
 	TCase* tc_merge_strings = tcase_create("test_merge_strings");
 	TCase* tc_print_by_line_column = tcase_create("test_print_by_line_column");
 	TCase* tc_str_from_int = tcase_create("test_str_from_int");
+	TCase* tc_string_line_end_byte = tcase_create("test_string_line_end_byte");
 	TCase* tc_string_line_span = tcase_create("test_string_line_span");
+	TCase* tc_string_line_start_byte = tcase_create("test_string_line_start_byte");
 	TCase* tc_trim_space = tcase_create("test_trim_space");
 
 	tcase_add_test(tc_ensure_trailing_dot, test_ensure_trailing_dot);
@@ -474,7 +535,9 @@ string_util_suite(void) {
 	tcase_add_test(tc_merge_strings, test_merge_strings);
 	tcase_add_test(tc_print_by_line_column, test_print_by_line_column);
 	tcase_add_test(tc_str_from_int, test_str_from_int);
+	tcase_add_test(tc_string_line_end_byte, test_string_line_end_byte);
 	tcase_add_test(tc_string_line_span, test_string_line_span);
+	tcase_add_test(tc_string_line_start_byte, test_string_line_start_byte);
 	tcase_add_test(tc_trim_space, test_trim_space);
 
 	suite_add_tcase(s, tc_ensure_trailing_dot);
@@ -483,7 +546,9 @@ string_util_suite(void) {
 	suite_add_tcase(s, tc_merge_strings);
 	suite_add_tcase(s, tc_print_by_line_column);
 	suite_add_tcase(s, tc_str_from_int);
+	suite_add_tcase(s, tc_string_line_end_byte);
 	suite_add_tcase(s, tc_string_line_span);
+	suite_add_tcase(s, tc_string_line_start_byte);
 	suite_add_tcase(s, tc_trim_space);
 
 	return s;

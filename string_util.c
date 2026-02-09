@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "string_util.h"
+
 // UNUSED
 // "buffer" needs to be an allocated string.
 	void
@@ -156,46 +158,70 @@ str_from_int(int num)
 	return buffer;
 }
 
+	int
+string_line_end_byte(const char* s, int line)
+{
+	int index = 0;
+	int cur_line = 1;
+
+	for (char* p = (char*)s; *p != '\0'; p++) {
+		if (cur_line == line
+				&& (*p == '\n' || *(p+1) == '\0' ))
+			return index;
+
+		if (*p == '\n')
+			cur_line++;
+
+		index++;
+	}
+
+	return -1;
+}
+
 // Caller has to free the returned buffer.
 // Return lines "from_line"-"to_line" from "s".
 // The first line is line 1.
-// Returns NULL if the line span could not be found in "s".
+// Returns NULL if from_line or to_line could not be found in "s"
+// or to_line is smaller than from_line.
 	char*
 string_line_span(const char* s, int from_line, int to_line)
 {
-	if (s == NULL || *s == '\0')
+	if (from_line > to_line)
 		return NULL;
 
-	if (from_line < 1 || from_line > to_line)
+	int start_offset = string_line_start_byte(s, from_line);
+	int last_byte = string_line_end_byte(s+start_offset, to_line-from_line+1);
+
+	// Both lines need to be present in s.
+	if (start_offset == -1 || last_byte == -1)
 		return NULL;
 
-	char* s_copy = strdup(s);
-	size_t buffer_size = strlen(s) + 1;
+	// Add +1 to get the string length from the last byte index.
+	// Add +1 for the null terminator.
+	size_t buffer_size = last_byte + 2;
 	char* buffer = malloc(buffer_size);
 	memset(buffer, 0, buffer_size);
 
-	int line_number = 1;
-	for(
-			char* line = strtok(s_copy, "\r\n");
-			line != NULL;
-			line = strtok(NULL, "\r\n")
-	   ) {
-		if (line_number < from_line) {
-			line_number++;
-			continue;
+	strncpy(buffer, s+start_offset, last_byte + 1);
+
+	return buffer;
+}
+
+	int
+string_line_start_byte(const char* s, int line)
+{
+	int cur_line = 1;
+
+	for (int i = 0; i < strlen(s); i++) {
+		if (cur_line == line)
+			return i;
+
+		if (s[i] == '\n') {
+			cur_line++;
 		}
-
-		if (line_number > to_line)
-			break;
-
-		strcat(buffer, line);
-		strcat(buffer, "\n");
-
-		line_number++;
 	}
 
-	free(s_copy);
-	return buffer;
+	return -1;
 }
 
 // Removes leading and trailing whitespace from s.
