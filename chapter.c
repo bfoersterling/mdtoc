@@ -155,21 +155,7 @@ fetch_chapter(FILE* source_file, const char* chapter)
 	void
 print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 {
-	if (*chapter == '\0') {
-		fprintf(stream, "Provided chapter was an empty string.\n");
-		return;
-	}
-	if (use_color())
-		print_chapter_with_color(source_file, chapter, stream);
-	else
-		print_chapter_no_color(source_file, chapter, stream);
-}
-
-	void
-print_chapter_no_color(FILE* source_file, const char* chapter, FILE* stream)
-{
 	assert(source_file != NULL);
-	assert(stream != NULL);
 
 	size_t source_size = file_size(source_file) + 1;
 	char* source = malloc(source_size);
@@ -180,7 +166,22 @@ print_chapter_no_color(FILE* source_file, const char* chapter, FILE* stream)
 	fread(source, source_size, 1, source_file);
 	fseek(source_file, initial_file_pos, SEEK_SET);
 
-	struct heading* root = parse_headings(source);
+	if (*chapter == '\0') {
+		fprintf(stream, "Provided chapter was an empty string.\n");
+		return;
+	}
+	if (use_color())
+		print_chapter_with_color(source, chapter, stream);
+	else
+		print_chapter_no_color(source, chapter, stream);
+}
+
+	void
+print_chapter_no_color(const char* source_code, const char* chapter, FILE* stream)
+{
+	assert(stream != NULL);
+
+	struct heading* root = parse_headings(source_code);
 	assert(root != NULL);
 	struct heading* chapter_heading = NULL;
 
@@ -196,13 +197,12 @@ print_chapter_no_color(FILE* source_file, const char* chapter, FILE* stream)
 	}
 
 	long start_line = chapter_heading->line;
-	long end_line = chapter_last_line(chapter_heading, source);
+	long end_line = chapter_last_line(chapter_heading, source_code);
 
 	assert(start_line > 0);
 	assert(end_line > 0);
 
-	//char* section = read_file_section(source_file, start_pos, end_pos);
-	char* section = string_line_span(source, start_line, end_line);
+	char* section = string_line_span(source_code, start_line, end_line);
 
 	if (section != NULL)
 		fprintf(stream, "%s", section);
@@ -215,21 +215,11 @@ print_chapter_no_color(FILE* source_file, const char* chapter, FILE* stream)
 }
 
 	void
-print_chapter_with_color(FILE* source_file, const char* chapter, FILE* stream)
+print_chapter_with_color(const char* source_code, const char* chapter, FILE* stream)
 {
-	assert(source_file != NULL);
 	assert(stream != NULL);
 
-	size_t source_size = file_size(source_file) + 1;
-	char* source = malloc(source_size);
-	memset(source, 0, source_size);
-
-	long initial_file_pos = ftell(source_file);
-	fseek(source_file, 0, SEEK_SET);
-	fread(source, source_size, 1, source_file);
-	fseek(source_file, initial_file_pos, SEEK_SET);
-
-	struct heading* root = parse_headings(source);
+	struct heading* root = parse_headings(source_code);
 	assert(root != NULL);
 	struct heading* chapter_heading = NULL;
 
@@ -240,23 +230,21 @@ print_chapter_with_color(FILE* source_file, const char* chapter, FILE* stream)
 	if (chapter_heading == NULL) {
 		fprintf(stream, "Chapter %s could not be found.\n", numbering);
 		free(numbering);
-		free(source);
 		free_heading_tree(root);
 		return;
 	}
 
 	long start_line = chapter_heading->line;
-	long end_line = chapter_last_line(chapter_heading, source);
+	long end_line = chapter_last_line(chapter_heading, source_code);
 
 	assert(start_line > 0);
 	assert(end_line > 0);
 
-	char* section = string_line_span(source, start_line, end_line);
+	char* section = string_line_span(source_code, start_line, end_line);
 
 	if (section != NULL)
 		print_colored_markdown(section, stream);
 
-	free(source);
 	free(numbering);
 	free(section);
 	free_heading_tree(root);
