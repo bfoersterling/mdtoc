@@ -174,6 +174,8 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 		print_chapter_with_color(source, chapter, stream);
 	else
 		print_chapter_no_color(source, chapter, stream);
+
+	free(source);
 }
 
 	void
