@@ -12,7 +12,6 @@
 
 // Prototypes for static functions.
 static int chapter_last_line(struct heading* chapter_heading, const char* source_code);
-static long chapter_end_pos(FILE* source_file, struct heading* node);
 
 // Returns the line where the chapter that begins with "chapter_heading" ends.
 // Returns -1 on error.
@@ -31,25 +30,6 @@ chapter_last_line(struct heading* chapter_heading, const char* source_code)
 	}
 
 	return string_line_count(source_code);
-}
-
-	static long
-chapter_end_pos(FILE* source_file, struct heading* node)
-{
-	assert(node != NULL);
-	assert(source_file != NULL);
-
-	if (node->next != NULL)
-		return line_start_pos(source_file, node->next->line);
-
-	// Last chapter of the file.
-	if (node->next == NULL && node->parent->next == NULL) {
-		return file_size(source_file);
-	} else {
-		return line_start_pos(source_file, node->parent->next->line);
-	}
-
-	return -1;
 }
 
 // Returns 0 on success, and 1 on error.
@@ -114,42 +94,6 @@ edit_chapter(const char* file_path, const char* chapter)
 	fclose(source_file);
 
 	return 0;
-}
-
-// UNUSED
-// Caller has to free the returned buffer.
-// Returns the "chapter" in "source_file" or NULL if it could not be found.
-	char*
-fetch_chapter(FILE* source_file, const char* chapter)
-{
-	assert(source_file != NULL);
-
-	if (chapter == NULL)
-		return NULL;
-
-	assert(*chapter != '\0');
-
-	char* numbering = numbering_with_trailing_dot(chapter);
-	struct heading* root = parse_headings_from_stream(source_file);
-	struct heading* chapter_heading = NULL;
-
-	find_heading_by_numbering(root, numbering, &chapter_heading);
-
-	if (chapter_heading == NULL) {
-		free_heading_tree(root);
-		free(numbering);
-		return NULL;
-	}
-
-	long start_pos = line_start_pos(source_file, chapter_heading->line);
-	long end_pos = chapter_end_pos(source_file, chapter_heading);
-
-	assert(start_pos >= 0);
-
-	free_heading_tree(root);
-	free(numbering);
-
-	return read_file_section(source_file, start_pos, end_pos);
 }
 
 	void
