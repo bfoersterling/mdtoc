@@ -11,7 +11,7 @@
 #include "string_util.h"
 
 // Prototypes for static functions.
-[[maybe_unused]] static int chapter_last_line(struct heading* chapter_heading, const char* source_code);
+static int chapter_last_line(struct heading* chapter_heading, const char* source_code);
 static long chapter_end_pos(FILE* source_file, struct heading* node);
 
 // Returns the line where the chapter that begins with "chapter_heading" ends.
