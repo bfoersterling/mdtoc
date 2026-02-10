@@ -37,6 +37,9 @@ all:
 clean:
 	rm -fv $(BINARY) $(TEST_DIR)/$(TEST_BINARY)
 
+debug_tests:
+	CK_FORK=no gdb $(TEST_DIR)/$(TEST_BINARY)
+
 tags:
 	ctags --language-force=C --C-kinds=+p /usr/include/cmark.h *.c
 
