@@ -10,6 +10,29 @@
 #include "stream.h"
 #include "string_util.h"
 
+// Prototypes for static functions.
+[[maybe_unused]] static int chapter_end_line(const char* source_code, struct heading* chapter_heading);
+static long chapter_end_pos(FILE* source_file, struct heading* node);
+
+// Returns the line where the chapter that begins with "chapter_heading" ends.
+// Returns -1 on error.
+	static int
+chapter_end_line(const char* source_code, struct heading* chapter_heading)
+{
+	if (chapter_heading == NULL)
+		return -1;
+
+	if (source_code == NULL || *source_code == '\0')
+		return -1;
+
+	for (struct heading* h = chapter_heading; h != NULL; h = chapter_heading->parent) {
+		if (h->next != NULL)
+			return h->next->line;
+	}
+
+	return string_line_count(source_code);
+}
+
 	static long
 chapter_end_pos(FILE* source_file, struct heading* node)
 {

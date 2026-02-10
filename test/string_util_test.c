@@ -293,6 +293,27 @@ START_TEST (test_str_from_int)
 	free(output_2);
 }
 
+START_TEST (test_string_line_count)
+{
+	// 1 - NULL
+	ck_assert_int_eq(string_line_count(NULL), 0);
+
+	// 2 - empty string
+	ck_assert_int_eq(string_line_count(""), 0);
+
+	// 3 - one char
+	ck_assert_int_eq(string_line_count("a"), 1);
+
+	// 4 - one line with terminating newline
+	ck_assert_int_eq(string_line_count("line 1\n"), 1);
+
+	// 5 - two lines without terminating newline
+	ck_assert_int_eq(string_line_count("line 1\nline 2"), 2);
+
+	// 6 - two lines with terminating newline
+	ck_assert_int_eq(string_line_count("line 1\nline 2\n"), 2);
+}
+
 START_TEST (test_string_line_end_byte)
 {
 	// 1 - no newlines
@@ -524,6 +545,7 @@ string_util_suite(void) {
 	TCase* tc_merge_strings = tcase_create("test_merge_strings");
 	TCase* tc_print_by_line_column = tcase_create("test_print_by_line_column");
 	TCase* tc_str_from_int = tcase_create("test_str_from_int");
+	TCase* tc_string_line_count = tcase_create("test_string_line_count");
 	TCase* tc_string_line_end_byte = tcase_create("test_string_line_end_byte");
 	TCase* tc_string_line_span = tcase_create("test_string_line_span");
 	TCase* tc_string_line_start_byte = tcase_create("test_string_line_start_byte");
@@ -535,6 +557,7 @@ string_util_suite(void) {
 	tcase_add_test(tc_merge_strings, test_merge_strings);
 	tcase_add_test(tc_print_by_line_column, test_print_by_line_column);
 	tcase_add_test(tc_str_from_int, test_str_from_int);
+	tcase_add_test(tc_string_line_count, test_string_line_count);
 	tcase_add_test(tc_string_line_end_byte, test_string_line_end_byte);
 	tcase_add_test(tc_string_line_span, test_string_line_span);
 	tcase_add_test(tc_string_line_start_byte, test_string_line_start_byte);
@@ -546,6 +569,7 @@ string_util_suite(void) {
 	suite_add_tcase(s, tc_merge_strings);
 	suite_add_tcase(s, tc_print_by_line_column);
 	suite_add_tcase(s, tc_str_from_int);
+	suite_add_tcase(s, tc_string_line_count);
 	suite_add_tcase(s, tc_string_line_end_byte);
 	suite_add_tcase(s, tc_string_line_span);
 	suite_add_tcase(s, tc_string_line_start_byte);

@@ -159,6 +159,24 @@ str_from_int(int num)
 }
 
 	int
+string_line_count(const char* s)
+{
+	if (s == NULL || *s == '\0')
+		return 0;
+
+	int line_count = 1;
+
+	for (char* p = (char*)s; *p != '\0'; p++) {
+		// There has to be at least one character in the next line to count
+		// it as a line.
+		if (*p == '\n' && *(p+1) != '\0')
+			line_count++;
+	}
+
+	return line_count;
+}
+
+	int
 string_line_end_byte(const char* s, int line)
 {
 	int index = 0;
@@ -186,6 +204,9 @@ string_line_end_byte(const char* s, int line)
 	char*
 string_line_span(const char* s, int from_line, int to_line)
 {
+	if (s == NULL || *s == '\0')
+		return NULL;
+
 	if (from_line > to_line)
 		return NULL;
 
