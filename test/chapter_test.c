@@ -87,7 +87,6 @@ START_TEST (test_print_chapter_no_color)
 		"## bar\n"
 		"#### subbar\n"
 		"Some subbar text.\n";
-	FILE* input_stream_1 = fmemopen((char*)source_1, strlen(source_1), "r");
 
 	size_t output_size_1 = 4096;
 	char* output_1 = malloc(output_size_1);
@@ -100,7 +99,7 @@ START_TEST (test_print_chapter_no_color)
 		"#### subfoo\n"
 		"Some subfoo text.\n";
 
-	print_chapter_no_color(input_stream_1, "1.", output_stream_1);
+	print_chapter_no_color(source_1, "1.", output_stream_1);
 
 	ck_assert_str_eq(output_1, expected_1);
 
@@ -118,7 +117,7 @@ START_TEST (test_print_chapter_no_color)
 		"#### subbar\n"
 		"Some subbar text.\n";
 
-	print_chapter_no_color(input_stream_1, "2.", output_stream_2);
+	print_chapter_no_color(source_1, "2.", output_stream_2);
 
 	ck_assert_str_eq(output_2, expected_2);
 
@@ -135,7 +134,7 @@ START_TEST (test_print_chapter_no_color)
 		"#### subfoo\n"
 		"Some subfoo text.\n";
 
-	print_chapter_no_color(input_stream_1, "1.1.", output_stream_3);
+	print_chapter_no_color(source_1, "1.1.", output_stream_3);
 
 	ck_assert_str_eq(output_3, expected_3);
 
@@ -152,14 +151,12 @@ START_TEST (test_print_chapter_no_color)
 		"#### subbar\n"
 		"Some subbar text.\n";
 
-	print_chapter_no_color(input_stream_1, "2.1.", output_stream_4);
+	print_chapter_no_color(source_1, "2.1.", output_stream_4);
 
 	ck_assert_str_eq(output_4, expected_4);
 
 	free(output_4);
 	fclose(output_stream_4);
-
-	fclose(input_stream_1);
 }
 
 	Suite*
