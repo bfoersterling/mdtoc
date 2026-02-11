@@ -58,3 +58,7 @@ docker_build:
 
 docker_run:
 	docker run --rm -it -v $(shell pwd):/mdtoc mdtoc-image
+
+install_latest_release:
+	wget https://github.com/bfoersterling/mdtoc/releases/latest/download/mdtoc -O /tmp/mdtoc
+	sudo install -v -m 755 /tmp/mdtoc /usr/local/bin/.
