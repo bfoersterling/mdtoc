@@ -48,7 +48,7 @@ edit_chapter(const char* file_path, const char* chapter)
 	FILE* source_file = fopen(file_path, "r");
 
 	if (source_file == NULL) {
-		fprintf(stderr, "Error opening file %s: %s\n", file_path, strerror(errno));
+		fprintf(stderr, "Error opening file \"%s\": %s\n", file_path, strerror(errno));
 		return 1;
 	}
 
