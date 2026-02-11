@@ -378,7 +378,7 @@ print_toc(const char* file_path, FILE* output_stream)
 	FILE* source_file = fopen(file_path, "r");
 
 	if (source_file == NULL) {
-		fprintf(output_stream, "Error opening %s: %s\n", file_path, strerror(errno));
+		fprintf(output_stream, "Error opening file \"%s\": %s\n", file_path, strerror(errno));
 		return;
 	}
 

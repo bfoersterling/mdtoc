@@ -133,7 +133,7 @@ ia_chapter(const char* file_path, const char* user_input)
 	FILE* source_file = fopen(file_path, "r");
 
 	if (source_file == NULL) {
-		printf("Error opening %s: %s\n", file_path, strerror(errno));
+		printf("Error opening file \"%s\": %s\n", file_path, strerror(errno));
 		free(user_input_copy);
 		return;
 	}
