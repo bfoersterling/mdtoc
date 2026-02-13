@@ -7,6 +7,11 @@ patch_version="$(echo "$current_tag" | cut -d'.' -f3)"
 
 echo "Current tag: ${current_tag}"
 
+if [[ ! "$current_tag" =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+	echo "Current tag does not look like a semver tag."
+	exit 1
+fi
+
 echo "major_version: ${major_version}"
 echo "minor_version: ${minor_version}"
 echo "patch_version: ${patch_version}"
