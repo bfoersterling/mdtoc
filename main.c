@@ -80,7 +80,7 @@ handle_cli_args(int argc, char** argv)
 	static void
 print_version(void)
 {
-	printf("mdtoc version %s comiled at %s.\n", VERSION, COMPILE_DATE);
+	printf("mdtoc version %s compiled at %s.\n", VERSION, COMPILE_DATE);
 	exit(0);
 }
 
