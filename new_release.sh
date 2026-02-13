@@ -35,9 +35,17 @@ echo "New version: ${new_version}"
 
 if git tag "$new_version"; then
 	echo "New tag ${new_version} was set."
-	echo "Push it with \"git push --tags\""
 else
 	echo "Failed to set new tag."
+	exit 1
 fi
+
+echo "Create new github release."
+
+gh release create "$new_version" --title "$new_version"
+
+make
+
+gh release upload "$new_version" "mdtoc"
 
 exit 0
