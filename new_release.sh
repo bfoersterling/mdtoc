@@ -47,7 +47,9 @@ fi
 
 echo "Create new github release."
 
-gh release create "$new_version" --title "$new_version"
+if ! gh release create "$new_version" --title "$new_version"; then
+	echo "Failed to create new github release."
+fi
 
 make
 
