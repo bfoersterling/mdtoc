@@ -1,4 +1,4 @@
-## mdtoc
+# mdtoc
 
 Create markdown table of contents.\
 Read individual chapters with syntax highlighting.\
@@ -7,15 +7,34 @@ Makes it easy to work with large Markdown files.
 
 Fully Commonmark compliant.
 
-#### installation
+## installation
 
-Download the latest release or build it with `make`.
+#### arch user repository
+
+https://aur.archlinux.org/packages/mdtoc
+
+```
+yay -S mdtoc
+```
+
+#### download the latest release
+
+```
+make install_latest_release
+```
 
 Dependencies:
 - cmark
 - readline
 
-#### usage
+#### build from source
+
+```
+make
+sudo make install
+```
+
+## usage
 
 Without arguments `mdtoc` will print a table of content.
 
@@ -26,7 +45,7 @@ Editing chapters is possible with `e CHAPTER` (or without CHAPTER to view the \
 most recently printed chapter.\
 Or you can print the table of content with `toc`.
 
-#### architecture
+## architecture
 
 Written in C23.
 

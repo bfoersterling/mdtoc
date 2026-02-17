@@ -1,4 +1,4 @@
-.PHONY: all clean tags test
+.PHONY: all clean debug_tests tags test test_leaks install install_latest_release
 
 BINARY = "mdtoc"
 
@@ -58,6 +58,9 @@ docker_build:
 
 docker_run:
 	docker run --rm -it -v $(shell pwd):/mdtoc mdtoc-image
+
+install:
+	install -v -m 755 ./mdtoc /usr/local/bin/mdtoc
 
 install_latest_release:
 	wget https://github.com/bfoersterling/mdtoc/releases/latest/download/mdtoc -O /tmp/mdtoc
