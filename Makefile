@@ -32,7 +32,7 @@ TEST_SOURCES = \
 			   $(TEST_DIR)/unit_testing.c
 
 all:
-	clang $(CFLAGS) -o $(BINARY) $(SOURCE_FILES) -lcmark -lreadline
+	$(CC) $(CFLAGS) -o $(BINARY) $(SOURCE_FILES) -lcmark -lreadline
 
 clean:
 	rm -fv $(BINARY) $(TEST_DIR)/$(TEST_BINARY)
@@ -44,12 +44,12 @@ tags:
 	ctags --language-force=C --C-kinds=+p /usr/include/cmark.h *.c
 
 test:
-	clang $(CFLAGS) -o $(TEST_DIR)/$(TEST_BINARY) \
+	$(CC) $(CFLAGS) -o $(TEST_DIR)/$(TEST_BINARY) \
 		$(TEST_SOURCES) -lcmark -lcheck
 	valgrind -q --exit-on-first-error=yes --error-exitcode=1 ./$(TEST_DIR)/$(TEST_BINARY)
 
 test_leaks:
-	clang $(CFLAGS) -o $(TEST_DIR)/$(TEST_BINARY) \
+	$(CC) $(CFLAGS) -o $(TEST_DIR)/$(TEST_BINARY) \
 		$(TEST_SOURCES) -lcmark -lcheck
 	valgrind ./test/check_mdtoc |& grep "lost"
 
