@@ -434,6 +434,25 @@ START_TEST (test_print_colored_markdown)
 
 	free(buffer_8);
 	fclose(stream_8);
+
+	// 9 - emph
+	const char* input_9 =
+		"This is *emphasized* and the rest is normal.\n";
+
+	const char* expected_9 =
+		"\033[0mThis is emphasized\033[0m and the rest is normal.\n\033[0m";
+
+	size_t buffer_size_9 = strlen(expected_9) * 2;
+	char* buffer_9 = malloc(buffer_size_9);
+	memset(buffer_9, 0, buffer_size_9);
+	FILE* stream_9 = fmemopen(buffer_9, buffer_size_9, "w");
+
+	print_colored_markdown(input_9, stream_9);
+
+	ck_assert_str_eq(buffer_9, expected_9);
+
+	free(buffer_9);
+	fclose(stream_9);
 }
 
 START_TEST (test_update_heading_levels)

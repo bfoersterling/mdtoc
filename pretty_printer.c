@@ -11,6 +11,7 @@ static int number_of_leading_nl(cmark_node* node);
 static void pretty_print_cmark_block_quote(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_code(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_code_block(cmark_node* node, FILE* stream);
+static void pretty_print_cmark_emph(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_heading(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_html_block(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_html_inline(cmark_node* node, FILE* stream);
@@ -103,6 +104,11 @@ pretty_print_cmark_code_block(cmark_node* node, FILE* stream)
 	}
 
 	free(code_block_copy);
+}
+
+	static void
+pretty_print_cmark_emph(cmark_node* node, FILE* stream)
+{
 }
 
 	static void
@@ -201,6 +207,9 @@ pretty_print_cmark_node(cmark_node* node, FILE* stream)
 			pretty_print_cmark_code_block(node, stream);
 			break;
 		case CMARK_NODE_DOCUMENT:
+			break;
+		case CMARK_NODE_EMPH:
+			pretty_print_cmark_emph(node, stream);
 			break;
 		case CMARK_NODE_HEADING:
 			pretty_print_cmark_heading(node, stream);
