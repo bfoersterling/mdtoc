@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#include "../pretty_printer.c"
+#include "../src/pretty_printer.c"
 
 START_TEST (test_pretty_print_heading_levels)
 {
