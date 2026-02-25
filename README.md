@@ -7,6 +7,8 @@ Makes it easy to work with large Markdown files.
 
 Fully Commonmark compliant.
 
+![screenshot](docs/screenshots/screenshot_1.png)
+
 ## installation
 
 #### arch user repository
