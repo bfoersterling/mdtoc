@@ -1,6 +1,6 @@
 #include "unit_testing.h"
 
-#include "../stream.c"
+#include "../src/stream.c"
 
 START_TEST(test_count_lines)
 {

@@ -1,6 +1,6 @@
 #include "unit_testing.h"
 
-#include "../chapter.c"
+#include "../src/chapter.c"
 
 #include <unistd.h>
 #include <errno.h>

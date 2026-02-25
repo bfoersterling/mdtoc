@@ -12,14 +12,16 @@ CFLAGS = -g -std=gnu23 -Wall \
 		 -DVERSION=\"$(GIT_TAG)\" \
 		 -DCOMPILE_DATE=\"$(COMPILE_DATE)\"
 
+SOURCE_DIR = "src"
+
 SOURCE_FILES = \
-			   chapter.c \
-			   interactive.c \
-			   main.c \
-			   parser.c \
-			   pretty_printer.c \
-			   stream.c \
-			   string_util.c
+			   $(SOURCE_DIR)/chapter.c \
+			   $(SOURCE_DIR)/interactive.c \
+			   $(SOURCE_DIR)/main.c \
+			   $(SOURCE_DIR)/parser.c \
+			   $(SOURCE_DIR)/pretty_printer.c \
+			   $(SOURCE_DIR)/stream.c \
+			   $(SOURCE_DIR)/string_util.c
 
 TEST_DIR = "test"
 

@@ -1,6 +1,6 @@
 #include "unit_testing.h"
 
-#include "../string_util.c"
+#include "../src/string_util.c"
 
 #include <string.h>
 #include <stdlib.h>
