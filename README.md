@@ -1,11 +1,10 @@
 # mdtoc
 
-Create markdown table of contents.\
-Read individual chapters with syntax highlighting.\
-Edit chapters with your `$EDITOR`.\
-Makes it easy to work with large Markdown files.
-
-Fully Commonmark compliant.
+- Create markdown table of contents
+- Read individual chapters with syntax highlighting
+- Edit chapters with your `$EDITOR`
+- Makes it easy to work with large Markdown files
+- Fully Commonmark compliant
 
 ![screenshot](docs/screenshots/screenshot_1.png)
 
