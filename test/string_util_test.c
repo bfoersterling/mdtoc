@@ -483,6 +483,9 @@ START_TEST (test_string_line_start_byte)
 
 	// 4 - start of line 2.
 	ck_assert_int_eq(string_line_start_byte("line 1\nline 2\n", 2), 7);
+
+	// 5 - empty lines.
+	ck_assert_int_eq(string_line_start_byte("\n\n\n", 2), 1);
 }
 
 START_TEST (test_trim_space)

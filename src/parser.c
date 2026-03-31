@@ -212,6 +212,7 @@ insert_preamble_heading(struct heading** head, const char* source_code)
 	(*head)->first_child = new_node;
 }
 
+// UNUSED
 // Return the last node of a tree branch.
 // "node" is the parent of the (sub)tree.
 // If "node" is the root of the tree this should be the bottom right node

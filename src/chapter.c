@@ -12,6 +12,11 @@
 
 // Prototypes for static functions.
 static int chapter_last_line(struct heading* chapter_heading, const char* source_code);
+static struct chapter* find_chapter_by_numbering(struct chapter* node,
+		const char* numbering);
+static void parse_chapters_from_headings(struct chapter** head,
+		struct chapter** c, struct heading* h, const char* source_code);
+
 
 // Returns the line where the chapter that begins with "chapter_heading" ends.
 // Returns -1 on error.
@@ -96,10 +101,134 @@ edit_chapter(const char* file_path, const char* chapter)
 	return 0;
 }
 
+/*
+ * Finds the first chapter with a heading numbering "numbering".
+ * "numbering" should have a trailing dot (i.e. "2.1.") so that this
+ * recursive function does not have to call "ensure_trailing_dot()"
+ * repeatedly.
+ * "node" should be the root of the tree or the node you want to start
+ * your search at.
+ */
+	static struct chapter*
+find_chapter_by_numbering(struct chapter* node, const char* numbering)
+{
+	struct chapter* needle_chapter = NULL;
+	char* pretty_levels = pretty_heading_levels(node->title->levels);
+
+	if (strcmp(pretty_levels, numbering) == 0) {
+		free(pretty_levels);
+		return node;
+	}
+
+	free(pretty_levels);
+
+	if (node->first_child != NULL)
+		needle_chapter = find_chapter_by_numbering(node->first_child, numbering);
+
+	if (node->next != NULL)
+		needle_chapter = find_chapter_by_numbering(node->next, numbering);
+
+	return needle_chapter;
+}
+
+// Convenience function that frees the chapter tree with/and the nested heading
+// tree.
+	void
+free_chapter_and_heading_tree(struct chapter* root)
+{
+	free_heading_tree(root->title);
+	free_chapter_tree(root);
+}
+
+// Free memory of "node" and all its children.
+	void
+free_chapter_tree(struct chapter* node)
+{
+	if (node->first_child != NULL)
+		free_chapter_tree(node->first_child);
+
+	if (node->next != NULL)
+		free_chapter_tree(node->next);
+
+	free((char*)node->body);
+	free(node);
+}
+
+/* Returns the root chapter with all its children.
+ * The freeing function for chapters has to free the headings as well.
+ * Caller has to free the chapter tree and the heading tree.
+ * (preferably with free_chapters_with_headings())
+ */
+	struct chapter*
+parse_chapters(const char* source_code)
+{
+	struct heading* root_heading = parse_headings(source_code);
+	struct chapter* root_chapter = NULL;
+	struct chapter* chapter_iterator = NULL;
+
+	parse_chapters_from_headings(&root_chapter, &chapter_iterator,
+			root_heading, source_code);
+
+	return root_chapter;
+}
+
+/* Recursive function for parse_chapters().
+ * "head" and "c" need to be pointers to NULL pointers of struct chapter.
+ * (Cannot pass NULL directly here.)
+ * "c" is needed to create the tree, but shall not be used before or
+ * after this function.
+ * "head" is the pointer to the root chapter.
+ * "h" has to be the root heading.
+ */
+	static void
+parse_chapters_from_headings(
+		struct chapter** head,
+		struct chapter** c,
+		struct heading* h,
+		const char* source_code)
+{
+	struct chapter* new_chapter = malloc(sizeof(struct chapter));
+
+	// Construct artificial root.
+	if (*head == NULL) {
+		new_chapter->start_line = 0;
+		new_chapter->end_line = 0;
+		new_chapter->body = malloc(8);
+		memset(new_chapter->body, 0, 8);
+		*head = new_chapter;
+	} else {
+		new_chapter->start_line = h->line + 1;
+		new_chapter->end_line = chapter_last_line(h, source_code);
+		new_chapter->body = string_line_span(source_code, new_chapter->start_line,
+				new_chapter->end_line);
+	}
+
+	new_chapter->title = h;
+	new_chapter->next = NULL;
+	new_chapter->first_child = NULL;
+	new_chapter->parent = NULL;
+
+	*c = new_chapter;
+
+	if (h->next != NULL) {
+		parse_chapters_from_headings(head, &((*c)->next), h->next, source_code);
+	}
+
+	if (h->first_child != NULL) {
+		parse_chapters_from_headings(head, &((*c)->first_child), h->first_child, source_code);
+	}
+}
+
 	void
 print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 {
 	assert(source_file != NULL);
+	assert(chapter != NULL);
+
+	if (*chapter == '\0') {
+		fprintf(stream, "Provided chapter was an empty string.\n");
+		return;
+	}
 
 	size_t source_size = file_size(source_file) + 1;
 	char* source = malloc(source_size);
@@ -110,16 +239,19 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 	fread(source, source_size, 1, source_file);
 	fseek(source_file, initial_file_pos, SEEK_SET);
 
-	if (*chapter == '\0') {
-		fprintf(stream, "Provided chapter was an empty string.\n");
-		return;
-	}
-	if (use_color())
-		print_chapter_with_color(source, chapter, stream);
-	else
-		print_chapter_no_color(source, chapter, stream);
+	struct chapter* root_chapter = parse_chapters(source);
+
+	// TODO: find chapter by numbering
+
+	/*
+	   if (use_color()) {
+	   print_colored_markdown(source, stream);
+	   } else {
+	   }
+	   */
 
 	free(source);
+	free_chapter_and_heading_tree(root_chapter);
 }
 
 	void

@@ -108,6 +108,12 @@ START_TEST (test_parse_headings)
 	ck_assert(head_1->first_child->parent == head_1);
 	ck_assert(head_1->first_child->next->parent == head_1);
 
+	char* pretty_levels_1 = pretty_heading_levels(head_1->levels);
+
+	ck_assert_str_eq(pretty_levels_1, "0.");
+
+	free(pretty_levels_1);
+
 	free_heading_tree(head_1);
 
 	// 2

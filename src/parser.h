@@ -7,8 +7,8 @@ struct heading {
 	int level;
 	int levels[6];
 	int line;
-	struct heading* first_child;
 	struct heading* next;
+	struct heading* first_child;
 	struct heading* parent;
 };
 
