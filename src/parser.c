@@ -10,7 +10,8 @@
 #include "string_util.h"
 
 // Static function prototypes.
-static void append_heading(struct heading** head, char* text, int level, int levels[6], int line);
+static void append_heading(struct heading** head, const char* text, int level, int levels[6], int line);
+static const char* extract_heading_text(cmark_node* node);
 static struct heading* find_connector(struct heading* node, int level);
 static void insert_preamble_heading(struct heading** head, const char* source_code);
 static void parse_headings_from_node(cmark_node* node, struct heading** head, int levels[6]);
@@ -18,13 +19,15 @@ static void print_colored_cmark_tree(cmark_node* node, const char* source_code, 
 static void print_heading(struct heading* h, int indentation_level, FILE* stream);
 static void print_indentation(int level, FILE* stream);
 static void print_node(cmark_node* node);
-static void push_heading(struct heading** head, char* text, int level, int levels[6], int line);
+static void push_heading(struct heading** head, const char* text, int level, int levels[6], int line);
 static void traverse_tree(cmark_node* node, int level);
 static void update_heading_levels(int current_level, int levels[6]);
 
 	static void
-append_heading(struct heading** head, char* text, int level, int levels[6], int line)
+append_heading(struct heading** head, const char* text, int level, int levels[6], int line)
 {
+	assert(text != NULL);
+
 	// Tree is empty.
 	if (*head == NULL) {
 		push_heading(head, text, level, levels, 0);
@@ -60,6 +63,21 @@ append_heading(struct heading** head, char* text, int level, int levels[6], int 
 	assert(connector->next == NULL);
 	new_node->parent = connector->parent;
 	connector->next = new_node;
+}
+
+	static const char*
+extract_heading_text(cmark_node* node)
+{
+	assert(cmark_node_get_type(node) == CMARK_NODE_HEADING);
+
+	cmark_node* first_child = cmark_node_first_child(node);
+
+	if (cmark_node_get_type(first_child) != CMARK_NODE_LINK)
+		return cmark_node_get_literal(first_child);
+
+	// The heading consists of a link and we need to get the literal of its
+	// child.
+	return cmark_node_get_literal(cmark_node_first_child(first_child));
 }
 
 // "node" should be the root of the tree.
@@ -219,8 +237,9 @@ parse_headings_from_node(cmark_node* node, struct heading** head, int hlevels[6]
 	if (cmark_node_get_type(node) == CMARK_NODE_HEADING) {
 		int hlevel = cmark_node_get_heading_level(node);
 		update_heading_levels(hlevel, hlevels);
+
 		append_heading(head,
-				(char*)cmark_node_get_literal(cmark_node_first_child(node)),
+				(char*)extract_heading_text(node),
 				hlevel,
 				hlevels,
 				cmark_node_get_start_line(node));
@@ -393,7 +412,7 @@ print_toc(const char* file_path, FILE* output_stream)
 
 // Push a new node to the root of the tree.
 	static void
-push_heading(struct heading** head, char* text, int level, int levels[6], int line)
+push_heading(struct heading** head, const char* text, int level, int levels[6], int line)
 {
 	struct heading* new_node = malloc(sizeof(struct heading));
 	size_t text_size = strlen(text) + 1;
