@@ -191,6 +191,30 @@ START_TEST (test_parse_headings)
 	free(buffer_4);
 	fclose(stream_4);
 	free_heading_tree(head_4);
+
+	// 5 - heading that contains a link
+	const char* source_5 =
+		"## [my link](https://example.com)\n"
+		"## foobar\n";
+
+	const char* expected_5 =
+		"1. my link (1)\n"
+		"2. foobar (2)\n";
+
+	struct heading* head_5 = parse_headings(source_5);
+
+	size_t buffer_size_5 = 64;
+	char* buffer_5 = malloc(buffer_size_5);
+	memset(buffer_5, 0, buffer_size_5);
+	FILE* stream_5 = fmemopen(buffer_5, buffer_size_5, "w");
+
+	print_heading_tree(head_5, 0, stream_5);
+
+	ck_assert_str_eq(buffer_5, expected_5);
+
+	free(buffer_5);
+	fclose(stream_5);
+	free_heading_tree(head_5);
 }
 
 START_TEST (test_pretty_heading_levels)
