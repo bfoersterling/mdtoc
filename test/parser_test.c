@@ -215,6 +215,31 @@ START_TEST (test_parse_headings)
 	free(buffer_5);
 	fclose(stream_5);
 	free_heading_tree(head_5);
+
+	// 6 - heading with nested content
+	const char* source_6 =
+		"## [link with nested **strong *and emph* content**]"
+		"(https://example.com)\n"
+		"## normal heading\n";
+
+	const char* expected_6 =
+		"1. link with nested strong and emph content (1)\n"
+		"2. normal heading (2)\n";
+
+	struct heading* head_6 = parse_headings(source_6);
+
+	size_t buffer_size_6 = 128;
+	char* buffer_6 = malloc(buffer_size_6);
+	memset(buffer_6, 0, buffer_size_6);
+	FILE* stream_6 = fmemopen(buffer_6, buffer_size_6, "w");
+
+	print_heading_tree(head_6, 0, stream_6);
+
+	ck_assert_str_eq(buffer_6, expected_6);
+
+	free(buffer_6);
+	fclose(stream_6);
+	free_heading_tree(head_6);
 }
 
 START_TEST (test_pretty_heading_levels)
