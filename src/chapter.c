@@ -104,8 +104,8 @@ edit_chapter(const char* file_path, const char* chapter)
 /*
  * Finds the first chapter with a heading numbering "numbering".
  * "numbering" should have a trailing dot (i.e. "2.1.") so that this
- * recursive function does not have to call "ensure_trailing_dot()"
- * repeatedly.
+ * recursive function does not have to call "numbering_with_trailing_dot()"
+ * repeatedly and make a lot of allocations.
  * "node" should be the root of the tree or the node you want to start
  * your search at.
  */
@@ -219,6 +219,11 @@ parse_chapters_from_headings(
 	}
 }
 
+/*
+ * Prints chapter "chapter" from file "source_file".
+ * "chapter": i.e. "1.2." or "1.2" (trailing dot will be appended).
+ * "stream": Output stream. (i.e. stdout or string stream for tests)
+ */
 	void
 print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 {
@@ -229,6 +234,8 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 		fprintf(stream, "Provided chapter was an empty string.\n");
 		return;
 	}
+
+	char* dotted_numbering = numbering_with_trailing_dot(chapter);
 
 	size_t source_size = file_size(source_file) + 1;
 	char* source = malloc(source_size);
@@ -241,15 +248,22 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 
 	struct chapter* root_chapter = parse_chapters(source);
 
-	// TODO: find chapter by numbering
+	struct chapter* needle_chapter =
+		find_chapter_by_numbering(root_chapter, dotted_numbering);
 
-	/*
-	   if (use_color()) {
-	   print_colored_markdown(source, stream);
-	   } else {
-	   }
-	   */
+	if (needle_chapter == NULL) {
+		printf("Chapter %s could not be found.\n", dotted_numbering);
+		goto end;
+	}
 
+	if (use_color()) {
+		print_colored_markdown(needle_chapter->body, stream);
+	} else {
+		printf("%s", needle_chapter->body);
+	}
+
+end:
+	free(dotted_numbering);
 	free(source);
 	free_chapter_and_heading_tree(root_chapter);
 }
