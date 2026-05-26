@@ -43,8 +43,9 @@ debug_tests:
 	CK_FORK=no gdb $(TEST_DIR)/$(TEST_BINARY)
 
 tags:
-	ctags --language-force=C --C-kinds=+p /usr/include/cmark.h
-	ctags --language-force=C --append=yes src/*.c src/*.h
+	ctags --language-force=C --c-kinds=+p /usr/include/cmark.h
+	ctags --language-force=C --append=yes src/*.c
+	ctags --language-force=C --c-kinds=+p --append=yes src/*.h
 
 test:
 	$(CC) $(CFLAGS) -o $(TEST_DIR)/$(TEST_BINARY) \
