@@ -254,7 +254,7 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 	if (use_color())
 		print_colored_markdown(heading_str, stream);
 	else
-		fprintf(stream, "%s\n", heading_str);
+		fprintf(stream, "%s", heading_str);
 
 	// Add newline between heading and chapter.
 	fprintf(stream, "\n");

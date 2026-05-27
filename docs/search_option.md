@@ -1,4 +1,4 @@
-#### search file for regex
+#### search file for pattern
 
 You could create a chapter tree out of the heading tree.\
 Then search this chapter tree for a regex.
@@ -8,3 +8,15 @@ Store the line number, then search in the heading tree which heading \
 has the biggest line number that is smaller than the line number the regex \
 was found in.\
 Then display that heading with its text and line field.
+
+###### pattern
+
+Do you really need/want to search for a regex?
+
+Or is a default case insensitive search for a pattern in chapters and \
+headings enough?
+
+What would be the use case for a regex search?\
+Something like `^foobar$` does not seem that useful.\
+Maybe if you want to search for two patterns you could to something like this:\
+`foo.*bar`.
