@@ -125,7 +125,7 @@ find_chapter_by_numbering(struct chapter* node, const char* numbering)
 	if (node->first_child != NULL)
 		needle_chapter = find_chapter_by_numbering(node->first_child, numbering);
 
-	if (node->next != NULL)
+	if (node->next != NULL && needle_chapter == NULL)
 		needle_chapter = find_chapter_by_numbering(node->next, numbering);
 
 	return needle_chapter;

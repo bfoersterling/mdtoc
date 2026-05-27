@@ -41,6 +41,26 @@ START_TEST (test_find_chapter_by_numbering)
 	ck_assert_str_eq(needle_chapter_2->body, "Foo text.\n");
 
 	free_chapter_tree(root_chapter_2);
+
+	// 3 - nested deeper
+	const char* source_3 =
+		"## foo\n"
+		"#### subfoo\n"
+		"###### subsubfoo\n"
+		"Subsubfoo text.\n"
+		"## bar\n"
+		"#### subbar\n"
+		"Subbar text.\n";
+
+	struct chapter* root_chapter_3 = parse_chapters(source_3);
+
+	struct chapter* needle_chapter_3 =
+		find_chapter_by_numbering(root_chapter_3, "1.1.1.");
+
+	ck_assert(needle_chapter_3 != NULL);
+	ck_assert_str_eq(needle_chapter_3->body, "Subsubfoo text.\n");
+
+	free_chapter_tree(root_chapter_3);
 }
 
 START_TEST (test_parse_chapters)
