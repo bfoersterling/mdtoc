@@ -89,8 +89,9 @@ usage(void)
 {
 	printf("mdtoc [OPTION]... FILE...\n\n");
 	printf("-c/--chapter CHAPTER FILE\tprint specific chapter ");
-	printf("-e/--edit CHAPTER FILE\tprint specific chapter ");
-	printf("(i.e. \"2.1.\")\n");
+	printf("(i.e. \"2.1\")\n");
+	printf("-e/--edit CHAPTER FILE\t\tedit specific chapter ");
+	printf("(i.e. \"2.1\")\n");
 	printf("-h/--help\t\t\tprint this help\n");
 	printf("-i/--interactive FILE\t\tinteractive mode\n");
 }
