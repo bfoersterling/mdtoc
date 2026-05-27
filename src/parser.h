@@ -12,6 +12,8 @@ struct heading {
 	struct heading* parent;
 };
 
+char* atx_string(char* text, int level);
+char* atx_string_from_heading(struct heading* h);
 void find_heading_by_numbering(struct heading* node, const char* pretty_numbering, struct heading** result);
 void free_heading_tree(struct heading* head);
 struct heading* last_heading(struct heading* node);

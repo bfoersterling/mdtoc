@@ -249,10 +249,15 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 		goto end;
 	}
 
+	char* heading_str = atx_string_from_heading(needle_chapter->title);
+
 	if (use_color())
-		print_colored_markdown(needle_chapter->title->text, stream);
+		print_colored_markdown(heading_str, stream);
 	else
-		fprintf(stream, "%s\n\n", needle_chapter->title->text);
+		fprintf(stream, "%s\n", heading_str);
+
+	// Add newline between heading and chapter.
+	fprintf(stream, "\n");
 
 	if (use_color()) {
 		print_colored_markdown(needle_chapter->body, stream);
@@ -260,6 +265,7 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 		fprintf(stream, "%s", needle_chapter->body);
 	}
 
+	free(heading_str);
 end:
 	free(dotted_numbering);
 	free(source);

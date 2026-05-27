@@ -65,6 +65,38 @@ append_heading(struct heading** head, const char* text, int level, int levels[6]
 	connector->next = new_node;
 }
 
+/*
+ * Build an ATX heading string from a heading "text" and its "level".
+ * "text" may not contain leading pound signs (#) or trailing setext elements.
+ * Caller has to free the returned buffer.
+ */
+	char*
+atx_string(char* text, int level)
+{
+	assert(text != NULL);
+	assert(level <= 6);
+	assert(level >= 1);
+
+	// 8 bytes: max. 6 pound signs, 1 space, 1 null terminator
+	size_t buffer_size = strlen(text) + 8;
+	char* buffer = malloc(buffer_size);
+	memset(buffer, 0, buffer_size);
+	memset(buffer, '#', level);
+	memset(buffer+level, ' ', 1);
+	strcat(buffer, text);
+
+	return buffer;
+}
+
+/*
+ * See "atx_string()". (Caller has to free the returned buffer.)
+ */
+	char*
+atx_string_from_heading(struct heading* h)
+{
+	return atx_string(h->text, h->level);
+}
+
 // Traverse node and concatenate the literals from all children and siblings
 // in "buffer".
 // The caller has to provide an allocated buffer "buffer" with enough space.
