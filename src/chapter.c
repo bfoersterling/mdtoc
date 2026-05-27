@@ -245,14 +245,19 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 		find_chapter_by_numbering(root_chapter, dotted_numbering);
 
 	if (needle_chapter == NULL) {
-		printf("Chapter %s could not be found.\n", dotted_numbering);
+		fprintf(stream, "Chapter %s could not be found.\n", dotted_numbering);
 		goto end;
 	}
+
+	if (use_color())
+		print_colored_markdown(needle_chapter->title->text, stream);
+	else
+		fprintf(stream, "%s\n\n", needle_chapter->title->text);
 
 	if (use_color()) {
 		print_colored_markdown(needle_chapter->body, stream);
 	} else {
-		printf("%s", needle_chapter->body);
+		fprintf(stream, "%s", needle_chapter->body);
 	}
 
 end:
