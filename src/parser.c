@@ -18,7 +18,6 @@ static struct heading* find_connector(struct heading* node, int level);
 static void insert_preamble_heading(struct heading** head, const char* source_code);
 static void parse_headings_from_node(cmark_node* node, struct heading** head, int levels[6]);
 static void print_colored_cmark_tree(cmark_node* node, const char* source_code, FILE* stream);
-static void print_heading(struct heading* h, int indentation_level, FILE* stream);
 static void print_indentation(int level, FILE* stream);
 static void push_heading(struct heading** head, const char* text, int level, int levels[6], int line);
 static void update_heading_levels(int current_level, int levels[6]);
@@ -399,7 +398,7 @@ print_heading_tree(struct heading* node, int recursion_level, FILE* stream)
 		print_heading_tree(node->next, recursion_level, stream);
 }
 
-	static void
+	void
 print_heading(struct heading* h, int indentation_level, FILE* stream)
 {
 	// Do not print the artificial root.

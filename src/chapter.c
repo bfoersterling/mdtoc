@@ -16,6 +16,8 @@ static struct chapter* find_chapter_by_numbering(struct chapter* node,
 		const char* numbering);
 static void parse_chapters_from_headings(struct chapter** head,
 		struct chapter** c, struct heading* h, const char* source_code);
+static void search_chapters_for_str_rec(struct chapter* node, const char* str,
+		FILE* stream);
 
 
 // Returns the line where the chapter that begins with "chapter_heading" ends.
@@ -344,6 +346,33 @@ print_chapter_with_color(const char* source_code, const char* chapter, FILE* str
 	free(numbering);
 	free(section);
 	free_heading_tree(root);
+}
+
+	void
+search_chapters_for_str(const char* source_code, const char* str, FILE* stream)
+{
+	struct chapter* root_chapter = parse_chapters(source_code);
+
+	search_chapters_for_str_rec(root_chapter, str, stream);
+
+	free_chapter_tree(root_chapter);
+}
+
+	static void
+search_chapters_for_str_rec(
+		struct chapter* node,
+		const char* str,
+		FILE* stream)
+{
+	if (strcasestr(node->title->text, str) != NULL ||
+			strcasestr(node->body, str) != NULL)
+		print_heading(node->title, 0, stream);
+
+	if (node->first_child != NULL)
+		search_chapters_for_str_rec(node->first_child, str, stream);
+
+	if (node->next != NULL)
+		search_chapters_for_str_rec(node->next, str, stream);
 }
 
 	bool
