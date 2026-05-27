@@ -23,7 +23,7 @@ START_TEST (test_find_chapter_by_numbering)
 	ck_assert(needle_chapter_1 != NULL);
 	ck_assert_str_eq(needle_chapter_1->body, "Subbar text.\n");
 
-	free_chapter_and_heading_tree(root_chapter_1);
+	free_chapter_tree(root_chapter_1);
 
 	// 2 - out of tree chapter
 	const char* source_2 =
@@ -40,7 +40,7 @@ START_TEST (test_find_chapter_by_numbering)
 	ck_assert(needle_chapter_2 != NULL);
 	ck_assert_str_eq(needle_chapter_2->body, "Foo text.\n");
 
-	free_chapter_and_heading_tree(root_chapter_2);
+	free_chapter_tree(root_chapter_2);
 }
 
 START_TEST (test_parse_chapters)
@@ -68,7 +68,7 @@ START_TEST (test_parse_chapters)
 	ck_assert_str_eq(root_chapter_1->first_child->next->body, "Bar text.\n");
 	ck_assert_str_eq(root_chapter_1->first_child->next->title->text, "bar");
 
-	free_chapter_and_heading_tree(root_chapter_1);
+	free_chapter_tree(root_chapter_1);
 
 	// 2 - nested headings
 	const char* source_2 =
@@ -93,7 +93,7 @@ START_TEST (test_parse_chapters)
 	ck_assert_str_eq(root_chapter_2->first_child->next->first_child->body,
 			"Subbar text.\n");
 
-	free_chapter_and_heading_tree(root_chapter_2);
+	free_chapter_tree(root_chapter_2);
 }
 
 START_TEST (test_print_chapter_no_color)

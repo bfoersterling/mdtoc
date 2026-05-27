@@ -131,15 +131,6 @@ find_chapter_by_numbering(struct chapter* node, const char* numbering)
 	return needle_chapter;
 }
 
-// Convenience function that frees the chapter tree with/and the nested heading
-// tree.
-	void
-free_chapter_and_heading_tree(struct chapter* root)
-{
-	free_heading_tree(root->title);
-	free_chapter_tree(root);
-}
-
 // Free memory of "node" and all its children.
 	void
 free_chapter_tree(struct chapter* node)
@@ -150,7 +141,9 @@ free_chapter_tree(struct chapter* node)
 	if (node->next != NULL)
 		free_chapter_tree(node->next);
 
-	free((char*)node->body);
+	free(node->title->text);
+	free(node->title);
+	free(node->body);
 	free(node);
 }
 
@@ -265,7 +258,7 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 end:
 	free(dotted_numbering);
 	free(source);
-	free_chapter_and_heading_tree(root_chapter);
+	free_chapter_tree(root_chapter);
 }
 
 	void

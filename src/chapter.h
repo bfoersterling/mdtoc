@@ -13,7 +13,6 @@ struct chapter {
 };
 
 int edit_chapter(const char* file_path, const char* chapter);
-void free_chapter_and_heading_tree(struct chapter* root);
 void free_chapter_tree(struct chapter* node);
 struct chapter* parse_chapters(const char* source_code);
 void print_chapter(FILE* source_file, const char* chapter, FILE* stream);
