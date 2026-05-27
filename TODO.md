@@ -1,5 +1,6 @@
 ## TODO
 
+- rename "parser" module to "heading"?
 - print_uncolored_markdown function instead of printing raw markdown?
   => would remove unnecessary whitespace
   => replace `\` with real newlines?
