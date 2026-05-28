@@ -22,15 +22,17 @@ handle_cli_args(int argc, char** argv)
 		{"edit", required_argument, 0, 'e'},
 		{"help", no_argument, 0, 'h'},
 		{"interactive", no_argument, 0, 'i'},
+		{"search", required_argument, 0, 's'},
 		{"version", no_argument, 0, 'v'},
 		{0, 0, 0, 0},
 	};
 
 	int c = 0;
 	int option_index = 0;
+	const char* file_path = NULL;
 
 	while(c != -1) {
-		c = getopt_long(argc, argv, "hive:c:", cli_args, &option_index);
+		c = getopt_long(argc, argv, "hive:c:s:", cli_args, &option_index);
 
 		switch(c) {
 			case 'c':
@@ -38,7 +40,7 @@ handle_cli_args(int argc, char** argv)
 					fprintf(stderr, "Option \"-c\" requires exactly one file!\n");
 					exit(1);
 				}
-				const char* file_path = argv[optind - option_index];
+				file_path = argv[optind - option_index];
 
 				FILE* md_file = fopen(file_path, "r");
 
@@ -68,6 +70,21 @@ handle_cli_args(int argc, char** argv)
 					exit(1);
 				}
 				do_interactive(argv[optind]);
+				exit(0);
+				break;
+			case 's':
+				if (argc - optind != 1) {
+					fprintf(stderr, "Option \"-s\" requires exactly one file!\n");
+					exit(1);
+				}
+				file_path = argv[optind];
+
+				char* source_code = read_file(file_path);
+
+				search_chapters_for_str(source_code, optarg, stdout);
+
+				free(source_code);
+
 				exit(0);
 				break;
 			case 'v':
