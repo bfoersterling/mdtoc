@@ -364,11 +364,10 @@ search_chapters_for_str_rec(
 		const char* str,
 		FILE* stream)
 {
-	assert(node->body != NULL);
-
-	if (strcasestr(node->title->text, str) != NULL ||
-			strcasestr(node->body, str) != NULL)
-		print_heading(node->title, 0, stream);
+	if (node->title->text != NULL && node->body != NULL)
+		if (strcasestr(node->title->text, str) != NULL ||
+				strcasestr(node->body, str) != NULL)
+			print_heading(node->title, 0, stream);
 
 	if (node->first_child != NULL)
 		search_chapters_for_str_rec(node->first_child, str, stream);
