@@ -9,6 +9,7 @@ COMPILE_DATE = "$(shell date "+%Y-%m-%d")"
 GIT_TAG = "$(shell git describe --tags --abbrev=0)"
 
 CFLAGS = -g -std=gnu23 -Wall \
+		 -D_GNU_SOURCE \
 		 -DVERSION=\"$(GIT_TAG)\" \
 		 -DCOMPILE_DATE=\"$(COMPILE_DATE)\"
 
