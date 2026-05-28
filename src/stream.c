@@ -130,8 +130,12 @@ line_start_pos(FILE* source_file, int line)
 	return -1;
 }
 
-// Caller has to free the returned buffer.
-// Error messages go to stderr.
+/*
+ * Read the file at path "file_path".
+ * Exit the program on error.
+ * Error messages go to stderr.
+ * Caller has to free the returned buffer.
+ */
 	char*
 read_file(const char* file_path)
 {
