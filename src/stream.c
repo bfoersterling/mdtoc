@@ -137,13 +137,14 @@ line_start_pos(FILE* source_file, int line)
  * Caller has to free the returned buffer.
  */
 	char*
-read_file(const char* file_path)
+read_file(const char* file_path, bool exit_on_error)
 {
 	FILE* f = fopen(file_path, "r");
 
 	if (f == NULL) {
 		fprintf(stderr, "Error opening %s: %s.\n", file_path, strerror(errno));
-		exit(1);
+		if (exit_on_error)
+			exit(1);
 	}
 
 	size_t f_size = (size_t)file_size(f);
@@ -153,6 +154,12 @@ read_file(const char* file_path)
 	memset(buffer, 0, buffer_size);
 
 	fread(buffer, 1, f_size, f);
+
+	if (ferror(f) != 0) {
+		fprintf(stderr, "Error reading file %s.\n", file_path);
+		if (exit_on_error)
+			exit(1);
+	}
 
 	fclose(f);
 

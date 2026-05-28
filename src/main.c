@@ -79,7 +79,7 @@ handle_cli_args(int argc, char** argv)
 				}
 				file_path = argv[optind];
 
-				char* source_code = read_file(file_path);
+				char* source_code = read_file(file_path, true);
 
 				search_chapters_for_str(source_code, optarg, stdout);
 
@@ -111,6 +111,7 @@ usage(void)
 	printf("(i.e. \"2.1\")\n");
 	printf("-h/--help\t\t\tprint this help\n");
 	printf("-i/--interactive FILE\t\tinteractive mode\n");
+	printf("-s/--search STRING\t\tsearch chapters for string\n");
 }
 
 	int
@@ -131,7 +132,7 @@ main(int argc, char** argv)
 	}
 
 	for (int i = 1; i < argc; i++) {
-		char* file_content = read_file(argv[i]);
+		char* file_content = read_file(argv[i], true);
 
 		struct heading* hhead = parse_headings(file_content);
 		print_heading_tree(hhead, 0, stdout);
