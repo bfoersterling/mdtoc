@@ -348,6 +348,10 @@ print_chapter_with_color(const char* source_code, const char* chapter, FILE* str
 	free_heading_tree(root);
 }
 
+/*
+ * Prints chapters in "source_code" that contain "str" to "stream".
+ * (see search_chapters_for_str_rec() for details)
+ */
 	void
 search_chapters_for_str(const char* source_code, const char* str, FILE* stream)
 {
@@ -358,6 +362,13 @@ search_chapters_for_str(const char* source_code, const char* str, FILE* stream)
 	free_chapter_tree(root_chapter);
 }
 
+/*
+ * Recursive function that prints the headings of chapters that contain the
+ * string "str" in either the heading text or in the body of the chapter.
+ * The search is case insensitive.
+ * The headings are printed with indentation level, text and line.
+ * The output goes to "stream".
+ */
 	static void
 search_chapters_for_str_rec(
 		struct chapter* node,
