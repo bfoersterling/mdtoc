@@ -398,6 +398,11 @@ print_heading_tree(struct heading* node, int recursion_level, FILE* stream)
 		print_heading_tree(node->next, recursion_level, stream);
 }
 
+/*
+ * Prints heading "h" with indentation "indentation_level" to "stream".
+ * Prints the heading numbering, its text and its line.
+ * Headings with level 0 will not be printed.
+ */
 	void
 print_heading(struct heading* h, int indentation_level, FILE* stream)
 {
