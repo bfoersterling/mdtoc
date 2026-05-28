@@ -46,6 +46,7 @@ debug_tests:
 tags:
 	ctags --language-force=C --c-kinds=+p /usr/include/cmark.h
 	ctags --language-force=C --append=yes src/*.c
+	ctags --language-force=C --c-kinds=p --append=yes src/*.c
 	ctags --language-force=C --c-kinds=+p --append=yes src/*.h
 
 test:
