@@ -1,3 +1,9 @@
 FROM alpine:latest
 
 RUN apk add check-dev clang cmark-dev readline-dev make valgrind
+
+# to build:
+#docker build -t mdtoc-alpine -f .docker/Dockerfile_alpine .
+
+# to run:
+#docker run -it --rm -v $(pwd):/mdtoc mdtoc-alpine
