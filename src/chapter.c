@@ -7,6 +7,7 @@
 
 #include "chapter.h"
 #include "parser.h"
+#include "pretty_printer.h"
 #include "stream.h"
 #include "string_util.h"
 

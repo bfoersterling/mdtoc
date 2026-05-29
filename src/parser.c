@@ -17,7 +17,6 @@ static char* extract_heading_text(cmark_node* node);
 static struct heading* find_connector(struct heading* node, int level);
 static void insert_preamble_heading(struct heading** head, const char* source_code);
 static void parse_headings_from_node(cmark_node* node, struct heading** head, int levels[6]);
-static void print_colored_cmark_tree(cmark_node* node, const char* source_code, FILE* stream);
 static void print_indentation(int level, FILE* stream);
 static void push_heading(struct heading** head, const char* text, int level, int levels[6], int line);
 static void update_heading_levels(int current_level, int levels[6]);
@@ -350,40 +349,6 @@ pretty_heading_levels(int levels[6])
 		strcpy(buffer, "0.");
 
 	return buffer;
-}
-
-	static void
-print_colored_cmark_tree(cmark_node* node, const char* source_code, FILE* stream)
-{
-	cmark_node_type node_type = cmark_node_get_type(node);
-
-	pretty_print_cmark_node(node, stream);
-
-	fflush(stream);
-
-	if (cmark_node_first_child(node))
-		print_colored_cmark_tree(cmark_node_first_child(node), source_code, stream);
-
-	if (node_type == CMARK_NODE_PARAGRAPH || node_type == CMARK_NODE_HEADING) {
-		fputc('\n', stream);
-	}
-
-	if (cmark_node_next(node))
-		print_colored_cmark_tree(cmark_node_next(node), source_code, stream);
-}
-
-	void
-print_colored_markdown(const char* source_code, FILE* stream)
-{
-	cmark_node* cmark_root = cmark_parse_document(source_code, strlen(source_code), 0);
-
-	print_colored_cmark_tree(cmark_root, source_code, stream);
-
-	// Reset colors.
-	fprintf(stream, "\033[0m");
-	fflush(stream);
-
-	cmark_node_free(cmark_root);
 }
 
 	void
