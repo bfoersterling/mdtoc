@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "parser.h"
+#include "heading.h"
 #include "pretty_printer.h"
 #include "stream.h"
 #include "string_util.h"

@@ -1,7 +1,7 @@
 #include "unit_testing.h"
 // For testing static and nonstatic functions include the .c file
 // and do not compile/link the .c file of you real program.
-#include "../src/parser.c"
+#include "../src/heading.c"
 
 #include <ctype.h>
 

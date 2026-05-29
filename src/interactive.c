@@ -8,7 +8,7 @@
 #include <readline/readline.h>
 
 #include "chapter.h"
-#include "parser.h"
+#include "heading.h"
 #include "stream.h"
 #include "string_util.h"
 
