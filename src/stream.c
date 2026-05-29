@@ -132,7 +132,7 @@ line_start_pos(FILE* source_file, int line)
 
 /*
  * Read the file at path "file_path".
- * Exit the program on error.
+ * If "exit_on_error" is true -> exit the entire program if an error occurs.
  * Error messages go to stderr.
  * Caller has to free the returned buffer.
  */
