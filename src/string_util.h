@@ -12,3 +12,4 @@ int string_line_end_byte(const char* s, int line);
 char* string_line_span(const char* s, int from_line, int to_line);
 int string_line_start_byte(const char* s, int line);
 void trim_space(char* s);
+void unquote_string(char* s);

@@ -9,6 +9,7 @@ COMPILE_DATE = "$(shell date "+%Y-%m-%d")"
 GIT_TAG = "$(shell git describe --tags --abbrev=0)"
 
 CFLAGS = -g -std=gnu23 -Wall \
+		 -D_GNU_SOURCE \
 		 -DVERSION=\"$(GIT_TAG)\" \
 		 -DCOMPILE_DATE=\"$(COMPILE_DATE)\"
 
@@ -43,7 +44,10 @@ debug_tests:
 	CK_FORK=no gdb $(TEST_DIR)/$(TEST_BINARY)
 
 tags:
-	ctags --language-force=C --C-kinds=+p /usr/include/cmark.h src/*.c
+	ctags --language-force=C --c-kinds=+p /usr/include/cmark.h
+	ctags --language-force=C --c-kinds=f --append=yes src/*.c
+	ctags -u --language-force=C --c-kinds=p --append=yes src/*.c
+	ctags -u --language-force=C --c-kinds=+p --append=yes src/*.h
 
 test:
 	$(CC) $(CFLAGS) -o $(TEST_DIR)/$(TEST_BINARY) \

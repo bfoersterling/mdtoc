@@ -483,6 +483,9 @@ START_TEST (test_string_line_start_byte)
 
 	// 4 - start of line 2.
 	ck_assert_int_eq(string_line_start_byte("line 1\nline 2\n", 2), 7);
+
+	// 5 - empty lines.
+	ck_assert_int_eq(string_line_start_byte("\n\n\n", 2), 1);
 }
 
 START_TEST (test_trim_space)
@@ -535,6 +538,53 @@ START_TEST (test_trim_space)
 	free(buffer_1);
 }
 
+START_TEST (test_unquote_string)
+{
+	// 1 - double quotes, literal utf8 and german umlaut
+	size_t buffer_size_1 = 64;
+	char* buffer_1 = malloc(buffer_size_1);
+	memset(buffer_1, 0, buffer_size_1);
+	strcpy(buffer_1, "\"Fürst✓\"");
+
+	unquote_string(buffer_1);
+	ck_assert_str_eq(buffer_1, "Fürst✓");
+
+	free(buffer_1);
+
+	// 2 - single quotes with double quote in the middle
+	size_t buffer_size_2 = 64;
+	char* buffer_2 = malloc(buffer_size_2);
+	memset(buffer_2, 0, buffer_size_2);
+	strcpy(buffer_2, "\'Foo\"bar\'");
+
+	unquote_string(buffer_2);
+	ck_assert_str_eq(buffer_2, "Foo\"bar");
+
+	free(buffer_2);
+
+	// 3 - unquoted string
+	size_t buffer_size_3 = 64;
+	char* buffer_3 = malloc(buffer_size_3);
+	memset(buffer_3, 0, buffer_size_3);
+	strcpy(buffer_3, "foobar");
+
+	unquote_string(buffer_3);
+	ck_assert_str_eq(buffer_3, "foobar");
+
+	free(buffer_3);
+
+	// 4 - only leading quote
+	size_t buffer_size_4 = 64;
+	char* buffer_4 = malloc(buffer_size_4);
+	memset(buffer_4, 0, buffer_size_4);
+	strcpy(buffer_4, "\'foobar");
+
+	unquote_string(buffer_4);
+	ck_assert_str_eq(buffer_4, "foobar");
+
+	free(buffer_4);
+}
+
 Suite*
 string_util_suite(void) {
 	Suite* s = suite_create("string_util");
@@ -550,6 +600,7 @@ string_util_suite(void) {
 	TCase* tc_string_line_span = tcase_create("test_string_line_span");
 	TCase* tc_string_line_start_byte = tcase_create("test_string_line_start_byte");
 	TCase* tc_trim_space = tcase_create("test_trim_space");
+	TCase* tc_unquote_string = tcase_create("test_unquote_string");
 
 	tcase_add_test(tc_ensure_trailing_dot, test_ensure_trailing_dot);
 	tcase_add_test(tc_first_digit_in_str, test_first_digit_in_str);
@@ -562,6 +613,7 @@ string_util_suite(void) {
 	tcase_add_test(tc_string_line_span, test_string_line_span);
 	tcase_add_test(tc_string_line_start_byte, test_string_line_start_byte);
 	tcase_add_test(tc_trim_space, test_trim_space);
+	tcase_add_test(tc_unquote_string, test_unquote_string);
 
 	suite_add_tcase(s, tc_ensure_trailing_dot);
 	suite_add_tcase(s, tc_first_digit_in_str);
@@ -574,6 +626,7 @@ string_util_suite(void) {
 	suite_add_tcase(s, tc_string_line_span);
 	suite_add_tcase(s, tc_string_line_start_byte);
 	suite_add_tcase(s, tc_trim_space);
+	suite_add_tcase(s, tc_unquote_string);
 
 	return s;
 }

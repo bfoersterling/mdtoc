@@ -18,11 +18,8 @@ static struct heading* find_connector(struct heading* node, int level);
 static void insert_preamble_heading(struct heading** head, const char* source_code);
 static void parse_headings_from_node(cmark_node* node, struct heading** head, int levels[6]);
 static void print_colored_cmark_tree(cmark_node* node, const char* source_code, FILE* stream);
-static void print_heading(struct heading* h, int indentation_level, FILE* stream);
 static void print_indentation(int level, FILE* stream);
-static void print_node(cmark_node* node);
 static void push_heading(struct heading** head, const char* text, int level, int levels[6], int line);
-static void traverse_tree(cmark_node* node, int level);
 static void update_heading_levels(int current_level, int levels[6]);
 
 	static void
@@ -65,6 +62,38 @@ append_heading(struct heading** head, const char* text, int level, int levels[6]
 	assert(connector->next == NULL);
 	new_node->parent = connector->parent;
 	connector->next = new_node;
+}
+
+/*
+ * Build an ATX heading string from a heading "text" and its "level".
+ * "text" may not contain leading pound signs (#) or trailing setext elements.
+ * Caller has to free the returned buffer.
+ */
+	char*
+atx_string(char* text, int level)
+{
+	assert(text != NULL);
+	assert(level <= 6);
+	assert(level >= 1);
+
+	// 8 bytes: max. 6 pound signs, 1 space, 1 null terminator
+	size_t buffer_size = strlen(text) + 8;
+	char* buffer = malloc(buffer_size);
+	memset(buffer, 0, buffer_size);
+	memset(buffer, '#', level);
+	memset(buffer+level, ' ', 1);
+	strcat(buffer, text);
+
+	return buffer;
+}
+
+/*
+ * See "atx_string()". (Caller has to free the returned buffer.)
+ */
+	char*
+atx_string_from_heading(struct heading* h)
+{
+	return atx_string(h->text, h->level);
 }
 
 // Traverse node and concatenate the literals from all children and siblings
@@ -212,6 +241,7 @@ insert_preamble_heading(struct heading** head, const char* source_code)
 	(*head)->first_child = new_node;
 }
 
+// UNUSED
 // Return the last node of a tree branch.
 // "node" is the parent of the (sub)tree.
 // If "node" is the root of the tree this should be the bottom right node
@@ -322,19 +352,6 @@ pretty_heading_levels(int levels[6])
 	return buffer;
 }
 
-	void
-print_ast(const char* source_code)
-{
-	cmark_node* root_node = cmark_parse_document(
-			source_code,
-			strlen(source_code),
-			CMARK_OPT_DEFAULT);
-
-	traverse_tree(root_node, 0);
-
-	cmark_node_free(root_node);
-}
-
 	static void
 print_colored_cmark_tree(cmark_node* node, const char* source_code, FILE* stream)
 {
@@ -381,7 +398,12 @@ print_heading_tree(struct heading* node, int recursion_level, FILE* stream)
 		print_heading_tree(node->next, recursion_level, stream);
 }
 
-	static void
+/*
+ * Prints heading "h" with indentation "indentation_level" to "stream".
+ * Prints the heading numbering, its text and its line.
+ * Headings with level 0 will not be printed.
+ */
+	void
 print_heading(struct heading* h, int indentation_level, FILE* stream)
 {
 	// Do not print the artificial root.
@@ -401,18 +423,6 @@ print_indentation(int level, FILE* stream)
 		fprintf(stream, "  ");
 	}
 	fflush(stream);
-}
-
-	static void
-print_node(cmark_node* node)
-{
-	printf("%s", cmark_node_get_type_string(node));
-	printf(" [%d, %d] ",
-			cmark_node_get_start_line(node),
-			cmark_node_get_start_column(node));
-	printf("- [%d, %d]\n",
-			cmark_node_get_end_line(node),
-			cmark_node_get_end_column(node));
 }
 
 	void
@@ -455,23 +465,6 @@ push_heading(struct heading** head, const char* text, int level, int levels[6], 
 		(*head)->parent = new_node;
 
 	*head = new_node;
-}
-
-	static void
-traverse_tree(cmark_node* node, int level)
-{
-	for (int i = 0; i<level; i++) {
-		printf("  ");
-	}
-
-	print_node(node);
-
-	cmark_node* child = cmark_node_first_child(node);
-
-	while (child != NULL) {
-		traverse_tree(child, level+1);
-		child = cmark_node_next(child);
-	}
 }
 
 	static void

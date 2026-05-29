@@ -9,6 +9,7 @@
 
 #include "chapter.h"
 #include "parser.h"
+#include "stream.h"
 #include "string_util.h"
 
 // Prototypes for static functions.
@@ -18,6 +19,7 @@ static void ia_chapter(const char* file_path, const char* user_input);
 static void ia_edit(const char* file_path, const char* user_input);
 static void ia_help(const char* user_input);
 static void ia_help_topic(const char* topic);
+static void ia_search(const char* file_path, const char* user_input);
 static void ia_toc(const char* file_path, const char* user_input);
 
 // Add command to history if it is not already the last entry.
@@ -53,6 +55,7 @@ complete_commands(const char* text, int state)
 		"edit",
 		"chapter",
 		"help",
+		"search",
 		"toc",
 	};
 
@@ -232,6 +235,7 @@ ia_help(const char* user_input)
 	printf("e[dit] [CHAPTER]\tedit chapter (without argument the last shown\n"
 			"\t\t\tchapter will be edited)\n");
 	printf("help [TOPIC]\t\tshow this help\n");
+	printf("s[earch] [STRING]\tcase-insensitive search\n");
 	printf("toc\t\t\tprint table of contents\n");
 
 	free(user_input_copy);
@@ -247,6 +251,53 @@ ia_help_topic(const char* topic)
 	} else {
 		printf("No help for topic \"%s\".\n", topic);
 	}
+}
+
+	static void
+ia_search(const char* file_path, const char* user_input)
+{
+	char* user_input_copy = strdup(user_input);
+	char* needle = NULL;
+
+	// Parse and validate the search string from the user.
+	int counter = 0;
+	for (char* token = strtok(user_input_copy, " ");
+			token != NULL;
+			token = strtok(NULL, " "))
+	{
+		if (counter == 0
+				&& isdigit((int)*token)) {
+			needle = token;
+			break;
+		}
+		if (counter == 0
+				&& strcmp(token, "s") != 0 && strcmp(token, "search")) {
+			printf("Unknown command %s.\n", token);
+			goto end;
+		}
+
+		if (counter > 1) {
+			printf("Command \"search\" only accepts one argument.\n");
+			printf("Received \"%s\".\n", token);
+			goto end;
+		}
+
+		if (counter == 1) {
+			needle = token;
+		}
+
+		counter++;
+	}
+
+	char* source_code = read_file(file_path, false);
+
+	unquote_string(needle);
+
+	search_chapters_for_str(source_code, needle, stdout);
+
+	free(source_code);
+end:
+	free(user_input_copy);
 }
 
 	static void
@@ -284,6 +335,8 @@ do_interactive(const char* file_path)
 			ia_chapter(file_path, user_input);
 		} else if(strncmp(user_input, "e", 1) == 0) {
 			ia_edit(file_path, user_input);
+		} else if(strncmp(user_input, "s", 1) == 0) {
+			ia_search(file_path, user_input);
 		} else if(strncmp(user_input, "toc", 3) == 0) {
 			ia_toc(file_path, user_input);
 		} else if (strncmp(user_input, "help", 4) == 0) {

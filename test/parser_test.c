@@ -53,6 +53,16 @@ pretty_string_diff(const char* s1, const char* s2)
 	printf("\n");
 }
 
+START_TEST (test_atx_string)
+{
+	// 1
+	char* output_1 = atx_string("Building From Source", 4);
+
+	ck_assert_str_eq(output_1, "#### Building From Source");
+
+	free(output_1);
+}
+
 START_TEST (test_find_heading_by_numbering)
 {
 	// 1
@@ -107,6 +117,12 @@ START_TEST (test_parse_headings)
 	ck_assert_str_eq(head_1->first_child->next->text, "second heading");
 	ck_assert(head_1->first_child->parent == head_1);
 	ck_assert(head_1->first_child->next->parent == head_1);
+
+	char* pretty_levels_1 = pretty_heading_levels(head_1->levels);
+
+	ck_assert_str_eq(pretty_levels_1, "0.");
+
+	free(pretty_levels_1);
 
 	free_heading_tree(head_1);
 
@@ -542,18 +558,21 @@ Suite*
 parser_suite(void) {
 	Suite* s = suite_create("parser");
 
+	TCase* tc_atx_string = tcase_create("test_atx_string");
 	TCase* tc_find_heading_by_numbering = tcase_create("test_find_heading_by_numbering");
 	TCase* tc_parse_headings = tcase_create("test_parse_headings");
 	TCase* tc_pretty_heading_levels = tcase_create("test_pretty_heading_levels");
 	TCase* tc_print_colored_markdown = tcase_create("test_print_colored_markdown");
 	TCase* tc_update_heading_levels = tcase_create("test_update_heading_levels");
 
+	tcase_add_test(tc_atx_string, test_atx_string);
 	tcase_add_test(tc_find_heading_by_numbering, test_find_heading_by_numbering);
 	tcase_add_test(tc_parse_headings, test_parse_headings);
 	tcase_add_test(tc_pretty_heading_levels, test_pretty_heading_levels);
 	tcase_add_test(tc_print_colored_markdown, test_print_colored_markdown);
 	tcase_add_test(tc_update_heading_levels, test_update_heading_levels);
 
+	suite_add_tcase(s, tc_atx_string);
 	suite_add_tcase(s, tc_find_heading_by_numbering);
 	suite_add_tcase(s, tc_parse_headings);
 	suite_add_tcase(s, tc_pretty_heading_levels);

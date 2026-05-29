@@ -228,6 +228,14 @@ string_line_span(const char* s, int from_line, int to_line)
 	return buffer;
 }
 
+// Returns the position of the first byte in line "line" in string "s".
+// The position may be used as an array index and starts with 0.
+// A "line" is defined by a string of zero or more characters terminated
+// by a newline character.
+// In case of the empty line, the newline character is the first byte.
+// Line counting starts at 1, so the first line is line 1.
+// (This is mainly because "(lib)cmark" starts line counting at 1.)
+// (But also tools like "vim" and "bat" will present lines starting at 1.)
 	int
 string_line_start_byte(const char* s, int line)
 {
@@ -272,4 +280,34 @@ trim_space(char* s)
 	}
 
 	free(duplicate);
+}
+
+/*
+ * Remove surrounding single or double quotes from "s".
+ */
+	void
+unquote_string(char* s)
+{
+	assert(s != NULL);
+	if (*s == '\0')
+		return;
+
+	char* s_copy = strdup(s);
+	memset(s, 0, strlen(s) + 1);
+
+	int last_char_idx = strlen(s_copy) - 1;
+	int counter = 0;
+
+	for(const char* p = s_copy; *p != '\0'; p++) {
+		if ((counter == 0 || counter == last_char_idx)
+				&& (*p == '\'' || *p == '\"')) {
+			counter++;
+			continue;
+		}
+
+		strncat(s, p, 1);
+		counter++;
+	}
+
+	free(s_copy);
 }
