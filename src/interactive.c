@@ -253,7 +253,6 @@ ia_help_topic(const char* topic)
 	}
 }
 
-// TODO: Remove double quotes from user input.
 	static void
 ia_search(const char* file_path, const char* user_input)
 {
@@ -291,6 +290,8 @@ ia_search(const char* file_path, const char* user_input)
 	}
 
 	char* source_code = read_file(file_path, false);
+
+	unquote_string(needle);
 
 	search_chapters_for_str(source_code, needle, stdout);
 
