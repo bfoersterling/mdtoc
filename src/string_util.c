@@ -281,3 +281,33 @@ trim_space(char* s)
 
 	free(duplicate);
 }
+
+/*
+ * Remove surrounding single or double quotes from "s".
+ */
+	void
+unquote_string(char* s)
+{
+	assert(s != NULL);
+	if (*s == '\0')
+		return;
+
+	char* s_copy = strdup(s);
+	memset(s, 0, strlen(s) + 1);
+
+	int last_char_idx = strlen(s_copy) - 1;
+	int counter = 0;
+
+	for(const char* p = s_copy; *p != '\0'; p++) {
+		if ((counter == 0 || counter == last_char_idx)
+				&& (*p == '\'' || *p == '\"')) {
+			counter++;
+			continue;
+		}
+
+		strncat(s, p, 1);
+		counter++;
+	}
+
+	free(s_copy);
+}
