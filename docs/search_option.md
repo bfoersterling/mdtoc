@@ -1,22 +1,24 @@
-#### search file for pattern
+#### Search File For String/Pattern
 
-You could create a chapter tree out of the heading tree.\
-Then search this chapter tree for a regex.
+You can search the file case insensitive for a string with `-s/--search` \
+and `s[earch]` in interactive mode.
 
-Or just make a function that searches the file for a regex.\
-Store the line number, then search in the heading tree which heading \
-has the biggest line number that is smaller than the line number the regex \
-was found in.\
-Then display that heading with its text and line field.
+The output will show all chapters that have this string in its `title` \
+or in its `body`.\
+Currently all ancesters of the chapter will be shown as well, as they \
+have all their descendants in their body.\
+Since this is visually obvious through the indentation it looks like a \
+clean solution.
 
-###### pattern
+###### Regex?
 
 Do you really need/want to search for a regex?
 
-Or is a default case insensitive search for a pattern in chapters and \
+Or is the default case insensitive search for a string in chapters and \
 headings enough?
 
 What would be the use case for a regex search?\
-Something like `^foobar$` does not seem that useful.\
-Maybe if you want to search for two patterns you could to something like this:\
+Something like `^foobar$` does not seem that useful except if you want \
+to match an exact heading.\
+Maybe if you want to search for two strings you could to something like this:\
 `foo.*bar`.
