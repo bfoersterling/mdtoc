@@ -19,7 +19,7 @@ SOURCE_FILES = \
 			   $(SOURCE_DIR)/chapter.c \
 			   $(SOURCE_DIR)/interactive.c \
 			   $(SOURCE_DIR)/main.c \
-			   $(SOURCE_DIR)/parser.c \
+			   $(SOURCE_DIR)/heading.c \
 			   $(SOURCE_DIR)/pretty_printer.c \
 			   $(SOURCE_DIR)/stream.c \
 			   $(SOURCE_DIR)/string_util.c
@@ -28,7 +28,7 @@ TEST_DIR = "test"
 
 TEST_SOURCES = \
 			   $(TEST_DIR)/chapter_test.c \
-			   $(TEST_DIR)/parser_test.c \
+			   $(TEST_DIR)/heading_test.c \
 			   $(TEST_DIR)/pretty_printer_test.c \
 			   $(TEST_DIR)/stream_test.c \
 			   $(TEST_DIR)/string_util_test.c \

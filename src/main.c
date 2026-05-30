@@ -6,7 +6,7 @@
 
 #include "chapter.h"
 #include "interactive.h"
-#include "parser.h"
+#include "heading.h"
 #include "stream.h"
 
 // Prototypes for static functions.
