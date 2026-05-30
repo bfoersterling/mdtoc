@@ -1,6 +1,6 @@
 ## TODO
 
-- rename "parser" module to "heading"?
+- bash script for integration testing?
 - one file "option.c" and "option.h" with functions like
   "option_print_chapter" for all options that can be either used through
   cli argument or in interactive mode
