@@ -8,6 +8,8 @@ COMPILE_DATE = "$(shell date "+%Y-%m-%d")"
 
 GIT_TAG = "$(shell git describe --tags --abbrev=0)"
 
+CC = "clang"
+
 CFLAGS = -g -std=gnu23 -Wall \
 		 -D_GNU_SOURCE \
 		 -DVERSION=\"$(GIT_TAG)\" \
@@ -50,6 +52,7 @@ tags:
 	ctags -u --language-force=C --c-kinds=+p --append=yes src/*.h
 
 test:
+	$(CC) --version
 	$(CC) $(CFLAGS) -o $(TEST_DIR)/$(TEST_BINARY) \
 		$(TEST_SOURCES) -lcmark -lcheck
 	valgrind -q --exit-on-first-error=yes --error-exitcode=1 ./$(TEST_DIR)/$(TEST_BINARY)

@@ -56,8 +56,7 @@ get_user_input(void)
 	memset(buffer, 0, buffer_size);
 	char read_char = 0;
 
-	while (read_char != EOF) {
-		read_char = fgetc(stdin);
+	while ((read_char = fgetc(stdin)) != EOF) {
 		strcat(buffer, &read_char);
 	}
 
