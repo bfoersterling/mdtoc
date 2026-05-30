@@ -20,6 +20,7 @@ static void pretty_print_cmark_item(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_linebreak(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_link(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_list(cmark_node* node, FILE* stream);
+static void pretty_print_cmark_node(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_paragraph(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_softbreak(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_strong(cmark_node* node, FILE* stream);
@@ -191,7 +192,7 @@ pretty_print_cmark_list(cmark_node* node, FILE* stream)
 	fprintf(stream, "\033[0m");
 }
 
-	void
+	static void
 pretty_print_cmark_node(cmark_node* node, FILE* stream)
 {
 	for (int i = 0; i < number_of_leading_nl(node); i++)
