@@ -1,0 +1,12 @@
+name: "Build On Alpine"
+
+on: [push]
+
+jobs:
+  build_on_alpine:
+    runs-on: ubuntu-24.04
+    container: ghcr.io/bfoersterling/cdevel_alpine:latest
+    steps:
+      - name: check out repo
+        uses: actions/checkout@v4
+      - run: make

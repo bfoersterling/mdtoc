@@ -2,8 +2,10 @@ name: "Unit Tests"
 
 on: [push]
 
+# Unit tests on alpine will not work anymore due to musl having FILE* const.
+
 jobs:
-  test:
+  test_on_archlinux:
     runs-on: ubuntu-24.04
     container: ghcr.io/bfoersterling/cdevel_archlinux:latest
     steps:
