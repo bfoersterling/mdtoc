@@ -8,8 +8,6 @@ COMPILE_DATE = "$(shell date "+%Y-%m-%d")"
 
 GIT_TAG = "$(shell git describe --tags --abbrev=0)"
 
-CC = "clang"
-
 CFLAGS = -g -std=gnu23 -Wall \
 		 -D_GNU_SOURCE \
 		 -DVERSION=\"$(GIT_TAG)\" \
@@ -37,6 +35,7 @@ TEST_SOURCES = \
 			   $(TEST_DIR)/unit_testing.c
 
 all:
+	$(CC) --version
 	$(CC) $(CFLAGS) -o $(BINARY) $(SOURCE_FILES) -lcmark -lreadline
 
 clean:
