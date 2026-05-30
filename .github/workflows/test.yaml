@@ -5,7 +5,7 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-24.04
-    container: ghcr.io/bfoersterling/cdevel:latest
+    container: ghcr.io/bfoersterling/cdevel_archlinux:latest
     steps:
       - name: check out repo
         uses: actions/checkout@v4
