@@ -20,7 +20,7 @@ function assert_str_eq() {
 }
 
 SCRIPT_DIR=$(realpath "$(dirname "$0")")
-PROJECT_DIR=$(git rev-parse --show-toplevel)
+PROJECT_DIR=$(dirname "$SCRIPT_DIR")
 MDTOC="${PROJECT_DIR}/mdtoc"
 
 printf "Integration tests for mdtoc.\n\n"
