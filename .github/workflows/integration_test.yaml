@@ -1,0 +1,12 @@
+name: "Integration Tests"
+
+on: [push]
+
+jobs:
+  integration_test_on_archlinux:
+    runs-on: ubuntu-24.04
+    container: ghcr.io/bfoersterling/cdevel_archlinux:latest
+    steps:
+      - name: check out repo
+        uses: actions/checkout@v4
+      - run: make integration_test
