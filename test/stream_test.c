@@ -41,6 +41,25 @@ START_TEST(test_file_size)
 	fclose(file_1);
 }
 
+START_TEST(test_read_stream)
+{
+	// 1
+	size_t input_buffer_size_1 = 32;
+	char* input_buffer_1 = malloc(input_buffer_size_1);
+	memset(input_buffer_1, 0, input_buffer_size_1);
+	strcpy(input_buffer_1, "# foo\n");
+
+	FILE* input_1 = fmemopen(input_buffer_1, input_buffer_size_1, "r");
+
+	char* output_1 = read_stream(input_1, false);
+
+	ck_assert_str_eq(output_1, input_buffer_1);
+
+	fclose(input_1);
+	free(output_1);
+	free(input_buffer_1);
+}
+
 START_TEST(test_line_end_pos)
 {
 	// 1
@@ -86,16 +105,19 @@ stream_suite() {
 
 	TCase* tc_test_count_lines = tcase_create("test_count_lines");
 	TCase* tc_test_file_size = tcase_create("test_file_size");
+	TCase* tc_test_read_stream = tcase_create("test_read_stream");
 	TCase* tc_test_line_end_pos = tcase_create("test_line_end_pos");
 	TCase* tc_test_line_start_pos = tcase_create("test_line_start_pos");
 
 	tcase_add_test(tc_test_count_lines, test_count_lines);
 	tcase_add_test(tc_test_file_size, test_file_size);
+	tcase_add_test(tc_test_read_stream, test_read_stream);
 	tcase_add_test(tc_test_line_end_pos, test_line_end_pos);
 	tcase_add_test(tc_test_line_start_pos, test_line_start_pos);
 
 	suite_add_tcase(s, tc_test_count_lines);
 	suite_add_tcase(s, tc_test_file_size);
+	suite_add_tcase(s, tc_test_read_stream);
 	suite_add_tcase(s, tc_test_line_end_pos);
 	suite_add_tcase(s, tc_test_line_start_pos);
 

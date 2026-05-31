@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Images
 
 on:
   schedule:
@@ -20,11 +20,20 @@ jobs:
       - name: Log in to GitHub Container Registry (GHCR)
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
 
-      - name: Build Docker image
+      - name: Build Alpine Image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/cdevel:latest \
+          docker build -t ghcr.io/${{ github.repository_owner }}/cdevel_alpine:latest \
             -f .docker/Dockerfile_alpine .
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/cdevel:latest
+          docker push ghcr.io/${{ github.repository_owner }}/cdevel_alpine:latest
+
+      - name: Build Archlinux Image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/cdevel_archlinux:latest \
+            -f .docker/Dockerfile_archlinux .
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/cdevel_archlinux:latest

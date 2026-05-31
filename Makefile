@@ -35,6 +35,7 @@ TEST_SOURCES = \
 			   $(TEST_DIR)/unit_testing.c
 
 all:
+	$(CC) --version
 	$(CC) $(CFLAGS) -o $(BINARY) $(SOURCE_FILES) -lcmark -lreadline
 
 clean:
@@ -50,6 +51,7 @@ tags:
 	ctags -u --language-force=C --c-kinds=+p --append=yes src/*.h
 
 test:
+	$(CC) --version
 	$(CC) $(CFLAGS) -o $(TEST_DIR)/$(TEST_BINARY) \
 		$(TEST_SOURCES) -lcmark -lcheck
 	valgrind -q --exit-on-first-error=yes --error-exitcode=1 ./$(TEST_DIR)/$(TEST_BINARY)
