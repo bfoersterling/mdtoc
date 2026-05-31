@@ -1,7 +1,8 @@
 #include "unit_testing.h"
 
-int
-main(void) {
+	int
+main(void)
+{
 	int number_failed = 0;
 
 	SRunner* sr = srunner_create(parser_suite());
