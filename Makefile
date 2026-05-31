@@ -1,4 +1,5 @@
-.PHONY: all clean debug_tests tags test test_leaks install install_latest_release
+.PHONY: all clean debug_tests tags test test_leaks install \
+	install_latest_release integration_test
 
 BINARY = "mdtoc"
 
@@ -73,3 +74,8 @@ install:
 install_latest_release:
 	wget https://github.com/bfoersterling/mdtoc/releases/latest/download/mdtoc -O /tmp/mdtoc
 	sudo install -v -m 755 /tmp/mdtoc /usr/local/bin/.
+
+integration_test:
+	$(MAKE) all
+	@echo
+	bash test/integration_tests.sh
