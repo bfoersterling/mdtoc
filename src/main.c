@@ -120,7 +120,7 @@ main(int argc, char** argv)
 	handle_cli_args(argc, argv);
 
 	if (argc == 1) {
-		char* input = get_user_input();
+		char* input = read_stream(stdin, true);
 
 		struct heading* hhead = parse_headings(input);
 		print_heading_tree(hhead, 0, stdout);

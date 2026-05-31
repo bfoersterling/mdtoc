@@ -46,6 +46,7 @@ file_size(FILE* stream)
 	return end_pos;
 }
 
+// UNUSED
 // Read from stdin.
 // Caller has to free the returned buffer.
 	char*
@@ -185,6 +186,36 @@ read_file_section(FILE* source_file, long from, long to)
 	fread(buffer, 1, to-from, source_file);
 
 	fseek(source_file, initial_file_pos, SEEK_SET);
+
+	return buffer;
+}
+
+/*
+ * Reads "stream" into a buffer and returns it.
+ * "stream" should NEVER be a real file as the file size is not determined.
+ * "stream" should be either stdin or a mem stream for unit testing.
+ * The size of the buffer is an arbitrarily chosen constant value.
+ * (Large streams will cause overflows.)
+ * Caller has to free the returned buffer.
+ */
+	char*
+read_stream(FILE* stream, bool exit_on_error)
+{
+	assert(stream != NULL);
+
+	// Arbitrary buffer size that should handle most user inputs and piped
+	// input.
+	size_t buffer_size = 32768;
+	char* buffer = malloc(buffer_size);
+	memset(buffer, 0, buffer_size);
+
+	fread(buffer, 1, buffer_size, stream);
+
+	if (ferror(stream) != 0) {
+		fprintf(stderr, "Error reading stream %d.\n", fileno(stream));
+		if (exit_on_error)
+			exit(1);
+	}
 
 	return buffer;
 }

@@ -7,3 +7,4 @@ long line_end_pos(FILE* source_file, int line);
 long line_start_pos(FILE* source_file, int line);
 char* read_file(const char* file_path, bool exit_on_error);
 char* read_file_section(FILE* source_file, long from, long to);
+char* read_stream(FILE* stream, bool exit_on_error);
