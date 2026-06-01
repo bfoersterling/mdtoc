@@ -109,15 +109,13 @@ ia_chapter(const char* file_path, const char* user_input)
 		if (counter == 0
 				&& strcmp(token, "c") != 0 && strcmp(token, "chapter")) {
 			printf("Unknown command %s.\n", token);
-			free(user_input_copy);
-			return;
+			goto end;
 		}
 
 		if (counter > 1) {
 			printf("Command \"chapter\" only accepts one argument.\n");
 			printf("Received \"%s\".\n", token);
-			free(user_input_copy);
-			return;
+			goto end;
 		}
 
 		if (counter == 1) {
@@ -129,22 +127,15 @@ ia_chapter(const char* file_path, const char* user_input)
 
 	if (chapter == NULL) {
 		printf("Command \"chapter\" requires one argument.\n");
-		free(user_input_copy);
-		return;
+		goto end;
 	}
 
-	FILE* source_file = fopen(file_path, "r");
+	char* source_code = read_file(file_path, false);
 
-	if (source_file == NULL) {
-		printf("Error opening file \"%s\": %s\n", file_path, strerror(errno));
-		free(user_input_copy);
-		return;
-	}
+	print_chapter(source_code, chapter, stdout);
 
-	print_chapter(source_file, chapter, stdout);
-
-	fclose(source_file);
-
+	free(source_code);
+end:
 	free(user_input_copy);
 }
 
