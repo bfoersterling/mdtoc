@@ -48,6 +48,12 @@ expected_3=$'1. a great quote (1)\n2. and another one (6)'
 
 assert_str_eq "3" "$output_3" "$expected_3"
 
+# 4
+output_4=$("$MDTOC" -c 2.1 "${SCRIPT_DIR}/input/basic.md")
+expected_4=$'#### sub bar\n\nBar.\n\n```\necho "hello"\n```\n\nMore text.'
+
+assert_str_eq "4" "$output_4" "$expected_4"
+
 printf "Integration tests end.\n"
 
 exit 0
