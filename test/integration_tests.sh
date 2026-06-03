@@ -1,5 +1,24 @@
 #!/usr/bin/bash
 
+function assert_int_eq() {
+	declare test_no
+	declare int1
+	declare int2
+	test_no="$1"
+	int1="$2"
+	int2="$3"
+
+	if [[ "$int1" -ne "$int2" ]]; then
+		printf "Test %s failed.\n" "$test_no"
+		printf "Ints differ.\n"
+		printf "int1: %d.\n" "$int1"
+		printf "int2: %d.\n" "$int2"
+		exit 1
+	else
+		echo "Test ${test_no} passed."
+	fi
+}
+
 function assert_str_eq() {
 	declare test_no
 	test_no="$1"
@@ -53,6 +72,11 @@ output_4=$("$MDTOC" -c 2.1 "${SCRIPT_DIR}/input/basic.md")
 expected_4=$'#### sub bar\n\nBar.\n\n```\necho "hello"\n```\n\nMore text.'
 
 assert_str_eq "4" "$output_4" "$expected_4"
+
+# 5 - passing a dir should not segfault (exit code 139), but exit with rc 1.
+"$MDTOC" "$(mktemp -d)" &>/dev/null
+
+assert_int_eq "5" "$?" "1"
 
 printf "Integration tests end.\n"
 
