@@ -216,14 +216,15 @@ parse_chapters_from_headings(
 }
 
 /*
- * Prints chapter "chapter" from file "source_file".
+ * Prints chapter "chapter" from string "source_code".
+ * "source_code": The content of a markdown file.
  * "chapter": i.e. "1.2." or "1.2" (trailing dot will be appended).
  * "stream": Output stream. (i.e. stdout or string stream for tests)
  */
 	void
-print_chapter(FILE* source_file, const char* chapter, FILE* stream)
+print_chapter(const char* source_code, const char* chapter, FILE* stream)
 {
-	assert(source_file != NULL);
+	assert(source_code != NULL);
 	assert(chapter != NULL);
 
 	if (*chapter == '\0') {
@@ -231,18 +232,14 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 		return;
 	}
 
+	if (*source_code == '\0') {
+		fprintf(stream, "Source code is an empty string.\n");
+		return;
+	}
+
 	char* dotted_numbering = numbering_with_trailing_dot(chapter);
 
-	size_t source_size = file_size(source_file) + 1;
-	char* source = malloc(source_size);
-	memset(source, 0, source_size);
-
-	long initial_file_pos = ftell(source_file);
-	fseek(source_file, 0, SEEK_SET);
-	fread(source, source_size, 1, source_file);
-	fseek(source_file, initial_file_pos, SEEK_SET);
-
-	struct chapter* root_chapter = parse_chapters(source);
+	struct chapter* root_chapter = parse_chapters(source_code);
 
 	struct chapter* needle_chapter =
 		find_chapter_by_numbering(root_chapter, dotted_numbering);
@@ -271,7 +268,6 @@ print_chapter(FILE* source_file, const char* chapter, FILE* stream)
 	free(heading_str);
 end:
 	free(dotted_numbering);
-	free(source);
 	free_chapter_tree(root_chapter);
 }
 

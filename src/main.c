@@ -30,6 +30,7 @@ handle_cli_args(int argc, char** argv)
 	int c = 0;
 	int option_index = 0;
 	const char* file_path = NULL;
+	char* source_code = NULL;
 
 	while(c != -1) {
 		c = getopt_long(argc, argv, "hive:c:s:", cli_args, &option_index);
@@ -42,17 +43,11 @@ handle_cli_args(int argc, char** argv)
 				}
 				file_path = argv[optind - option_index];
 
-				FILE* md_file = fopen(file_path, "r");
+				source_code = read_file(file_path, true);
 
-				if (md_file == NULL) {
-					fprintf(stderr, "Error opening file \"%s\": %s\n",
-							file_path, strerror(errno));
-					exit(1);
-				}
+				print_chapter(source_code, optarg, stdout);
 
-				print_chapter(md_file, optarg, stdout);
-
-				fclose(md_file);
+				free(source_code);
 
 				exit(0);
 				break;
@@ -79,7 +74,7 @@ handle_cli_args(int argc, char** argv)
 				}
 				file_path = argv[optind];
 
-				char* source_code = read_file(file_path, true);
+				source_code = read_file(file_path, true);
 
 				search_chapters_for_str(source_code, optarg, stdout);
 
