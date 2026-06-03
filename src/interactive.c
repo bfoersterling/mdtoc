@@ -309,6 +309,8 @@ do_interactive(const char* file_path)
 		return;
 	}
 
+	assert_regular_file(file_path);
+
 	const char* prompt = "mdtoc> ";
 	rl_completion_entry_function = complete_commands;
 

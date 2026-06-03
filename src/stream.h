@@ -1,8 +1,10 @@
 #pragma once
 
+void assert_regular_file(const char* entry_path);
 int count_lines(FILE* stream);
 long file_size(FILE* stream);
 char* get_user_input(void);
+bool is_regular_file(const char* entry_path);
 long line_end_pos(FILE* source_file, int line);
 long line_start_pos(FILE* source_file, int line);
 char* read_file(const char* file_path, bool exit_on_error);

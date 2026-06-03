@@ -4,6 +4,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+
+/*
+ * Exit the program if "entry_path" is not a regular file or a symlink
+ * that points to a regular file.
+ * Error messages will be printed to stderr.
+ */
+	void
+assert_regular_file(const char* entry_path)
+{
+	struct stat stat_buffer = {};
+	int stat_return = stat(entry_path, &stat_buffer);
+
+	if (stat_return != 0) {
+		fprintf(stderr, "Failed to stat \"%s\": %s.\n", entry_path,
+				strerror(errno));
+		exit(1);
+	}
+
+	if (!S_ISREG(stat_buffer.st_mode)) {
+		fprintf(stderr, "Error: \"%s\" is not a regular file.\n", entry_path);
+		exit(1);
+	}
+}
 
 // Return the number of lines in file "stream".
 	int
@@ -29,6 +53,10 @@ count_lines(FILE* stream)
 	return line_count;
 }
 
+/*
+ * Warning: Do NOT use this on dirs. Only pass regular files.
+ * Directories will return very large values.
+ */
 	long
 file_size(FILE* stream)
 {
@@ -62,6 +90,21 @@ get_user_input(void)
 	}
 
 	return buffer;
+}
+
+	bool
+is_regular_file(const char* entry_path)
+{
+	struct stat stat_buffer = {};
+	int stat_return = stat(entry_path, &stat_buffer);
+
+	if (stat_return != 0)
+		return false;
+
+	if (S_ISREG(stat_buffer.st_mode))
+		return true;
+
+	return false;
 }
 
 // Returns the file position of the end of the line "line"
@@ -134,23 +177,35 @@ line_start_pos(FILE* source_file, int line)
  * Read the file at path "file_path".
  * If "exit_on_error" is true -> exit the entire program if an error occurs.
  * Error messages go to stderr.
+ * Return value: Content of "file_path" or NULL if it is not a regular file.
  * Caller has to free the returned buffer.
  */
 	char*
 read_file(const char* file_path, bool exit_on_error)
 {
+	char* buffer = NULL;
+
 	FILE* f = fopen(file_path, "r");
 
 	if (f == NULL) {
-		fprintf(stderr, "Error opening %s: %s.\n", file_path, strerror(errno));
+		fprintf(stderr, "Error opening \"%s\": %s.\n", file_path, strerror(errno));
 		if (exit_on_error)
 			exit(1);
+		goto end;
+	}
+
+	if (!is_regular_file(file_path)) {
+		fprintf(stderr, "Error: \"%s\" is not a regular file.\n", file_path);
+		if (exit_on_error) {
+			exit(1);
+		}
+		goto end;
 	}
 
 	size_t f_size = (size_t)file_size(f);
 
 	size_t buffer_size = f_size + 1;
-	char* buffer = malloc(buffer_size);
+	buffer = malloc(buffer_size);
 	memset(buffer, 0, buffer_size);
 
 	fread(buffer, 1, f_size, f);
@@ -161,6 +216,7 @@ read_file(const char* file_path, bool exit_on_error)
 			exit(1);
 	}
 
+end:
 	fclose(f);
 
 	return buffer;
