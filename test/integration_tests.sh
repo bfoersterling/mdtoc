@@ -15,7 +15,23 @@ function assert_int_eq() {
 		printf "int2: %d.\n" "$int2"
 		exit 1
 	else
-		echo "Test ${test_no} passed."
+		printf "Test %s passed.\n" "$test_no"
+	fi
+}
+
+function assert_rc_eq() {
+	declare rc="$?"
+	declare test_no="$1"
+	declare expected_rc="$2"
+
+	if [[ "$rc" == "$expected_rc" ]]; then
+		printf "Test %s passed.\n" "$test_no"
+	else
+		printf "Test %s failed.\n" "$test_no"
+		printf "Actual return code: %d\n" "$rc"
+		printf "Expected return code: %d\n" "$expected_rc"
+
+		exit 1
 	fi
 }
 
@@ -34,7 +50,7 @@ function assert_str_eq() {
 		printf "s2:\n\"%q\"\n" "$s2"
 		exit 1
 	else
-		echo "Test ${test_no} passed."
+		printf "Test %s passed.\n" "$test_no"
 	fi
 }
 
@@ -77,6 +93,11 @@ assert_str_eq "4" "$output_4" "$expected_4"
 "$MDTOC" "$(mktemp -d)" &>/dev/null
 
 assert_int_eq "5" "$?" "1"
+
+# 6 - passing a dir with interactive mode
+"$MDTOC" -i "$(mktemp -d)" &>/dev/null
+
+assert_rc_eq "6" "1"
 
 printf "Integration tests end.\n"
 
