@@ -53,14 +53,9 @@ edit_chapter(const char* file_path, const char* chapter)
 		return 1;
 	}
 
-	FILE* source_file = fopen(file_path, "r");
+	char* source_code = read_file(file_path, true);
 
-	if (source_file == NULL) {
-		fprintf(stderr, "Error opening file \"%s\": %s\n", file_path, strerror(errno));
-		return 1;
-	}
-
-	struct heading* root = parse_headings_from_stream(source_file);
+	struct heading* root = parse_headings(source_code);
 
 	struct heading* chapter_heading = NULL;
 
@@ -70,6 +65,7 @@ edit_chapter(const char* file_path, const char* chapter)
 
 	if (chapter_heading == NULL) {
 		fprintf(stderr, "Chapter %s was not found in %s.\n", numbering, file_path);
+		free(source_code);
 		free(numbering);
 		free_heading_tree(root);
 		return 1;
@@ -94,12 +90,10 @@ edit_chapter(const char* file_path, const char* chapter)
 
 	wait(0);
 
-	free(numbering);
 	free(line_argument);
-
+	free(numbering);
 	free_heading_tree(root);
-
-	fclose(source_file);
+	free(source_code);
 
 	return 0;
 }

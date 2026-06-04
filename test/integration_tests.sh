@@ -94,10 +94,15 @@ assert_str_eq "4" "$output_4" "$expected_4"
 
 assert_int_eq "5" "$?" "1"
 
-# 6 - passing a dir with interactive mode
+# 6 - passing a dir with interactive mode should not segfault (exit code 139)
 "$MDTOC" -i "$(mktemp -d)" &>/dev/null
 
 assert_rc_eq "6" "1"
+
+# 7 - passing a dir with edit mode should not segfault (exit code 139)
+"$MDTOC" -e "1.3" "$(mktemp -d)" &>/dev/null
+
+assert_rc_eq "7" "1"
 
 printf "Integration tests end.\n"
 
