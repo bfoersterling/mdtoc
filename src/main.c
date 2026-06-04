@@ -14,9 +14,22 @@ static void handle_cli_args(int argc, char** argv);
 static void print_version(void);
 static void usage(void);
 
+enum mode {
+	EDIT_CHAPTER,
+	HELP,
+	INTERACTIVE,
+	PRINT_CHAPTER,
+	PRINT_VERSION,
+	SEARCH_STRING,
+	TOC,
+};
+
 	static void
 handle_cli_args(int argc, char** argv)
 {
+	if (argc == 1)
+		return;
+
 	static struct option cli_args[] = {
 		{"chapter", required_argument, 0, 'c'},
 		{"edit", required_argument, 0, 'e'},
@@ -31,6 +44,9 @@ handle_cli_args(int argc, char** argv)
 	int option_index = 0;
 	const char* file_path = NULL;
 	char* source_code = NULL;
+	char* chosen_chapter = NULL;
+	char* search_string = NULL;
+	enum mode chosen_mode = -1;
 
 	while(c != -1) {
 		c = getopt_long(argc, argv, "hive:c:s:", cli_args, &option_index);
@@ -41,52 +57,72 @@ handle_cli_args(int argc, char** argv)
 					fprintf(stderr, "Option \"-c\" requires exactly one file!\n");
 					exit(1);
 				}
-				file_path = argv[optind - option_index];
-
-				source_code = read_file(file_path, true);
-
-				print_chapter(source_code, optarg, stdout);
-
-				free(source_code);
-
-				exit(0);
+				chosen_mode = PRINT_CHAPTER;
+				chosen_chapter = optarg;
 				break;
 			case 'e':
-				int rc = edit_chapter(argv[optind], optarg);
-				exit(rc);
+				if (argc - optind != 1) {
+					fprintf(stderr, "Option \"-e\" requires exactly one file.\n");
+					exit(1);
+				}
+				chosen_mode = EDIT_CHAPTER;
+				chosen_chapter = optarg;
 				break;
 			case 'h':
-				usage();
-				exit(1);
+				chosen_mode = HELP;
 				break;
 			case 'i':
 				if (argc - optind != 1) {
 					fprintf(stderr, "Option \"-i\" requires exactly one file.\n");
 					exit(1);
 				}
-				do_interactive(argv[optind]);
-				exit(0);
+				chosen_mode = INTERACTIVE;
 				break;
 			case 's':
 				if (argc - optind != 1) {
-					fprintf(stderr, "Option \"-s\" requires exactly one file!\n");
+					fprintf(stderr, "Option \"-s\" requires exactly one file.\n");
 					exit(1);
 				}
-				file_path = argv[optind];
-
-				source_code = read_file(file_path, true);
-
-				search_chapters_for_str(source_code, optarg, stdout);
-
-				free(source_code);
-
-				exit(0);
+				chosen_mode = SEARCH_STRING;
+				search_string = optarg;
 				break;
 			case 'v':
-				print_version();
+				chosen_mode = PRINT_VERSION;
 				break;
 		}
 	}
+
+	if (file_path != NULL) {
+		file_path = argv[optind];
+		source_code = read_file(file_path, true);
+	}
+
+	switch(chosen_mode) {
+		case EDIT_CHAPTER:
+			edit_chapter(file_path, chosen_chapter);
+			break;
+		case HELP:
+			usage();
+			break;
+		case INTERACTIVE:
+			do_interactive(file_path);
+			break;
+		case PRINT_CHAPTER:
+			print_chapter(source_code, chosen_chapter, stdout);
+			break;
+		case PRINT_VERSION:
+			print_version();
+			break;
+		case SEARCH_STRING:
+			search_chapters_for_str(source_code, search_string, stdout);
+			break;
+		default:
+			usage();
+			break;
+	}
+
+	free(source_code);
+	exit(0);
 }
 
 	static void
