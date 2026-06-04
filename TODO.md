@@ -10,3 +10,5 @@
 characters
 - respect FORCE_COLOR environment variable that forces colors even when \
   output is redirected (would improve integration tests)?
+- support multiple files for all options?
+  (this would be a breaking api change -> 1.0.0)
