@@ -116,6 +116,26 @@ START_TEST (test_parse_chapters)
 	free_chapter_tree(root_chapter_2);
 }
 
+START_TEST (test_print_chapter)
+{
+	setenv("NO_COLOR", "1", 0);
+
+	// 1 - preamble chapter
+	const char* source_1 = "foobar\n";
+	size_t buffer_size_1 = 256;
+	char* buffer_1 = malloc(buffer_size_1);
+	FILE* stream_1 = fmemopen(buffer_1, buffer_size_1, "w");
+
+	print_chapter(source_1, "0", stream_1);
+
+	ck_assert_str_eq(buffer_1, "# 0. preamble (1)");
+
+	fclose(stream_1);
+	free(buffer_1);
+
+	unsetenv("NO_COLOR");
+}
+
 START_TEST (test_print_chapter_no_color)
 {
 	const char* source_1 =
@@ -229,16 +249,19 @@ chapter_suite(void)
 
 	TCase* tc_find_chapter_by_numbering = tcase_create("test_find_chapter_by_numbering");
 	TCase* tc_parse_chapters = tcase_create("test_parse_chapters");
+	TCase* tc_print_chapter = tcase_create("test_print_chapter");
 	TCase* tc_print_chapter_no_color = tcase_create("test_print_chapter_no_color");
 	TCase* tc_search_chapters_for_str = tcase_create("test_search_chapters_for_str");
 
 	tcase_add_test(tc_find_chapter_by_numbering, test_find_chapter_by_numbering);
 	tcase_add_test(tc_parse_chapters, test_parse_chapters);
+	tcase_add_test(tc_print_chapter, test_print_chapter);
 	tcase_add_test(tc_print_chapter_no_color, test_print_chapter_no_color);
 	tcase_add_test(tc_search_chapters_for_str, test_search_chapters_for_str);
 
 	suite_add_tcase(s, tc_find_chapter_by_numbering);
 	suite_add_tcase(s, tc_parse_chapters);
+	suite_add_tcase(s, tc_print_chapter);
 	suite_add_tcase(s, tc_print_chapter_no_color);
 	suite_add_tcase(s, tc_search_chapters_for_str);
 
