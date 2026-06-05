@@ -112,7 +112,8 @@ find_chapter_by_numbering(struct chapter* node, const char* numbering)
 	struct chapter* needle_chapter = NULL;
 	char* pretty_levels = pretty_heading_levels(node->title->levels);
 
-	if (strcmp(pretty_levels, numbering) == 0) {
+	if (strcmp(pretty_levels, numbering) == 0
+			&& node->title->level != 0) {
 		free(pretty_levels);
 		return node;
 	}
@@ -252,6 +253,8 @@ print_chapter(const char* source_code, const char* chapter, FILE* stream)
 
 	// Add newline between heading and chapter.
 	fprintf(stream, "\n");
+
+	assert(needle_chapter->body != NULL);
 
 	if (use_color()) {
 		print_colored_markdown(needle_chapter->body, stream);
