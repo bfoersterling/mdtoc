@@ -187,11 +187,19 @@ parse_chapters_from_headings(
 		new_chapter->body = malloc(8);
 		memset(new_chapter->body, 0, 8);
 		*head = new_chapter;
+	} else if (strcmp(h->text, "preamble") == 0) {
+		// Preamble headings do not have a corresponding heading in the
+		// markdown source, so we need to start at line 1 instead of adding
+		// 1 to the heading line field.
+		new_chapter->start_line = 1;
+		new_chapter->end_line = chapter_last_line(h, source_code);
+		new_chapter->body = string_line_span(source_code,
+				new_chapter->start_line, new_chapter->end_line);
 	} else {
 		new_chapter->start_line = h->line + 1;
 		new_chapter->end_line = chapter_last_line(h, source_code);
-		new_chapter->body = string_line_span(source_code, new_chapter->start_line,
-				new_chapter->end_line);
+		new_chapter->body = string_line_span(source_code,
+				new_chapter->start_line, new_chapter->end_line);
 	}
 
 	new_chapter->title = h;
