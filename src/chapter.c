@@ -180,7 +180,9 @@ parse_chapters_from_headings(
 {
 	struct chapter* new_chapter = malloc(sizeof(struct chapter));
 
-	// Construct artificial root. (The entire document is not a chapter.)
+	// Construct artificial root.
+	// The entire document is not a real chapter so its body is set to an
+	// empty string.
 	if (*head == NULL) {
 		new_chapter->start_line = 0;
 		new_chapter->end_line = 0;
