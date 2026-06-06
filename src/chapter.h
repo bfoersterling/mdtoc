@@ -4,7 +4,11 @@
 
 struct chapter {
 	struct heading* title;
+	// The "start_line" is the line of the heading.
+	// In case of an empty body, the chapter only consists of the heading.
 	int start_line;
+	// The "end_line" is the last line of the chapter body.
+	// In case of an empty body, this is identical to "start_line".
 	int end_line;
 	char* body;
 	struct chapter* next;

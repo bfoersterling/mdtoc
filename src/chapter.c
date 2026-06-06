@@ -180,7 +180,7 @@ parse_chapters_from_headings(
 {
 	struct chapter* new_chapter = malloc(sizeof(struct chapter));
 
-	// Construct artificial root.
+	// Construct artificial root. (The entire document is not a chapter.)
 	if (*head == NULL) {
 		new_chapter->start_line = 0;
 		new_chapter->end_line = 0;
@@ -196,10 +196,16 @@ parse_chapters_from_headings(
 		new_chapter->body = string_line_span(source_code,
 				new_chapter->start_line, new_chapter->end_line);
 	} else {
-		new_chapter->start_line = h->line + 1;
+		new_chapter->start_line = h->line;
 		new_chapter->end_line = chapter_last_line(h, source_code);
-		new_chapter->body = string_line_span(source_code,
-				new_chapter->start_line, new_chapter->end_line);
+		if (new_chapter->end_line > new_chapter->start_line) {
+			new_chapter->body = string_line_span(source_code,
+					new_chapter->start_line + 1, new_chapter->end_line);
+		} else {
+			// There is no body, the chapter consists only of the heading.
+			new_chapter->body = malloc(8);
+			memset(new_chapter->body, 0, 8);
+		}
 	}
 
 	new_chapter->title = h;
@@ -274,6 +280,7 @@ print_chapter(const char* source_code, const char* chapter, FILE* stream)
 end:
 	free(dotted_numbering);
 	free_chapter_tree(root_chapter);
+	fflush(stream);
 }
 
 	void
