@@ -111,6 +111,12 @@ assert_rc_eq "7" "1"
 
 assert_rc_eq "8" "1"
 
+# 9 - printing preamble chapters should not result in assert failure
+# (exit code 134), but exit with 0
+"$MDTOC" -c "0" "${SCRIPT_DIR}/input/preamble.md" &>/dev/null
+
+assert_rc_eq "9" "0"
+
 printf "Integration tests end.\n"
 
 exit 0

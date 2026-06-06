@@ -196,19 +196,20 @@ string_line_end_byte(const char* s, int line)
 	return -1;
 }
 
-// Caller has to free the returned buffer.
-// Return lines "from_line"-"to_line" from "s".
-// The first line is line 1.
-// Returns NULL if from_line or to_line could not be found in "s"
-// or to_line is smaller than from_line.
+/*
+ * Caller has to free the returned buffer.
+ * Return lines "from_line"-"to_line" from "s".
+ * "from_line" and "to_line" are inclusive and part of the span.
+ * The first line is line 1.
+ * Returns NULL if from_line or to_line could not be found in "s".
+ */
 	char*
 string_line_span(const char* s, int from_line, int to_line)
 {
 	if (s == NULL || *s == '\0')
 		return NULL;
 
-	if (from_line > to_line)
-		return NULL;
+	assert(from_line <= to_line);
 
 	int start_offset = string_line_start_byte(s, from_line);
 	int last_byte = string_line_end_byte(s+start_offset, to_line-from_line+1);

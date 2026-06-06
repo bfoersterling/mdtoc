@@ -112,7 +112,8 @@ find_chapter_by_numbering(struct chapter* node, const char* numbering)
 	struct chapter* needle_chapter = NULL;
 	char* pretty_levels = pretty_heading_levels(node->title->levels);
 
-	if (strcmp(pretty_levels, numbering) == 0) {
+	if (strcmp(pretty_levels, numbering) == 0
+			&& node->title->level != 0) {
 		free(pretty_levels);
 		return node;
 	}
@@ -180,17 +181,33 @@ parse_chapters_from_headings(
 	struct chapter* new_chapter = malloc(sizeof(struct chapter));
 
 	// Construct artificial root.
+	// The entire document is not a real chapter so its body is set to an
+	// empty string.
 	if (*head == NULL) {
 		new_chapter->start_line = 0;
 		new_chapter->end_line = 0;
 		new_chapter->body = malloc(8);
 		memset(new_chapter->body, 0, 8);
 		*head = new_chapter;
-	} else {
-		new_chapter->start_line = h->line + 1;
+	} else if (strcmp(h->text, "preamble") == 0) {
+		// Preamble headings do not have a corresponding heading in the
+		// markdown source, so we need to start at line 1 instead of adding
+		// 1 to the heading line field.
+		new_chapter->start_line = 1;
 		new_chapter->end_line = chapter_last_line(h, source_code);
-		new_chapter->body = string_line_span(source_code, new_chapter->start_line,
-				new_chapter->end_line);
+		new_chapter->body = string_line_span(source_code,
+				new_chapter->start_line, new_chapter->end_line);
+	} else {
+		new_chapter->start_line = h->line;
+		new_chapter->end_line = chapter_last_line(h, source_code);
+		if (new_chapter->end_line > new_chapter->start_line) {
+			new_chapter->body = string_line_span(source_code,
+					new_chapter->start_line + 1, new_chapter->end_line);
+		} else {
+			// There is no body, the chapter consists only of the heading.
+			new_chapter->body = malloc(8);
+			memset(new_chapter->body, 0, 8);
+		}
 	}
 
 	new_chapter->title = h;
@@ -253,6 +270,8 @@ print_chapter(const char* source_code, const char* chapter, FILE* stream)
 	// Add newline between heading and chapter.
 	fprintf(stream, "\n");
 
+	assert(needle_chapter->body != NULL);
+
 	if (use_color()) {
 		print_colored_markdown(needle_chapter->body, stream);
 	} else {
@@ -263,6 +282,7 @@ print_chapter(const char* source_code, const char* chapter, FILE* stream)
 end:
 	free(dotted_numbering);
 	free_chapter_tree(root_chapter);
+	fflush(stream);
 }
 
 	void
