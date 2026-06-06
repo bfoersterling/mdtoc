@@ -265,7 +265,7 @@ print_chapter(const char* source_code, const char* chapter, FILE* stream)
 	if (use_color())
 		print_colored_markdown(heading_str, stream);
 	else
-		fprintf(stream, "%s\n", heading_str);
+		print_uncolored_markdown(heading_str, stream);
 
 	// Add newline between heading and chapter.
 	fprintf(stream, "\n");
@@ -275,7 +275,7 @@ print_chapter(const char* source_code, const char* chapter, FILE* stream)
 	if (use_color()) {
 		print_colored_markdown(needle_chapter->body, stream);
 	} else {
-		fprintf(stream, "%s", needle_chapter->body);
+		print_uncolored_markdown(needle_chapter->body, stream);
 	}
 
 	free(heading_str);
