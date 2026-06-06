@@ -199,6 +199,7 @@ string_line_end_byte(const char* s, int line)
 /*
  * Caller has to free the returned buffer.
  * Return lines "from_line"-"to_line" from "s".
+ * "from_line" and "to_line" are inclusive and part of the span.
  * The first line is line 1.
  * Returns NULL if from_line or to_line could not be found in "s".
  */
