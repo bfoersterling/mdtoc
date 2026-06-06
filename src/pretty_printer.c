@@ -363,3 +363,11 @@ print_colored_markdown(const char* source_code, FILE* stream)
 
 	cmark_node_free(cmark_root);
 }
+
+	void
+print_uncolored_markdown(const char* source_code, FILE* stream)
+{
+	assert(source_code != NULL);
+
+	// TODO: Remove leading newlines.
+}
