@@ -26,7 +26,7 @@ static void pretty_print_cmark_softbreak(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_strong(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_text(cmark_node* node, FILE* stream);
 static void pretty_print_cmark_thematic_break(cmark_node* node, FILE* stream);
-static void print_colored_cmark_tree(cmark_node* node, const char* source_code, FILE* stream);
+static void print_colored_cmark_tree(cmark_node* node, FILE* stream);
 
 // Determine the position of an item in a numbered list.
 	static int
@@ -331,7 +331,7 @@ pretty_print_heading_levels(int levels[6], FILE* stream)
 }
 
 	static void
-print_colored_cmark_tree(cmark_node* node, const char* source_code, FILE* stream)
+print_colored_cmark_tree(cmark_node* node, FILE* stream)
 {
 	cmark_node_type node_type = cmark_node_get_type(node);
 
@@ -340,14 +340,14 @@ print_colored_cmark_tree(cmark_node* node, const char* source_code, FILE* stream
 	fflush(stream);
 
 	if (cmark_node_first_child(node))
-		print_colored_cmark_tree(cmark_node_first_child(node), source_code, stream);
+		print_colored_cmark_tree(cmark_node_first_child(node), stream);
 
 	if (node_type == CMARK_NODE_PARAGRAPH || node_type == CMARK_NODE_HEADING) {
 		fputc('\n', stream);
 	}
 
 	if (cmark_node_next(node))
-		print_colored_cmark_tree(cmark_node_next(node), source_code, stream);
+		print_colored_cmark_tree(cmark_node_next(node), stream);
 }
 
 	void
@@ -355,7 +355,7 @@ print_colored_markdown(const char* source_code, FILE* stream)
 {
 	cmark_node* cmark_root = cmark_parse_document(source_code, strlen(source_code), 0);
 
-	print_colored_cmark_tree(cmark_root, source_code, stream);
+	print_colored_cmark_tree(cmark_root, stream);
 
 	// Reset colors.
 	fprintf(stream, "\033[0m");
