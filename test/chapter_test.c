@@ -129,9 +129,7 @@ START_TEST (test_print_chapter)
 
 	print_chapter(source_1, "0", stream_1);
 
-	// Warning: This is not yet the desired output.
-	// An additional newline should follow the preamble heading.
-	ck_assert_str_eq(buffer_1, "# preamble\nfoobar\n");
+	ck_assert_str_eq(buffer_1, "# preamble\n\nfoobar\n");
 
 	fclose(stream_1);
 	free(buffer_1);

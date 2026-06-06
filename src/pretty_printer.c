@@ -1,8 +1,10 @@
+#include <assert.h>
 #include <cmark.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "pretty_printer.h"
+#include "string_util.h"
 
 // Prototypes for static functions.
 static int determine_item_pos(cmark_node* node);
@@ -362,4 +364,29 @@ print_colored_markdown(const char* source_code, FILE* stream)
 	fflush(stream);
 
 	cmark_node_free(cmark_root);
+}
+
+/*
+ * Prints uncolored markdown without leading and trailing whitespace
+ * to "stream".
+ * A newline character is printed at the end.
+ * Does not print anything when "source_code" is an empty string.
+ */
+	void
+print_uncolored_markdown(const char* source_code, FILE* stream)
+{
+	assert(source_code != NULL);
+
+	// To avoid printing a new line on an empty body -> exit early.
+	if (*source_code == '\0')
+		return;
+
+	char* source_code_copy = strdup(source_code);
+
+	trim_space(source_code_copy);
+
+	fprintf(stream, "%s\n", source_code_copy);
+	fflush(stream);
+
+	free(source_code_copy);
 }
