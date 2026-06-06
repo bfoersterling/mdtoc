@@ -1,9 +1,5 @@
 ## TODO
 
-- print_uncolored_markdown function instead of printing raw markdown?
-  => fix missing newlines after preamble headings
-  => would remove unnecessary whitespace
-  => replace `\` with real newlines?
 - one file "option.c" and "option.h" with functions like
   "option_print_chapter" for all options that can be either used through
   cli argument or in interactive mode
