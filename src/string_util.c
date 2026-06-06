@@ -254,8 +254,14 @@ string_line_start_byte(const char* s, int line)
 	return -1;
 }
 
-// Removes leading and trailing whitespace from s.
-// s needs to be an allocated buffer.
+/*
+ * Removes leading and trailing whitespace from "s".
+ * "s" needs to be an allocated buffer.
+ * If you do not have an allocated buffer -> use strdup and then use this
+ * function instead of writing a second version of this.
+ * This would result in code duplication as you also would need test cases
+ * for the new version.
+ */
 	void
 trim_space(char* s)
 {
